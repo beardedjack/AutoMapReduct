@@ -18,6 +18,7 @@ public class Main {
         Automaton a = new Automaton();
         
         a.loadFromFile("Auto.txt");
+        a.printAutomaton();
         
         /*
         TransitionOutput[] to = new TransitionOutput[5];

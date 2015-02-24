@@ -20,7 +20,7 @@ public class Automaton {
     // элемент таблицы переходов-выходов автомата (отдельно взятая ячейка)
     public class TransitionOutput {
                        
-        int NextCondition; // следующее состояние
+        Integer NextCondition; // следующее состояние
         String Output; // выход
         
         public TransitionOutput(int Condition, String Output) {
@@ -39,7 +39,7 @@ public class Automaton {
     }
      
      // добавление нового состояния
-    public void addCondition(Integer transitionNumber, TransitionOutput[] e) {
+    public void addCondition(Integer transitionNumber, ArrayList<TransitionOutput> e) {
         if (!hasCondition(transitionNumber)) {
             
             conditionMap.put(transitionNumber, new ArrayList<TransitionOutput>());
@@ -60,7 +60,7 @@ public class Automaton {
             System.out.print(me.getKey() + ": ");
             List<TransitionOutput> to = me.getValue();
             for (TransitionOutput o : to) {
-                System.out.print(o.NextCondition + "\\" + o.Output);
+                System.out.print(o.NextCondition + "/" + o.Output + " ");
             }
             System.out.println("\n");
         }
@@ -68,7 +68,7 @@ public class Automaton {
 
     public void loadFromFile(String filename) throws UnsupportedEncodingException, FileNotFoundException, IOException {
         
-        int co = 0;
+        Integer co = 0;
         File f = new File(filename);
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
         String line = null;
@@ -112,13 +112,22 @@ public class Automaton {
         }
         
         // Читаем данные: Состояние:<переход/выход>,...,<переход/выход>
+        TransitionOutput to = new TransitionOutput(0, null);
+        ArrayList<TransitionOutput> tr = new ArrayList<TransitionOutput>();
+        StringTokenizer st;
+        
         while ((line = br.readLine()) != null) {
-            System.out.println(line);
+            st = new StringTokenizer(line, ":,/");
+            co = Integer.valueOf(st.nextToken());
+            while(st.hasMoreElements()) {
+                to.NextCondition = Integer.valueOf(st.nextToken());
+                to.Output = st.nextToken();
+                tr.add(to);
+            }
+            addCondition(co, tr);
+            tr.clear();
         }
-
-        
         br.close();
-        
     }
     
     public Map<Integer, List<TransitionOutput>> getConditionMap() {

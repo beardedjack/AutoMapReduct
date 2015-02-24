@@ -9,3 +9,4 @@ InitialCondition:1
 5:3/x,5/z,2/y
 6:3/x,5/z,2/y
 7:3/x,5/z,2/y
+8:3/x,5/z,1/y

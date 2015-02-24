@@ -6,16 +6,23 @@
 package automapreduct;
 
 import automapreduct.Automaton.TransitionOutput;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  *
  * @author kondrashov
  */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         Automaton a = new Automaton();
-        TransitionOutput[] to;
         
+        a.loadFromFile("Auto.txt");
+        
+        /*
+        TransitionOutput[] to = new TransitionOutput[5];
+        to[1].NextCondition = 1;
+        */
         
         
         

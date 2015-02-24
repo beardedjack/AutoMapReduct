@@ -1,0 +1,11 @@
+@Automaton
+InputAlphabet:a,b,c
+OutputAlphabet:x,y,z
+InitialCondition:1
+1:3/x,5/z,2/y
+2:6/y,1/x,3/z
+3:3/x,5/z,2/y
+4:3/x,5/z,2/y
+5:3/x,5/z,2/y
+6:3/x,5/z,2/y
+7:3/x,5/z,2/y

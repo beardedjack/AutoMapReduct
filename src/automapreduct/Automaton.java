@@ -7,19 +7,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 import java.util.TreeMap;
+import java.io.*;
+import java.util.StringTokenizer;
 
 public class Automaton {
 
-    private int initialTransition = 1;
+    public List<String> inputAlphabet = new ArrayList<String>();
+    public List<String> outputAlphabet = new ArrayList<String>();
+    
+    private int initialCondition = 1;
     
     // элемент таблицы переходов-выходов автомата (отдельно взятая ячейка)
     public class TransitionOutput {
                        
-        int Condition; // следующее состояние
-        char Output; // выход
+        int NextCondition; // следующее состояние
+        String Output; // выход
         
-        public TransitionOutput(int Condition, char Output) {
-            this.Condition = Condition;
+        public TransitionOutput(int Condition, String Output) {
+            this.NextCondition = Condition;
             this.Output = Output;
         }
     
@@ -55,13 +60,66 @@ public class Automaton {
             System.out.print(me.getKey() + ": ");
             List<TransitionOutput> to = me.getValue();
             for (TransitionOutput o : to) {
-                System.out.print(o.Condition + "\\" + o.Output);
+                System.out.print(o.NextCondition + "\\" + o.Output);
             }
             System.out.println("\n");
         }
     }
 
-    
+    public void loadFromFile(String filename) throws UnsupportedEncodingException, FileNotFoundException, IOException {
+        
+        int co = 0;
+        File f = new File(filename);
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
+        String line = null;
+        
+        line = br.readLine();
+        
+        
+        // Читаем входной алфавит
+        line = br.readLine();
+        StringTokenizer ia1 = new StringTokenizer(line, ":");
+        while(ia1.hasMoreTokens()) {
+            ia1.nextToken();
+            line = ia1.nextToken();
+        }
+        StringTokenizer ia2 = new StringTokenizer(line, ",");
+        while(ia2.hasMoreTokens()) {
+            line = ia2.nextToken();
+            inputAlphabet.add(line);
+        }
+        
+        // Читаем входной алфавит
+        line = br.readLine();
+        StringTokenizer oa1 = new StringTokenizer(line, ":");
+        while(oa1.hasMoreTokens()) {
+            oa1.nextToken();
+            line = oa1.nextToken();
+        }
+        StringTokenizer oa2 = new StringTokenizer(line, ",");
+        while(oa2.hasMoreTokens()) {
+            line = oa2.nextToken();
+            outputAlphabet.add(line);
+        }
+        
+        // Читаем начальное состояние
+        line = br.readLine();
+        StringTokenizer ic = new StringTokenizer(line, ":");
+        while(ic.hasMoreTokens()) {
+            ic.nextToken();
+            line = ic.nextToken();
+            initialCondition = Integer.valueOf(line);
+        }
+        
+        // Читаем данные: Состояние:<переход/выход>,...,<переход/выход>
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+        }
+
+        
+        br.close();
+        
+    }
     
     public Map<Integer, List<TransitionOutput>> getConditionMap() {
         return conditionMap;

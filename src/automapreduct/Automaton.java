@@ -42,13 +42,15 @@ public class Automaton {
     public void addCondition(Integer transitionNumber, ArrayList<TransitionOutput> e) {
         if (!hasCondition(transitionNumber)) {
             
-            conditionMap.put(transitionNumber, new ArrayList<TransitionOutput>());
+            conditionMap.put(transitionNumber, new ArrayList<TransitionOutput>(e));
             
             // добавление всех переходов/выходов по каждому символу входного алфавита для данного состояния
+            /*
             List<TransitionOutput> to = conditionMap.get(transitionNumber);
             for (TransitionOutput c : e) {
                 to.add(c);
             }
+            */
         }
     }
     
@@ -123,6 +125,8 @@ public class Automaton {
                 to.NextCondition = Integer.valueOf(st.nextToken());
                 to.Output = st.nextToken();
                 tr.add(to);
+                
+                System.out.println(to.NextCondition + "^^" + to.Output);
             }
             addCondition(co, tr);
             tr.clear();

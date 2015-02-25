@@ -140,6 +140,47 @@ public class Automaton {
         br.close();
     }
     
+    public void saveToFile(String filename) throws FileNotFoundException, IOException {
+        File f = new File(filename);
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
+        String line = "";
+        
+        bw.write("@Automaton");
+        
+        bw.newLine();
+        bw.write("InputAlphabet:");
+        
+        for (String a : inputAlphabet) {
+            line += a + ",";
+        }
+        bw.write(line.substring(0, line.length()-1));
+        
+        bw.newLine();
+        bw.write("OutputAlphabet:");
+        line = "";
+        for (String a : outputAlphabet) {
+            line += a + ",";
+        }
+        bw.write(line.substring(0, line.length()-1));
+        
+        bw.newLine();
+        bw.write("InitialCondition:");
+        bw.write(Integer.toString(initialCondition));
+        
+        Set<Map.Entry<Integer, List<TransitionOutput>>> set = conditionMap.entrySet();
+        for (Map.Entry<Integer, List<TransitionOutput>> me : set) {
+            bw.newLine();
+            line = Integer.toString(me.getKey()) + ":";
+            List<TransitionOutput> to = me.getValue();
+            for (TransitionOutput o : to) {
+                line += Integer.toString(o.NextCondition) + "/" + o.Output + ",";
+            }
+            bw.write(line.substring(0, line.length()-1));
+        }
+        
+        bw.close();
+    }
+    
     public Map<Integer, List<TransitionOutput>> getConditionMap() {
         return conditionMap;
     }

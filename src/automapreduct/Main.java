@@ -17,8 +17,9 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         Automaton a = new Automaton();
         
-        a.loadFromFile("Auto.txt");
+        a.loadFromFile("InputAuto.txt");
         a.printAutomaton();
+        a.saveToFile("OutputAuto.txt");
         
         /*
         TransitionOutput[] to = new TransitionOutput[5];

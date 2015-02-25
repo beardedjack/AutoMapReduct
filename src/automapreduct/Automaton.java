@@ -55,9 +55,8 @@ public class Automaton {
     }
     
     public void printAutomaton() {
-        System.out.print("Автомат:\n#:\t");
-        
-        
+        System.out.print("Автомат:\nНачальное состояние: " +
+                Integer.toString(initialCondition) + "\n#:\t");
         
         for (String a : inputAlphabet) {
             System.out.print(a + "\t");
@@ -68,7 +67,7 @@ public class Automaton {
             System.out.print(me.getKey() + ":\t");
             List<TransitionOutput> to = me.getValue();
             for (TransitionOutput o : to) {
-                System.out.print(o.NextCondition + "-" + o.Output + "\t");
+                System.out.print(o.NextCondition + "/" + o.Output + "\t");
             }
             System.out.print("\n");
         }
@@ -97,7 +96,7 @@ public class Automaton {
             inputAlphabet.add(line);
         }
         
-        // Читаем входной алфавит
+        // Читаем выходной алфавит
         line = br.readLine();
         StringTokenizer oa1 = new StringTokenizer(line, ":");
         while(oa1.hasMoreTokens()) {
@@ -129,9 +128,9 @@ public class Automaton {
             co = Integer.valueOf(st.nextToken());
            
             while(st.hasMoreElements()) {
-                to = new TransitionOutput(0, null);
-                to.NextCondition = Integer.valueOf(st.nextToken());
-                to.Output = st.nextToken();
+                to = new TransitionOutput(Integer.valueOf(st.nextToken()), st.nextToken());
+                //to.NextCondition = Integer.valueOf(st.nextToken());
+                //to.Output = st.nextToken();
                 tr.add(to);
             }
             addCondition(co, tr);
@@ -185,7 +184,7 @@ public class Automaton {
         return conditionMap;
     }
     
-    public void minimize() {
+    public void minimize_old() {
       int numStates = 0;
       int numInput = 0;
       int [][] table = null;
@@ -657,6 +656,13 @@ public class Automaton {
   
     System.out.println(numStates+" states in minimized DFA");
   }
+    
+    
+    // Минимизация автомата
+    public Automaton getMinimized(TreeMap<Integer, List<TransitionOutput>> auto) {
+        Automaton minAutomaton = new Automaton();
+        return minAutomaton;
+    }  
 
 }
     

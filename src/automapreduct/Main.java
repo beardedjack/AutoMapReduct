@@ -21,10 +21,6 @@ public class Main {
         a.printAutomaton();
         a.saveToFile("OutputAuto.txt");
         
-        /*
-        TransitionOutput[] to = new TransitionOutput[5];
-        to[1].NextCondition = 1;
-        */
         
         
         

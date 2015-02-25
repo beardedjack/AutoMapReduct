@@ -661,6 +661,7 @@ public class Automaton {
     // Минимизация автомата
     public Automaton getMinimized(TreeMap<Integer, List<TransitionOutput>> auto) {
         Automaton minAutomaton = new Automaton();
+        
         return minAutomaton;
     }  
 

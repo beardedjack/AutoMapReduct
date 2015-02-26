@@ -20,7 +20,7 @@ public class Main {
         a.loadFromFile("InputAuto.txt");
         //a.printAutomaton();
         //a.saveToFile("OutputAuto.txt");
-        a.getMinimized(true);
+        a.getMinimized();
         
         
         

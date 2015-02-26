@@ -659,13 +659,15 @@ public class Automaton {
     
     
     // Минимизация автомата
-    public void /*Automaton*/ getMinimized(boolean showPartitions) {
+    public void /*Automaton*/ getMinimized() {
         
         int cc = 1;
         int co = 1;
         String so = "";
                 
         TreeMap<Integer, ArrayList<Integer>> fc = new TreeMap<Integer, ArrayList<Integer>>();
+        TreeMap<Integer, ArrayList<Integer>> equalClasses = new TreeMap<Integer, ArrayList<Integer>>();
+        
         
         Set<Map.Entry<Integer, List<TransitionOutput>>> set = conditionMap.entrySet();
       
@@ -677,23 +679,37 @@ public class Automaton {
                     cc = me.getKey(); // Текущее состояние
                     List<TransitionOutput> to = me.getValue();
                     so = to.get(ia).Output;
-                    
                     if (so.equals(oa)) {
                      ArrayList<Integer> al = fc.get(co);
                      al.add(cc);
-                        
                     }
                 }
                 co++;
             }
         }
         
+        
+        
+        int equClassNum = 1;
+        Set<Map.Entry<Integer, ArrayList<Integer>>> p = fc.entrySet();
+        for (Map.Entry<Integer, ArrayList<Integer>> s : p) {
+            ArrayList<Integer> al = s.getValue();
+            for (Integer i : al) {
+                
+            }
+                
+            
+        }
+        
+        
+        /*
+        // Отобразить разбиения
+        boolean showPartitions = true;
         if (showPartitions) {
             System.out.println("Первичное разбиение:");
             Set<Map.Entry<Integer, ArrayList<Integer>>> sss = fc.entrySet();
             for (Map.Entry<Integer, ArrayList<Integer>> ss : sss) {
-                co = ss.getKey();
-                System.out.print(co + ": ");
+                System.out.print(ss.getKey() + ": ");
                 ArrayList<Integer> llll = ss.getValue();
                 for (Integer qwer : llll) {
                     System.out.print(qwer.intValue() + " ");
@@ -701,7 +717,7 @@ public class Automaton {
                 System.out.print("\n");
             }
         }
-        
+        */
         
         
         

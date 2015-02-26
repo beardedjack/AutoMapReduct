@@ -659,10 +659,24 @@ public class Automaton {
     
     
     // Минимизация автомата
-    public Automaton getMinimized(TreeMap<Integer, List<TransitionOutput>> auto) {
-        Automaton minAutomaton = new Automaton();
+    public void /*Automaton*/ getMinimized() {
+        // Классы эквивалентности
+        TreeMap<Integer, ArrayList<Integer>> fc = new TreeMap<Integer, ArrayList<Integer>>();
         
+        Set<Map.Entry<Integer, List<TransitionOutput>>> set1 = conditionMap.entrySet();
+        Set<Map.Entry<Integer, List<TransitionOutput>>> set2 = conditionMap.entrySet();
+        
+        for (Map.Entry<Integer, List<TransitionOutput>> me1 : set1) {
+            for (Map.Entry<Integer, List<TransitionOutput>> me2 : set2) {
+                
+            }
+        }
+        
+        
+        /*
+        Automaton minAutomaton = new Automaton();
         return minAutomaton;
+        */
     }  
 
 }

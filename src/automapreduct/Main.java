@@ -18,9 +18,9 @@ public class Main {
         Automaton a = new Automaton();
         
         a.loadFromFile("InputAuto.txt");
-        a.printAutomaton();
-        a.saveToFile("OutputAuto.txt");
-        
+        //a.printAutomaton();
+        //a.saveToFile("OutputAuto.txt");
+        a.getMinimized();
         
         
         

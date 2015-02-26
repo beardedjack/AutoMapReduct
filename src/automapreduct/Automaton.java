@@ -660,9 +660,36 @@ public class Automaton {
     
     // Минимизация автомата
     public void /*Automaton*/ getMinimized() {
-        // Классы эквивалентности
+        
+        int co = 0;
+        String so = "";
         TreeMap<Integer, ArrayList<Integer>> fc = new TreeMap<Integer, ArrayList<Integer>>();
         
+        Set<Map.Entry<Integer, List<TransitionOutput>>> set = conditionMap.entrySet();
+        
+        // Таблица выходов
+        
+        
+        
+        
+        // Первичное разбиение
+        for (String oa : outputAlphabet) {
+            for (String ia: inputAlphabet) {
+                //System.out.println(ia + " - " + oa);
+                for (Map.Entry<Integer, List<TransitionOutput>> me : set) {
+                   co = me.getKey();
+                   List<TransitionOutput> to = me.getValue();
+                   for (TransitionOutput o : to) {
+                       so = o.Output;
+                   }
+                }
+            }
+        }
+        
+        
+        
+        
+        /*
         Set<Map.Entry<Integer, List<TransitionOutput>>> set1 = conditionMap.entrySet();
         Set<Map.Entry<Integer, List<TransitionOutput>>> set2 = conditionMap.entrySet();
         
@@ -673,7 +700,7 @@ public class Automaton {
         }
         
         
-        /*
+        
         Automaton minAutomaton = new Automaton();
         return minAutomaton;
         */

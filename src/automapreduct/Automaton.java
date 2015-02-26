@@ -659,48 +659,54 @@ public class Automaton {
     
     
     // Минимизация автомата
-    public void /*Automaton*/ getMinimized() {
+    public void /*Automaton*/ getMinimized(boolean showPartitions) {
         
-        int co = 0;
+        int cc = 1;
+        int co = 1;
         String so = "";
+                
         TreeMap<Integer, ArrayList<Integer>> fc = new TreeMap<Integer, ArrayList<Integer>>();
         
         Set<Map.Entry<Integer, List<TransitionOutput>>> set = conditionMap.entrySet();
-        
-        // Таблица выходов
-        
-        
-        
-        
+      
         // Первичное разбиение
         for (String oa : outputAlphabet) {
-            for (String ia: inputAlphabet) {
-                //System.out.println(ia + " - " + oa);
+            for (int ia = 0; ia < inputAlphabet.size(); ia++) {
+                fc.put(co, new ArrayList<Integer>());
                 for (Map.Entry<Integer, List<TransitionOutput>> me : set) {
-                   co = me.getKey();
-                   List<TransitionOutput> to = me.getValue();
-                   for (TransitionOutput o : to) {
-                       so = o.Output;
-                   }
+                    cc = me.getKey(); // Текущее состояние
+                    List<TransitionOutput> to = me.getValue();
+                    so = to.get(ia).Output;
+                    
+                    if (so.equals(oa)) {
+                     ArrayList<Integer> al = fc.get(co);
+                     al.add(cc);
+                        
+                    }
                 }
+                co++;
             }
         }
+        
+        if (showPartitions) {
+            System.out.println("Первичное разбиение:");
+            Set<Map.Entry<Integer, ArrayList<Integer>>> sss = fc.entrySet();
+            for (Map.Entry<Integer, ArrayList<Integer>> ss : sss) {
+                co = ss.getKey();
+                System.out.print(co + ": ");
+                ArrayList<Integer> llll = ss.getValue();
+                for (Integer qwer : llll) {
+                    System.out.print(qwer.intValue() + " ");
+                }
+                System.out.print("\n");
+            }
+        }
+        
         
         
         
         
         /*
-        Set<Map.Entry<Integer, List<TransitionOutput>>> set1 = conditionMap.entrySet();
-        Set<Map.Entry<Integer, List<TransitionOutput>>> set2 = conditionMap.entrySet();
-        
-        for (Map.Entry<Integer, List<TransitionOutput>> me1 : set1) {
-            for (Map.Entry<Integer, List<TransitionOutput>> me2 : set2) {
-                
-            }
-        }
-        
-        
-        
         Automaton minAutomaton = new Automaton();
         return minAutomaton;
         */

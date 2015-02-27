@@ -47,7 +47,7 @@ public class Automaton {
             equivalenceMap.clear();
         }
         
-        // Вернуть номер класса по значению
+        // Вернуть к какому номеру класса относится состояние
         public Integer getEquivalenceClassNum(Integer v) {
             Integer c = 0;
             Set<Map.Entry<Integer, ArrayList<Integer>>> set = equivalenceMap.entrySet();
@@ -64,6 +64,16 @@ public class Automaton {
             return c;
         }
         
+        // Вернуть сколько классов эквивалентности есть
+        public Integer getEquivalenceClassesCount() {
+            return equivalenceMap.size();
+        }
+        
+        // Вернуть список элементов одного класса эквивалентности
+        public ArrayList<Integer> getElements(Integer i) {
+            return equivalenceMap.get(i);
+        }
+        
     }
 
     // мапа всех состояний автомата с переходами/выходами по алфавиту 
@@ -77,16 +87,8 @@ public class Automaton {
      // добавление нового состояния
     public void addCondition(Integer transitionNumber, ArrayList<TransitionOutput> e) {
         if (!hasCondition(transitionNumber)) {
-            
-            conditionMap.put(transitionNumber, new ArrayList<TransitionOutput>(e));
-            
             // добавление всех переходов/выходов по каждому символу входного алфавита для данного состояния
-            /*
-            List<TransitionOutput> to = conditionMap.get(transitionNumber);
-            for (TransitionOutput c : e) {
-                to.add(c);
-            }
-            */
+            conditionMap.put(transitionNumber, new ArrayList<TransitionOutput>(e));
         }
     }
     
@@ -237,7 +239,7 @@ public class Automaton {
     // Минимизация автомата
     public void /*Automaton*/ getMinimized() {
         
-        int cc = 1;
+        int cc;
         int co = 0;
         String so = "";
 
@@ -280,7 +282,6 @@ public class Automaton {
     }
 
     // 3. Преобразовываем ее (убираем дубли)
-    
     for (int i1=0; i1<(fc.size()); i1++) {
         for (int j1=0; j1<conditionMap.size(); j1++) {
             for (int i2=0; i2<(fc.size()); i2++) {
@@ -301,7 +302,6 @@ public class Automaton {
     // Заполняем классы эквивалентности
     equivalenceClasses eqc = new equivalenceClasses();
     ArrayList<Integer> al;
-
     for (int i1=0; i1<(fc.size()); i1++) {
         al = new ArrayList<Integer>();
         for (int i2=0; i2<(conditionMap.size()); i2++) {
@@ -314,6 +314,7 @@ public class Automaton {
         }
     }
 
+    
     
     
         /*

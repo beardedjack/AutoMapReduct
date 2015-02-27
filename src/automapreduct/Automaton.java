@@ -33,6 +33,38 @@ public class Automaton {
         }
     
     }
+    
+    public class equivalenceClasses {
+        
+        private TreeMap<Integer, ArrayList<Integer>> equivalenceMap = new TreeMap<Integer, ArrayList<Integer>>();
+        
+        // Добавить новый класс
+        public void addClass(List<Integer> e) {
+            equivalenceMap.put(equivalenceMap.size()+1, new ArrayList<Integer>(e));
+        }
+        
+        public void clearClass() {
+            equivalenceMap.clear();
+        }
+        
+        // Вернуть номер класса по значению
+        public Integer getEquivalenceClassNum(Integer v) {
+            Integer c = 0;
+            Set<Map.Entry<Integer, ArrayList<Integer>>> set = equivalenceMap.entrySet();
+            for (Map.Entry<Integer, ArrayList<Integer>> me : set) {
+                c=me.getKey();
+                ArrayList<Integer> al = me.getValue();
+                for (Integer i : al) {
+                    if (i==v) {
+                        return c;
+                    }
+                }
+            }
+            
+            return c;
+        }
+        
+    }
 
     // мапа всех состояний автомата с переходами/выходами по алфавиту 
     private TreeMap<Integer, List<TransitionOutput>> conditionMap = new TreeMap<Integer, List<TransitionOutput>>();
@@ -59,6 +91,7 @@ public class Automaton {
     }
     
     public void printAutomaton() {
+        
         System.out.print("Автомат:\nНачальное состояние: " +
                 Integer.toString(initialCondition) + "\n#:\t");
         
@@ -188,19 +221,29 @@ public class Automaton {
         return conditionMap;
     }
     
+    // Выдать элемент выходного алфавита по номеру элемента входного алфавита и номеру состояния
+    public String getOutput(Integer inputElement, Integer condition) {
+        List<TransitionOutput> to = conditionMap.get(condition);
+        return to.get(inputElement-1).Output;
+    }
+    
+    // Выдать номер следующего состояния по номеру элемента входного алфавита и номеру состояния
+    public Integer getCondition(Integer inputElement, Integer condition) {
+        List<TransitionOutput> to = conditionMap.get(condition);
+        return to.get(inputElement-1).NextCondition;
+    }
+    
+    
     // Минимизация автомата
     public void /*Automaton*/ getMinimized() {
         
         int cc = 1;
         int co = 0;
         String so = "";
-                
-        TreeMap<Integer, ArrayList<Integer>> fc = new TreeMap<Integer, ArrayList<Integer>>();
-        TreeMap<Integer, ArrayList<Integer>> equalClasses = new TreeMap<Integer, ArrayList<Integer>>();
 
-        Set<Map.Entry<Integer, List<TransitionOutput>>> set = conditionMap.entrySet();
-      
         // Первичное разбиение
+        TreeMap<Integer, ArrayList<Integer>> fc = new TreeMap<Integer, ArrayList<Integer>>();
+        Set<Map.Entry<Integer, List<TransitionOutput>>> set = conditionMap.entrySet();
         for (String oa : outputAlphabet) {
             for (int ia = 0; ia < inputAlphabet.size(); ia++) {
                 fc.put(co, new ArrayList<Integer>());
@@ -216,22 +259,18 @@ public class Automaton {
                 co++;
             }
         }
-        
-        int equClassNum = 1;
-        int c;
-        
-        Set<Map.Entry<Integer, ArrayList<Integer>>> p = fc.entrySet();
        
-// Делаем таблицу
+    // Делаем таблицу разбиений
     Integer table [][] = new Integer[fc.size()][conditionMap.size()];
 
-    // Забиваем ее нулями
+    // 1. Забиваем ее нулями
     for (int i1=0; i1<(fc.size()); i1++) {
     for (int i2=0; i2<(conditionMap.size()); i2++) {
     table[i1][i2] = 0;}
     }
     
-    // заполняем ее
+    // 2. Заполняем ее
+    Set<Map.Entry<Integer, ArrayList<Integer>>> p = fc.entrySet();
     for (Map.Entry<Integer, ArrayList<Integer>> s : p) {
         Integer cl = s.getKey();
         ArrayList<Integer> al = s.getValue();
@@ -240,7 +279,7 @@ public class Automaton {
         }
     }
 
-    // Преобразовываем ее
+    // 3. Преобразовываем ее (убираем дубли)
     
     for (int i1=0; i1<(fc.size()); i1++) {
         for (int j1=0; j1<conditionMap.size(); j1++) {
@@ -248,7 +287,7 @@ public class Automaton {
                 if (i1!=i2) {
                         for (int j2=0; j2<conditionMap.size(); j2++) {
                             
-                            //Integer.valueOf(table[i2][j2]) = 
+                            
                             if (table[i2][j2] == table[i1][j1]) {
                                 table[i2][j2] = 0;
                             }
@@ -259,109 +298,24 @@ public class Automaton {
         }
     
     
-    
-/*
-    
-for (int i1=0; i1<(fc.size()); i1++) {
-        for (int i2=0; i2<(fc.size()); i2++) {
-            if (i1!=i2) {
-                for (int j=0; j<conditionMap.size(); j++) {
-                    if (table[i2][j]=table[i1][j]) 
-                }
-            
-            }
-        }    
-        
-    }    
-        
-        
-        
-        
-        
+    // Заполняем классы эквивалентности
+    equivalenceClasses eqc = new equivalenceClasses();
+    ArrayList<Integer> al;
+
+    for (int i1=0; i1<(fc.size()); i1++) {
+        al = new ArrayList<Integer>();
         for (int i2=0; i2<(conditionMap.size()); i2++) {
-            System.out.print(table[i1][i2] + " ");
+            if (table[i1][i2]!=0) {
+                al.add(table[i1][i2]);
+            }
         }
-    System.out.println();
-}
-    
-*/    
-    
-// покажем ее    
-for (int i1=0; i1<(fc.size()); i1++) {
-    for (int i2=0; i2<(conditionMap.size()); i2++) {
-        System.out.print(table[i1][i2] + " ");
+        if (al.size()!=0) {
+        eqc.addClass(al);
+        }
     }
-    System.out.println();
-}
+
     
-
-/*                
-        
-        for (Map.Entry<Integer, ArrayList<Integer>> s0 : p0) { //перебираем созданную ранее мапу
-            equalClasses.put(equClassNum, new ArrayList<Integer>());
-            ArrayList<Integer> al0 = s0.getValue(); // <=== взяли первый класс
-            if (al0.size()!=0) {
-            for (Integer i : al0) {
-                for (Map.Entry<Integer, ArrayList<Integer>> s1 : p1) {
-                    c = s1.getKey(); //текущий класс
-                    ArrayList<Integer> al1 = s1.getValue();
-                    for (Integer j : al1) {
-                        if (i==j) {
-                            ArrayList<Integer> a = equalClasses.get(equClassNum);
-                            a.add(j);
-                            
-                            ArrayList<Integer> b = fc.get(c);
-                            //b.remove(b.indexOf(j));
-                            
-                        }
-                    }
-                }
-            }
-        }
-            equClassNum++;
-        }
-        
-
-        
-      
-        
-        
-
-        
-        
-        // Отобразить разбиения
-        Set<Map.Entry<Integer, ArrayList<Integer>>> pppp = equalClasses.entrySet();
-        for (Map.Entry<Integer, ArrayList<Integer>> sssss : pppp) {
-            System.out.print(sssss.getKey() + ": ");
-            ArrayList<Integer> aaaaa = sssss.getValue();
-            for (Integer iiiii : aaaaa) {
-                System.out.print(iiiii + ", ");
-            }
-            System.out.print("\n");
-        }
-        
-        
-        */
-/*
-        // Отобразить разбиения
-        boolean showPartitions = true;
-        if (showPartitions) {
-            System.out.println("Первичное разбиение:");
-            Set<Map.Entry<Integer, ArrayList<Integer>>> sss = fc.entrySet();
-            for (Map.Entry<Integer, ArrayList<Integer>> ss : sss) {
-                System.out.print(ss.getKey() + ": ");
-                ArrayList<Integer> llll = ss.getValue();
-                for (Integer qwer : llll) {
-                    System.out.print(qwer.intValue() + " ");
-                }
-                System.out.print("\n");
-            }
-        }
-        
-        */
-        
-        
-        
+    
         /*
         Automaton minAutomaton = new Automaton();
         return minAutomaton;

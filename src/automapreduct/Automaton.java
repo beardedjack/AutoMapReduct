@@ -14,6 +14,8 @@ import java.util.StringTokenizer;
 
 public class Automaton {
 
+    
+    
     public List<String> inputAlphabet = new ArrayList<String>();
     public List<String> outputAlphabet = new ArrayList<String>();
     
@@ -190,13 +192,12 @@ public class Automaton {
     public void /*Automaton*/ getMinimized() {
         
         int cc = 1;
-        int co = 1;
+        int co = 0;
         String so = "";
                 
         TreeMap<Integer, ArrayList<Integer>> fc = new TreeMap<Integer, ArrayList<Integer>>();
         TreeMap<Integer, ArrayList<Integer>> equalClasses = new TreeMap<Integer, ArrayList<Integer>>();
-        
-        
+
         Set<Map.Entry<Integer, List<TransitionOutput>>> set = conditionMap.entrySet();
       
         // Первичное разбиение
@@ -216,44 +217,85 @@ public class Automaton {
             }
         }
         
-        
-        
         int equClassNum = 1;
         int c;
         
-        
-        Set<Map.Entry<Integer, ArrayList<Integer>>> p0 = fc.entrySet();
-        Set<Map.Entry<Integer, ArrayList<Integer>>> p1 = fc.entrySet();
-        
- /*
- Можно сделать так
+        Set<Map.Entry<Integer, ArrayList<Integer>>> p = fc.entrySet();
+       
+// Делаем таблицу
+    Integer table [][] = new Integer[fc.size()][conditionMap.size()];
 
-for(Iterator<Role> roleIter = roles.iterator(); roleIter.hasNext();){
- Role currentRole = roleIter.next();
-  if (roleId.equals(currentRole.getId())) {
-     roleIter.remove();
-   }
+    // Забиваем ее нулями
+    for (int i1=0; i1<(fc.size()); i1++) {
+    for (int i2=0; i2<(conditionMap.size()); i2++) {
+    table[i1][i2] = 0;}
+    }
+    
+    // заполняем ее
+    for (Map.Entry<Integer, ArrayList<Integer>> s : p) {
+        Integer cl = s.getKey();
+        ArrayList<Integer> al = s.getValue();
+        for (Integer i  : al) {
+            table[cl][al.indexOf(i)] = i;
+        }
+    }
+
+    // Преобразовываем ее
+    
+    for (int i1=0; i1<(fc.size()); i1++) {
+        for (int j1=0; j1<conditionMap.size(); j1++) {
+            for (int i2=0; i2<(fc.size()); i2++) {
+                if (i1!=i2) {
+                        for (int j2=0; j2<conditionMap.size(); j2++) {
+                            
+                            //Integer.valueOf(table[i2][j2]) = 
+                            if (table[i2][j2] == table[i1][j1]) {
+                                table[i2][j2] = 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    
+    
+    
+/*
+    
+for (int i1=0; i1<(fc.size()); i1++) {
+        for (int i2=0; i2<(fc.size()); i2++) {
+            if (i1!=i2) {
+                for (int j=0; j<conditionMap.size(); j++) {
+                    if (table[i2][j]=table[i1][j]) 
+                }
+            
+            }
+        }    
+        
+    }    
+        
+        
+        
+        
+        
+        for (int i2=0; i2<(conditionMap.size()); i2++) {
+            System.out.print(table[i1][i2] + " ");
+        }
+    System.out.println();
 }
-
-а можно еще так. Так как удаляется всего один элемент то достаточно после удаления поставить return из фукнции
-
-private function deleteRole(List<Role> roles)
-for (Role givenRole : roles) {
-  if (roleId.equals(givenRole.getId())) {
-     roles.remove(givenRole);
-     return;
-   }
- }
+    
+*/    
+    
+// покажем ее    
+for (int i1=0; i1<(fc.size()); i1++) {
+    for (int i2=0; i2<(conditionMap.size()); i2++) {
+        System.out.print(table[i1][i2] + " ");
+    }
+    System.out.println();
 }
- */
-        
-        
-        
- 
-        
+    
 
-        
-                
+/*                
         
         for (Map.Entry<Integer, ArrayList<Integer>> s0 : p0) { //перебираем созданную ранее мапу
             equalClasses.put(equClassNum, new ArrayList<Integer>());
@@ -267,8 +309,9 @@ for (Role givenRole : roles) {
                         if (i==j) {
                             ArrayList<Integer> a = equalClasses.get(equClassNum);
                             a.add(j);
+                            
                             ArrayList<Integer> b = fc.get(c);
-                            b.remove(b.indexOf(j));
+                            //b.remove(b.indexOf(j));
                             
                         }
                     }
@@ -277,6 +320,11 @@ for (Role givenRole : roles) {
         }
             equClassNum++;
         }
+        
+
+        
+      
+        
         
 
         
@@ -293,8 +341,8 @@ for (Role givenRole : roles) {
         }
         
         
-        
-        /*
+        */
+/*
         // Отобразить разбиения
         boolean showPartitions = true;
         if (showPartitions) {
@@ -309,8 +357,8 @@ for (Role givenRole : roles) {
                 System.out.print("\n");
             }
         }
-        */
         
+        */
         
         
         

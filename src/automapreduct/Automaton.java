@@ -180,18 +180,28 @@ public class Automaton {
         bw.close();
     }
     
-    
+    public String getOutputWord(String inputWord) {
+        String outWord ="";
+        int tmp = 0; 
+        int currentCondition = 1;
+        for (Integer i=0; i<inputWord.length(); i++) {
+            tmp = Character.getNumericValue(inputWord.charAt(i));
+            outWord += Integer.toString(this.getOutput(tmp, currentCondition));
+            currentCondition = this.getCondition(tmp, currentCondition);
+        }
+        return outWord;
+    }
     
     // Выдать элемент выходного алфавита по номеру элемента входного алфавита и номеру состояния
     public Integer getOutput(Integer inputElement, Integer condition) {
         List<TransitionOutput> to = conditionMap.get(condition);
-        return to.get(inputElement-1).Output;
+        return to.get(inputElement).Output;
     }
     
     // Выдать номер следующего состояния по номеру элемента входного алфавита и номеру состояния
     public Integer getCondition(Integer inputElement, Integer condition) {
         List<TransitionOutput> to = conditionMap.get(condition);
-        return to.get(inputElement-1).NextCondition;
+        return to.get(inputElement).NextCondition;
     }
     
     

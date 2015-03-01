@@ -202,6 +202,7 @@ public class Automaton {
     public Integer getCondition(Integer inputElement, Integer condition) {
         List<TransitionOutput> to = conditionMap.get(condition);
         return to.get(inputElement).NextCondition;
+        
     }
     
     

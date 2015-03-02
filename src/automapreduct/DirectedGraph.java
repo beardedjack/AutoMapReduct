@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.List;
@@ -58,7 +59,7 @@ public class DirectedGraph {
     }
     
     // Делаем файл для графвиза
-    public void makeFile(String filename) throws FileNotFoundException, IOException {
+    public void makeFile(String filename, int k) throws FileNotFoundException, IOException {
         File f = new File(filename);
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
         String line;
@@ -76,5 +77,20 @@ public class DirectedGraph {
         }
         bw.write("}");
         bw.close();
+        
+        // Делаем графический файл
+        try {
+            Process process = Runtime.getRuntime().
+            exec("C:\\graphviz\\bin\\dot -Tjpg -o graph(k=" + k + ").jpg graph.dot");
+            InputStream inputStream = process.getInputStream();
+            InputStream errorStream = process.getErrorStream();
+ 
+            } catch (IOException e) {
+            // handle exception.
+        }
+        
+        
+        
     }
+    
 }

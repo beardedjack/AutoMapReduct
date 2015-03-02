@@ -236,7 +236,7 @@ public class Automaton {
         return res;
     }
     
-    // Выдать редукцию
+    /*
     public String getReduction(String input, Integer k) {
         String outWord ="";
         String o = input.substring(input.length()-k+1, input.length());
@@ -252,7 +252,8 @@ public class Automaton {
         
         return outWord;
     }
-        
+    */
+    
     // Выдать элемент выходного алфавита по номеру элемента входного алфавита и номеру состояния
     public Integer getOutput(Integer inputElement, Integer condition) {
         List<TransitionOutput> to = conditionMap.get(condition);
@@ -282,8 +283,11 @@ public class Automaton {
         
         //LinkedList<Integer> dotList = new LinkedList<Integer>();
         // Заполняем соответствия x-f(x)
-        for (Integer i = 0; i < getPow(alphabetsDimention, k)-1; i++) {
+        for (Integer i = 0; i < getPow(alphabetsDimention, k); i++) {
             // Взяли число и перевели его в двоичную
+            
+            //System.out.println("ЧИСЛО " + i);
+            
             binaryData = Integer.toBinaryString(i);
             // Даем его автомату
             //System.out.println("=======>" + binaryData);
@@ -302,8 +306,11 @@ public class Automaton {
         for (Map.Entry<Integer, Integer> me1 : set1) {
             for (Map.Entry<Integer, Integer> me2 : set2) {
                 //  f(x)=y (mod m^k)
+                if (me1.getKey()!=me2.getKey()) {
                 if (compareByModule(me1.getValue(), me2.getKey(), k)) {
+                
                    graph.addEdge(Integer.toString(me1.getKey()), Integer.toString(me2.getKey()));
+                }
                 }
             }
         }

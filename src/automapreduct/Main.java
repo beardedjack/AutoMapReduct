@@ -12,7 +12,7 @@ public class Main {
             Automaton a = new Automaton();
             a.loadFromFile("InputAuto.txt");
             DirectedGraph sdf = a.makeGraph(i);
-            sdf.makeFile("graph.dot");
+            sdf.makeFile("graph.dot", i);
         } 
         catch (Exception e) { 
             System.out.println(e); 

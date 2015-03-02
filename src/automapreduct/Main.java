@@ -25,12 +25,23 @@ public class Main {
         //System.out.println(a.getOutput(1, 9));
         //System.out.println(a.getCondition(1, 9));
         
-        String o = a.getOutputWord("22121001210201222010210102020101010100100011212120101121020120120102010111002201001010110102020210122010101110100000111011111000011122222200101222000111100221101010");
+        String o = "010000101110100001110110101010100001101101";
+         System.out.println(o);
         
-        System.out.println(o);
+        String s = a.getReduction(o, 12);
+        System.out.println(s);
         
         
+        String a1 = a.getOutputWord(o);
+        System.out.println(a1);
         
+        String a2 = a.getReduction(a1, 12);
+        
+       
+        
+        
+        System.out.println(a2);
+      
         
         
     }

@@ -11,17 +11,14 @@ import java.io.*;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
-import java.math.*;
 
-public class Automaton {
+// Старый класс автомата
+public class Auto {
 
     
     
-    public List<Integer> inputAlphabet = new ArrayList<Integer>();
-    public List<Integer> outputAlphabet = new ArrayList<Integer>();
-    
-    
-    public Integer alphabetsDimention =0;
+    public List<String> inputAlphabet = new ArrayList<String>();
+    public List<String> outputAlphabet = new ArrayList<String>();
     
     private int initialCondition = 1;
     
@@ -29,16 +26,56 @@ public class Automaton {
     public class TransitionOutput {
                        
         Integer NextCondition; // следующее состояние
-        Integer Output; // выход
+        String Output; // выход
         
-        public TransitionOutput(int Condition, int Output) {
+        public TransitionOutput(int Condition, String Output) {
             this.NextCondition = Condition;
             this.Output = Output;
         }
     
     }
     
-    
+    public class equivalenceClasses {
+        
+        private TreeMap<Integer, ArrayList<Integer>> equivalenceMap = new TreeMap<Integer, ArrayList<Integer>>();
+        
+        // Добавить новый класс
+        public void addClass(List<Integer> e) {
+            equivalenceMap.put(equivalenceMap.size()+1, new ArrayList<Integer>(e));
+        }
+        
+        public void clearClass() {
+            equivalenceMap.clear();
+        }
+        
+        // Вернуть к какому номеру класса относится состояние
+        public Integer getEquivalenceClassNum(Integer v) {
+            Integer c = 0;
+            Set<Map.Entry<Integer, ArrayList<Integer>>> set = equivalenceMap.entrySet();
+            for (Map.Entry<Integer, ArrayList<Integer>> me : set) {
+                c=me.getKey();
+                ArrayList<Integer> al = me.getValue();
+                for (Integer i : al) {
+                    if (i==v) {
+                        return c;
+                    }
+                }
+            }
+            
+            return c;
+        }
+        
+        // Вернуть сколько классов эквивалентности есть
+        public Integer getEquivalenceClassesCount() {
+            return equivalenceMap.size();
+        }
+        
+        // Вернуть список элементов одного класса эквивалентности
+        public ArrayList<Integer> getElements(Integer i) {
+            return equivalenceMap.get(i);
+        }
+        
+    }
 
     // мапа всех состояний автомата с переходами/выходами по алфавиту 
     private TreeMap<Integer, List<TransitionOutput>> conditionMap = new TreeMap<Integer, List<TransitionOutput>>();
@@ -61,7 +98,7 @@ public class Automaton {
         System.out.print("Автомат:\nНачальное состояние: " +
                 Integer.toString(initialCondition) + "\n#:\t");
         
-        for (int a : inputAlphabet) {
+        for (String a : inputAlphabet) {
             System.out.print(a + "\t");
         }
         System.out.print("\n");
@@ -85,24 +122,8 @@ public class Automaton {
         
         line = br.readLine();
         
-         // Читаем размерность множества входного/выходного алфавита
-        line = br.readLine();
-        StringTokenizer dm = new StringTokenizer(line, ":");
-        while(dm.hasMoreTokens()) {
-            dm.nextToken();
-            line = dm.nextToken();
-            alphabetsDimention = Integer.valueOf(line);
-        }
-        
-        for (Integer a=0; a<alphabetsDimention; a++) {
-            inputAlphabet.add(a);
-            outputAlphabet.add(a);
-        }
-        
-        
-        
+        // ПЕРЕДЕЛАТЬ БАРДАК ТУТ
         // Читаем входной алфавит
-        /*
         line = br.readLine();
         StringTokenizer ia1 = new StringTokenizer(line, ":");
         while(ia1.hasMoreTokens()) {
@@ -112,8 +133,7 @@ public class Automaton {
         StringTokenizer ia2 = new StringTokenizer(line, ",");
         while(ia2.hasMoreTokens()) {
             line = ia2.nextToken();
-            inputAlphabet.add(Integer.valueOf(line));
-            
+            inputAlphabet.add(line);
         }
         
         // Читаем выходной алфавит
@@ -126,12 +146,9 @@ public class Automaton {
         StringTokenizer oa2 = new StringTokenizer(line, ",");
         while(oa2.hasMoreTokens()) {
             line = oa2.nextToken();
-            outputAlphabet.add(Integer.valueOf(line));
+            outputAlphabet.add(line);
         }
-       */ 
-                
-                
-                
+        
         // Читаем начальное состояние
         line = br.readLine();
         StringTokenizer ic = new StringTokenizer(line, ":");
@@ -151,7 +168,7 @@ public class Automaton {
             co = Integer.valueOf(st.nextToken());
            
             while(st.hasMoreElements()) {
-                to = new TransitionOutput(Integer.valueOf(st.nextToken()), Integer.valueOf(st.nextToken()));
+                to = new TransitionOutput(Integer.valueOf(st.nextToken()), st.nextToken());
                 //to.NextCondition = Integer.valueOf(st.nextToken());
                 //to.Output = st.nextToken();
                 tr.add(to);
@@ -170,13 +187,9 @@ public class Automaton {
         bw.write("@Automaton");
         
         bw.newLine();
-        bw.write("AlphabetsDimention:"+alphabetsDimention);
+        bw.write("InputAlphabet:");
         
-        
-        
-        
-        /*
-        for (Integer a : inputAlphabet) {
+        for (String a : inputAlphabet) {
             line += a + ",";
         }
         bw.write(line.substring(0, line.length()-1));
@@ -184,12 +197,10 @@ public class Automaton {
         bw.newLine();
         bw.write("OutputAlphabet:");
         line = "";
-        for (Integer a : outputAlphabet) {
+        for (String a : outputAlphabet) {
             line += a + ",";
         }
         bw.write(line.substring(0, line.length()-1));
-        */
-        
         
         bw.newLine();
         bw.write("InitialCondition:");
@@ -209,61 +220,109 @@ public class Automaton {
         bw.close();
     }
     
-    public String getOutputWord(String inputWord) {
-        String outWord ="";
-        int tmp = 0; 
-        int currentCondition = 1;
-        for (Integer i=0; i<inputWord.length(); i++) {
-            tmp = Character.getNumericValue(inputWord.charAt(i));
-            outWord += Integer.toString(this.getOutput(tmp, currentCondition));
-            currentCondition = this.getCondition(tmp, currentCondition);
-        }
-        return outWord;
+    public Map<Integer, List<TransitionOutput>> getConditionMap() {
+        return conditionMap;
     }
-    
-    
-    // Выдать степень числа
-    public Integer getPow(Integer a, Integer b) {
-        Integer res = 1;
-        for (int i=1; i<=b; i++) {
-            res *= a;
-        }
-        return res;
-    }
-    
-    // Выдать редукцию
-    public String getReduction(String input, Integer k) {
-        String outWord ="";
-        String o = input.substring(input.length()-k+1, input.length());
-        for (Integer i=0; i<input.length()-k; i++) {
-            outWord +="0 ";
-        }
-        
-        
-        for (Integer i=0; i<o.length(); i++) {
-            outWord += "\t" + Integer.toString(Character.getNumericValue(o.charAt(i))*getPow(alphabetsDimention, o.length()-i));
-           
-        }
-        
-        return outWord;
-    }
-    
     
     // Выдать элемент выходного алфавита по номеру элемента входного алфавита и номеру состояния
-    public Integer getOutput(Integer inputElement, Integer condition) {
+    public String getOutput(Integer inputElement, Integer condition) {
         List<TransitionOutput> to = conditionMap.get(condition);
-        return to.get(inputElement).Output;
+        return to.get(inputElement-1).Output;
     }
     
     // Выдать номер следующего состояния по номеру элемента входного алфавита и номеру состояния
     public Integer getCondition(Integer inputElement, Integer condition) {
         List<TransitionOutput> to = conditionMap.get(condition);
-        return to.get(inputElement).NextCondition;
-        
+        return to.get(inputElement-1).NextCondition;
     }
     
     
-   
+    // Минимизация автомата
+    public void /*Automaton*/ getMinimized() {
+        
+        int cc;
+        int co = 0;
+        String so = "";
+
+        // Первичное разбиение
+        TreeMap<Integer, ArrayList<Integer>> fc = new TreeMap<Integer, ArrayList<Integer>>();
+        Set<Map.Entry<Integer, List<TransitionOutput>>> set = conditionMap.entrySet();
+        for (String oa : outputAlphabet) {
+            for (int ia = 0; ia < inputAlphabet.size(); ia++) {
+                fc.put(co, new ArrayList<Integer>());
+                for (Map.Entry<Integer, List<TransitionOutput>> me : set) {
+                    cc = me.getKey(); // Текущее состояние
+                    List<TransitionOutput> to = me.getValue();
+                    so = to.get(ia).Output;
+                    if (so.equals(oa)) {
+                     ArrayList<Integer> al = fc.get(co);
+                     al.add(cc);
+                    }
+                }
+                co++;
+            }
+        }
+       
+    // Делаем таблицу разбиений
+    Integer table [][] = new Integer[fc.size()][conditionMap.size()];
+
+    // 1. Забиваем ее нулями
+    for (int i1=0; i1<(fc.size()); i1++) {
+    for (int i2=0; i2<(conditionMap.size()); i2++) {
+    table[i1][i2] = 0;}
+    }
+    
+    // 2. Заполняем ее
+    Set<Map.Entry<Integer, ArrayList<Integer>>> p = fc.entrySet();
+    for (Map.Entry<Integer, ArrayList<Integer>> s : p) {
+        Integer cl = s.getKey();
+        ArrayList<Integer> al = s.getValue();
+        for (Integer i  : al) {
+            table[cl][al.indexOf(i)] = i;
+        }
+    }
+
+    // 3. Преобразовываем ее (убираем дубли)
+    for (int i1=0; i1<(fc.size()); i1++) {
+        for (int j1=0; j1<conditionMap.size(); j1++) {
+            for (int i2=0; i2<(fc.size()); i2++) {
+                if (i1!=i2) {
+                        for (int j2=0; j2<conditionMap.size(); j2++) {
+                            
+                            
+                            if (table[i2][j2] == table[i1][j1]) {
+                                table[i2][j2] = 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    
+    
+    // Заполняем классы эквивалентности
+    equivalenceClasses eqc = new equivalenceClasses();
+    ArrayList<Integer> al;
+    for (int i1=0; i1<(fc.size()); i1++) {
+        al = new ArrayList<Integer>();
+        for (int i2=0; i2<(conditionMap.size()); i2++) {
+            if (table[i1][i2]!=0) {
+                al.add(table[i1][i2]);
+            }
+        }
+        if (al.size()!=0) {
+        eqc.addClass(al);
+        }
+    }
+
+    
+    
+    
+        /*
+        Automaton minAutomaton = new Automaton();
+        return minAutomaton;
+        */
+    }  
 
 }
     

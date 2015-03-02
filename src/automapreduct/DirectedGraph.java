@@ -12,11 +12,18 @@ package automapreduct;
 Несуществующие вершины будут созданы автоматически.
 */
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Set;
 
 public class DirectedGraph {
     
@@ -48,5 +55,26 @@ public class DirectedGraph {
  
     public Map<String, List<String>> getVertexMap() {
         return vertexMap;
+    }
+    
+    // Делаем файл для графвиза
+    public void makeFile(String filename) throws FileNotFoundException, IOException {
+        File f = new File(filename);
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
+        String line;
+        bw.write("digraph G{");
+        bw.newLine();
+        
+        Set<Map.Entry<String, List<String>>> set = vertexMap.entrySet();
+        for (Map.Entry<String, List<String>> me : set) {
+            line = me.getKey();
+            List<String> to = me.getValue();
+            for (String s : to) {
+                bw.write(line + "->" + s);
+                bw.newLine();
+            }
+        }
+        bw.write("}");
+        bw.close();
     }
 }

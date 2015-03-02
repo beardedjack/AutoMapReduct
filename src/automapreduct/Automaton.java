@@ -2,17 +2,11 @@ package automapreduct;
 
 import java.util.Map;
 import java.util.List;
-import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Set;
 import java.util.TreeMap;
 import java.io.*;
-import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.StringTokenizer;
-import java.math.*;
-import java.util.LinkedList;
 
 public class Automaton {
     // мапа всех состояний автомата с переходами/выходами по алфавиту 
@@ -87,6 +81,7 @@ public class Automaton {
             alphabetsDimention = Integer.valueOf(line);
         }
         
+        // Заполняем алфавиты (входной=выходной)
         for (Integer a=0; a<alphabetsDimention; a++) {
             inputAlphabet.add(a);
             outputAlphabet.add(a);
@@ -206,6 +201,20 @@ public class Automaton {
         String outWord ="";
         int tmp = 0; 
         int currentCondition = 1;
+        
+        //System.out.println("inputWord=" + inputWord);
+        
+        Integer i = inputWord.length()-1;
+        
+        do {tmp = Character.getNumericValue(inputWord.charAt(i));
+            outWord = Integer.toString(this.getOutput(tmp, currentCondition)) + outWord;
+            // outWord += Integer.toString(this.getOutput(tmp, currentCondition));
+            currentCondition = this.getCondition(tmp, currentCondition);
+            i = i-1;
+            
+        } while (i>=0);
+        
+        /*
         for (Integer i=inputWord.length(); i== 0; i--) {
         //for (Integer i=0; i<inputWord.length(); i++) {
             tmp = Character.getNumericValue(inputWord.charAt(i));
@@ -214,6 +223,7 @@ public class Automaton {
            // outWord += Integer.toString(this.getOutput(tmp, currentCondition));
             currentCondition = this.getCondition(tmp, currentCondition);
         }
+        */
         return outWord;
     }
         
@@ -267,20 +277,36 @@ public class Automaton {
         String outBinaryData;
         Integer outData = 0;
         
-        LinkedList<Integer> dotList = new LinkedList<Integer>();
+        TreeMap<Integer, Integer> dotList = new TreeMap<Integer, Integer>();
         
-        for (Integer i = 0; i < getPow(alphabetsDimention, k); i++) {
+        
+        //LinkedList<Integer> dotList = new LinkedList<Integer>();
+        // Заполняем соответствия x-f(x)
+        for (Integer i = 0; i < getPow(alphabetsDimention, k)-1; i++) {
             // Взяли число и перевели его в двоичную
             binaryData = Integer.toBinaryString(i);
             // Даем его автомату
+            //System.out.println("=======>" + binaryData);
             outBinaryData = getOutputWord(binaryData);
             // Выход из автомата переводим в десятичную
-            outData = Integer.parseInt(binaryData, 2);
+            //System.out.println("=======>" + outBinaryData);
+            outData = Integer.parseInt(outBinaryData, 2);
             // И добавляем его в коллекцию
-            dotList.add(outData);
+            dotList.put(i, outData);
         }
         
+        // Перебираем и заполняем граф
+        Set<Map.Entry<Integer, Integer>> set1 = dotList.entrySet();
+        Set<Map.Entry<Integer, Integer>> set2 = dotList.entrySet();
         
+        for (Map.Entry<Integer, Integer> me1 : set1) {
+            for (Map.Entry<Integer, Integer> me2 : set2) {
+                //  f(x)=y (mod m^k)
+                if (compareByModule(me1.getValue(), me2.getKey(), k)) {
+                   graph.addEdge(Integer.toString(me1.getKey()), Integer.toString(me2.getKey()));
+                }
+            }
+        }
         
         
         return graph;

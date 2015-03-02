@@ -12,17 +12,15 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.math.*;
+import java.util.LinkedList;
 
 public class Automaton {
-
-    
-    
+    // мапа всех состояний автомата с переходами/выходами по алфавиту 
+    private TreeMap<Integer, List<TransitionOutput>> conditionMap = new TreeMap<Integer, List<TransitionOutput>>();
+        
     public List<Integer> inputAlphabet = new ArrayList<Integer>();
     public List<Integer> outputAlphabet = new ArrayList<Integer>();
-    
-    
     public Integer alphabetsDimention =0;
-    
     private int initialCondition = 1;
     
     // элемент таблицы переходов-выходов автомата (отдельно взятая ячейка)
@@ -37,11 +35,6 @@ public class Automaton {
         }
     
     }
-    
-    
-
-    // мапа всех состояний автомата с переходами/выходами по алфавиту 
-    private TreeMap<Integer, List<TransitionOutput>> conditionMap = new TreeMap<Integer, List<TransitionOutput>>();
      
     // проверка на наличие состояния с таким номером
     public boolean hasCondition(Integer conditionNumber) {
@@ -213,15 +206,17 @@ public class Automaton {
         String outWord ="";
         int tmp = 0; 
         int currentCondition = 1;
-        for (Integer i=0; i<inputWord.length(); i++) {
+        for (Integer i=inputWord.length(); i== 0; i--) {
+        //for (Integer i=0; i<inputWord.length(); i++) {
             tmp = Character.getNumericValue(inputWord.charAt(i));
-            outWord += Integer.toString(this.getOutput(tmp, currentCondition));
+            outWord = Integer.toString(this.getOutput(tmp, currentCondition)) + outWord;
+            
+           // outWord += Integer.toString(this.getOutput(tmp, currentCondition));
             currentCondition = this.getCondition(tmp, currentCondition);
         }
         return outWord;
     }
-    
-    
+        
     // Выдать степень числа
     public Integer getPow(Integer a, Integer b) {
         Integer res = 1;
@@ -247,8 +242,7 @@ public class Automaton {
         
         return outWord;
     }
-    
-    
+        
     // Выдать элемент выходного алфавита по номеру элемента входного алфавита и номеру состояния
     public Integer getOutput(Integer inputElement, Integer condition) {
         List<TransitionOutput> to = conditionMap.get(condition);
@@ -262,10 +256,37 @@ public class Automaton {
         
     }
     
-    
+    public boolean compareByModule(Integer x, Integer y, Integer k) {
+        Integer c = getPow(alphabetsDimention, k);
+        return (x%c==y%c);
+    }
    
+    public DirectedGraph makeGraph(Integer k) {
+        DirectedGraph graph = new DirectedGraph();
+        String binaryData;
+        String outBinaryData;
+        Integer outData = 0;
+        
+        LinkedList<Integer> dotList = new LinkedList<Integer>();
+        
+        for (Integer i = 0; i < getPow(alphabetsDimention, k); i++) {
+            // Взяли число и перевели его в двоичную
+            binaryData = Integer.toBinaryString(i);
+            // Даем его автомату
+            outBinaryData = getOutputWord(binaryData);
+            // Выход из автомата переводим в десятичную
+            outData = Integer.parseInt(binaryData, 2);
+            // И добавляем его в коллекцию
+            dotList.add(outData);
+        }
+        
+        
+        
+        
+        return graph;
 
 }
     
 
 
+}

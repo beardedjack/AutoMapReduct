@@ -13,7 +13,7 @@ public class Main {
             a.loadFromFile("InputAuto.txt");
             DirectedGraph sdf = a.makeGraph(i);
             sdf.makeFile("graph.dot", i);
-        } 
+        }  
         catch (Exception e) { 
             System.out.println(e); 
         } 

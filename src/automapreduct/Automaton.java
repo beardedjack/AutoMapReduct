@@ -154,35 +154,12 @@ public class Automaton {
         File f = new File(filename);
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
         String line = "";
-        
         bw.write("@Automaton");
-        
         bw.newLine();
-        bw.write("AlphabetsDimention:"+alphabetsDimention);
-        
-        
-        
-        
-        /*
-        for (Integer a : inputAlphabet) {
-            line += a + ",";
-        }
-        bw.write(line.substring(0, line.length()-1));
-        
-        bw.newLine();
-        bw.write("OutputAlphabet:");
-        line = "";
-        for (Integer a : outputAlphabet) {
-            line += a + ",";
-        }
-        bw.write(line.substring(0, line.length()-1));
-        */
-        
-        
+        bw.write("AlphabetsDimention:" + alphabetsDimention);
         bw.newLine();
         bw.write("InitialCondition:");
         bw.write(Integer.toString(initialCondition));
-        
         Set<Map.Entry<Integer, List<TransitionOutput>>> set = conditionMap.entrySet();
         for (Map.Entry<Integer, List<TransitionOutput>> me : set) {
             bw.newLine();
@@ -191,9 +168,8 @@ public class Automaton {
             for (TransitionOutput o : to) {
                 line += Integer.toString(o.NextCondition) + "/" + o.Output + ",";
             }
-            bw.write(line.substring(0, line.length()-1));
+            bw.write(line.substring(0, line.length() - 1));
         }
-        
         bw.close();
     }
     
@@ -207,9 +183,9 @@ public class Automaton {
         Integer i = inputWord.length()-1;
         
         do {tmp = Character.getNumericValue(inputWord.charAt(i));
-            outWord = Integer.toString(this.getOutput(tmp, currentCondition)) + outWord;
+            outWord =  Integer.toString(this.getOutput(tmp, currentCondition)) + outWord  ;
             // outWord += Integer.toString(this.getOutput(tmp, currentCondition));
-            currentCondition = this.getCondition(tmp, currentCondition);
+            currentCondition = getCondition(tmp, currentCondition);
             i = i-1;
             
         } while (i>=0);
@@ -230,30 +206,12 @@ public class Automaton {
     // Выдать степень числа
     public Integer getPow(Integer a, Integer b) {
         Integer res = 1;
-        for (int i=1; i<=b; i++) {
+        for (int i = 1; i <= b; i++) {
             res *= a;
         }
         return res;
     }
-    
-    /*
-    public String getReduction(String input, Integer k) {
-        String outWord ="";
-        String o = input.substring(input.length()-k+1, input.length());
-        for (Integer i=0; i<input.length()-k; i++) {
-            outWord +="0 ";
-        }
-        
-        
-        for (Integer i=0; i<o.length(); i++) {
-            outWord += "\t" + Integer.toString(Character.getNumericValue(o.charAt(i))*getPow(alphabetsDimention, o.length()-i));
-           
-        }
-        
-        return outWord;
-    }
-    */
-    
+            
     // Выдать элемент выходного алфавита по номеру элемента входного алфавита и номеру состояния
     public Integer getOutput(Integer inputElement, Integer condition) {
         List<TransitionOutput> to = conditionMap.get(condition);
@@ -264,15 +222,39 @@ public class Automaton {
     public Integer getCondition(Integer inputElement, Integer condition) {
         List<TransitionOutput> to = conditionMap.get(condition);
         return to.get(inputElement).NextCondition;
-        
     }
     
     public boolean compareByModule(Integer x, Integer y, Integer k) {
-        Integer c = getPow(alphabetsDimention, k);
-        return (x%c==y%c);
+        String a, b;
+        a = Integer.toBinaryString(x);
+        a = a.substring(a.length()-k+1, a.length()-1);
+        
+        
+        b = Integer.toBinaryString(y);
+        b = b.substring(a.length()-k+1, b.length()-1);
+        
+        
+        return (a==b);
+    }
+    
+    // Выдать граф автомата
+    public DirectedGraph makeAutomatonGraph() {
+        DirectedGraph graph = new DirectedGraph();
+        String curr ,next;
+        Set<Map.Entry<Integer, List<TransitionOutput>>> set = conditionMap.entrySet();
+        for (Map.Entry<Integer, List<TransitionOutput>> me : set) {
+            curr = Integer.toString(me.getKey());
+            List<TransitionOutput> to = me.getValue();
+            for (TransitionOutput o : to) {
+                next = Integer.toString(o.NextCondition);
+                graph.addEdge(curr, next);
+            }
+        }
+        return graph;
     }
    
-    public DirectedGraph makeGraph(Integer k) {
+    // Выдать граф редукции
+    public DirectedGraph makeReductGraph(Integer k) {
         DirectedGraph graph = new DirectedGraph();
         String binaryData;
         String outBinaryData;
@@ -286,15 +268,19 @@ public class Automaton {
         for (Integer i = 0; i < getPow(alphabetsDimention, k); i++) {
             // Взяли число и перевели его в двоичную
             
-            //System.out.println("ЧИСЛО " + i);
+            //System.out.println("X= " + i);
             
             binaryData = Integer.toBinaryString(i);
             // Даем его автомату
-            //System.out.println("=======>" + binaryData);
+            System.out.println("-------------------------");
+            System.out.println("x=" + binaryData + " (" + i + ")");
             outBinaryData = getOutputWord(binaryData);
             // Выход из автомата переводим в десятичную
-            //System.out.println("=======>" + outBinaryData);
+            
+            
             outData = Integer.parseInt(outBinaryData, 2);
+            System.out.println("f(x)=" + outBinaryData + " (" + outData + ")");
+
             // И добавляем его в коллекцию
             dotList.put(i, outData);
         }
@@ -302,14 +288,22 @@ public class Automaton {
         // Перебираем и заполняем граф
         Set<Map.Entry<Integer, Integer>> set1 = dotList.entrySet();
         Set<Map.Entry<Integer, Integer>> set2 = dotList.entrySet();
+        Set<Map.Entry<Integer, Integer>> set3 = dotList.entrySet();
+        
+        for (Map.Entry<Integer, Integer> me3 : set3) {
+            graph.addVertex(Integer.toString(me3.getKey().intValue()));
+            System.out.println("------->>>>>" + Integer.toString(me3.getKey().intValue()));
+        }
+        
         
         for (Map.Entry<Integer, Integer> me1 : set1) {
             for (Map.Entry<Integer, Integer> me2 : set2) {
                 //  f(x)=y (mod m^k)
                 if (me1.getKey()!=me2.getKey()) {
-                if (compareByModule(me1.getValue(), me2.getKey(), k)) {
+                //if (compareByModule(me1.getValue(), me2.getKey(), k)) {
+                if (me1.getValue()==me2.getKey()) {
                 
-                   graph.addEdge(Integer.toString(me1.getKey()), Integer.toString(me2.getKey()));
+                   graph.addEdge(Integer.toString(me2.getKey()), Integer.toString(me1.getKey()));
                 }
                 }
             }

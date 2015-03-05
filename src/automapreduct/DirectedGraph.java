@@ -61,6 +61,7 @@ public class DirectedGraph {
     // Делаем файл для графвиза
     public void makeFile(String filename, int k) throws FileNotFoundException, IOException {
         File f = new File(filename);
+        String dummy;
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
         String line;
         bw.write("digraph G{");
@@ -70,6 +71,11 @@ public class DirectedGraph {
         for (Map.Entry<String, List<String>> me : set) {
             line = me.getKey();
             List<String> to = me.getValue();
+            
+            if (to.size()==0) {
+            bw.write(line);
+                bw.newLine();
+            }
             for (String s : to) {
                 bw.write(line + "->" + s);
                 bw.newLine();
@@ -78,10 +84,13 @@ public class DirectedGraph {
         bw.write("}");
         bw.close();
         
+        if (k==0) {dummy = "C:\\graphviz\\bin\\dot -Tjpg -o GraphAutomaton.jpg graphautomaton.dot"; }
+        else {dummy = "C:\\graphviz\\bin\\dot -Tjpg -o GraphReduct(k=" + Integer.toString(k) + ").jpg graphreduct.dot"; }
+        
         // Делаем графический файл
         try {
             Process process = Runtime.getRuntime().
-            exec("C:\\graphviz\\bin\\dot -Tjpg -o graph(k=" + k + ").jpg graph.dot");
+            exec(dummy);
             InputStream inputStream = process.getInputStream();
             InputStream errorStream = process.getErrorStream();
  

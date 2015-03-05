@@ -11,8 +11,13 @@ public class Main {
             System.out.println("k="+i);
             Automaton a = new Automaton();
             a.loadFromFile("InputAuto.txt");
-            DirectedGraph sdf = a.makeGraph(i);
-            sdf.makeFile("graph.dot", i);
+            
+            DirectedGraph sdf = a.makeReductGraph(i);
+            sdf.makeFile("graphreduct.dot", i);
+            
+            DirectedGraph ag = a.makeAutomatonGraph();
+            ag.makeFile("graphautomaton.dot", 0);
+            
         }  
         catch (Exception e) { 
             System.out.println(e); 

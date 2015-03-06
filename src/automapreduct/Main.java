@@ -1,6 +1,5 @@
 package automapreduct;
 
-import automapreduct.Automaton.TransitionOutput;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -15,8 +14,8 @@ public class Main {
             DirectedGraph sdf = a.makeReductGraph(i);
             sdf.makeFile("graphreduct.dot", i);
             
-            DirectedGraph ag = a.makeAutomatonGraph();
-            ag.makeFile("graphautomaton.dot", 0);
+            //DirectedGraph ag = a.makeAutomatonGraph();
+            //ag.makeFile("graphautomaton.dot", 0);
             
         }  
         catch (Exception e) { 

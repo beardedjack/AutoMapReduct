@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import static java.lang.String.format;
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
@@ -66,7 +67,10 @@ public class DirectedGraph {
         String line;
         bw.write("digraph G{");
         bw.newLine();
-        
+        bw.write(format("label=\"(k = %d)\"", k));
+        bw.newLine();
+        bw.write("node[shape=\"circle\"]");
+        bw.newLine();
         Set<Map.Entry<String, List<String>>> set = vertexMap.entrySet();
         for (Map.Entry<String, List<String>> me : set) {
             line = me.getKey();

@@ -6,19 +6,20 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeMap;
 import java.io.*;
+import java.util.LinkedList;
 import java.util.StringTokenizer;
 
 public class Automaton {
     // мапа всех состояний автомата с переходами/выходами по алфавиту 
     private TreeMap<Integer, List<TransitionOutput>> conditionMap = new TreeMap<Integer, List<TransitionOutput>>();
         
-    public List<Integer> inputAlphabet = new ArrayList<Integer>();
-    public List<Integer> outputAlphabet = new ArrayList<Integer>();
-    public Integer alphabetsDimention =0;
+    private List<Integer> inputAlphabet = new ArrayList<Integer>();
+    private List<Integer> outputAlphabet = new ArrayList<Integer>();
+    private Integer alphabetsDimention =0;
     private int initialCondition = 1;
     
     // элемент таблицы переходов-выходов автомата (отдельно взятая ячейка)
-    public class TransitionOutput {
+    private class TransitionOutput {
                        
         Integer NextCondition; // следующее состояние
         Integer Output; // выход
@@ -31,19 +32,19 @@ public class Automaton {
     }
      
     // проверка на наличие состояния с таким номером
-    public boolean hasCondition(Integer conditionNumber) {
+    private boolean hasCondition(Integer conditionNumber) {
         return conditionMap.containsKey(conditionNumber);
     }
      
      // добавление нового состояния
-    public void addCondition(Integer transitionNumber, ArrayList<TransitionOutput> e) {
+    private void addCondition(Integer transitionNumber, ArrayList<TransitionOutput> e) {
         if (!hasCondition(transitionNumber)) {
             // добавление всех переходов/выходов по каждому символу входного алфавита для данного состояния
             conditionMap.put(transitionNumber, new ArrayList<TransitionOutput>(e));
         }
     }
     
-    public void printAutomaton() {
+    private void printAutomaton() {
         
         System.out.print("Автомат:\nНачальное состояние: " +
                 Integer.toString(initialCondition) + "\n#:\t");
@@ -173,13 +174,10 @@ public class Automaton {
         bw.close();
     }
     
-    public String getOutputWord(String inputWord) {
+    private String getOutputWord(String inputWord) {
         String outWord ="";
         int tmp = 0; 
         int currentCondition = 1;
-        
-        //System.out.println("inputWord=" + inputWord);
-        
         Integer i = inputWord.length()-1;
         
         do {tmp = Character.getNumericValue(inputWord.charAt(i));
@@ -187,56 +185,39 @@ public class Automaton {
             // outWord += Integer.toString(this.getOutput(tmp, currentCondition));
             currentCondition = getCondition(tmp, currentCondition);
             i = i-1;
-            
         } while (i>=0);
-        
-        /*
-        for (Integer i=inputWord.length(); i== 0; i--) {
-        //for (Integer i=0; i<inputWord.length(); i++) {
-            tmp = Character.getNumericValue(inputWord.charAt(i));
-            outWord = Integer.toString(this.getOutput(tmp, currentCondition)) + outWord;
-            
-           // outWord += Integer.toString(this.getOutput(tmp, currentCondition));
-            currentCondition = this.getCondition(tmp, currentCondition);
-        }
-        */
         return outWord;
     }
         
     // Выдать степень числа
-    public Integer getPow(Integer a, Integer b) {
+    private Integer getPow(Integer a, Integer b) {
         Integer res = 1;
-        for (int i = 1; i <= b; i++) {
+        for (int i = 1; i <= b; i++) { 
             res *= a;
         }
         return res;
     }
             
     // Выдать элемент выходного алфавита по номеру элемента входного алфавита и номеру состояния
-    public Integer getOutput(Integer inputElement, Integer condition) {
+    private Integer getOutput(Integer inputElement, Integer condition) {
         List<TransitionOutput> to = conditionMap.get(condition);
         return to.get(inputElement).Output;
     }
     
     // Выдать номер следующего состояния по номеру элемента входного алфавита и номеру состояния
-    public Integer getCondition(Integer inputElement, Integer condition) {
+    private Integer getCondition(Integer inputElement, Integer condition) {
         List<TransitionOutput> to = conditionMap.get(condition);
         return to.get(inputElement).NextCondition;
     }
-    
-    public boolean compareByModule(Integer x, Integer y, Integer k) {
-        String a, b;
-        a = Integer.toBinaryString(x);
-        a = a.substring(a.length()-k+1, a.length()-1);
-        
-        
-        b = Integer.toBinaryString(y);
-        b = b.substring(a.length()-k+1, b.length()-1);
-        
-        
-        return (a==b);
+       
+    private String addBits(String s, Integer k) {
+        StringBuffer sb = new StringBuffer(s).reverse();
+        while(sb.length() < k)
+            sb.append("0");
+            sb.reverse();
+        return sb.toString();
     }
-    
+
     // Выдать граф автомата
     public DirectedGraph makeAutomatonGraph() {
         DirectedGraph graph = new DirectedGraph();
@@ -256,63 +237,34 @@ public class Automaton {
     // Выдать граф редукции
     public DirectedGraph makeReductGraph(Integer k) {
         DirectedGraph graph = new DirectedGraph();
-        String binaryData;
-        String outBinaryData;
-        Integer outData = 0;
         
-        TreeMap<Integer, Integer> dotList = new TreeMap<Integer, Integer>();
+        // мапа <№ множества> - <x, f(x)>
+        TreeMap<Integer, LinkedList<String>> reductMap = new TreeMap<Integer, LinkedList<String>>();
         
+        String input, output = ""; // <входное слово>,<выходное слово>
+        LinkedList<String> corr;
         
-        //LinkedList<Integer> dotList = new LinkedList<Integer>();
-        // Заполняем соответствия x-f(x)
         for (Integer i = 0; i < getPow(alphabetsDimention, k); i++) {
-            // Взяли число и перевели его в двоичную
-            
-            //System.out.println("X= " + i);
-            
-            binaryData = Integer.toBinaryString(i);
-            // Даем его автомату
-            System.out.println("-------------------------");
-            System.out.println("x=" + binaryData + " (" + i + ")");
-            outBinaryData = getOutputWord(binaryData);
-            // Выход из автомата переводим в десятичную
-            
-            
-            outData = Integer.parseInt(outBinaryData, 2);
-            System.out.println("f(x)=" + outBinaryData + " (" + outData + ")");
+            corr = new LinkedList<String>();
+            input = addBits(Integer.toBinaryString(i), k);
+            output = getOutputWord(input);
+            corr.add(input);
+            corr.add(output);
+            reductMap.put(i, corr);
+        }
 
-            // И добавляем его в коллекцию
-            dotList.put(i, outData);
-        }
+        Set<Map.Entry<Integer, LinkedList<String>>> set = reductMap.entrySet();
         
-        // Перебираем и заполняем граф
-        Set<Map.Entry<Integer, Integer>> set1 = dotList.entrySet();
-        Set<Map.Entry<Integer, Integer>> set2 = dotList.entrySet();
-        Set<Map.Entry<Integer, Integer>> set3 = dotList.entrySet();
-        
-        for (Map.Entry<Integer, Integer> me3 : set3) {
-            graph.addVertex(Integer.toString(me3.getKey().intValue()));
-            System.out.println("------->>>>>" + Integer.toString(me3.getKey().intValue()));
-        }
-        
-        
-        for (Map.Entry<Integer, Integer> me1 : set1) {
-            for (Map.Entry<Integer, Integer> me2 : set2) {
-                //  f(x)=y (mod m^k)
-                if (me1.getKey()!=me2.getKey()) {
-                //if (compareByModule(me1.getValue(), me2.getKey(), k)) {
-                if (me1.getValue()==me2.getKey()) {
-                
-                   graph.addEdge(Integer.toString(me2.getKey()), Integer.toString(me1.getKey()));
-                }
+        for (Map.Entry<Integer, LinkedList<String>> me1 : set) { 
+            for (Map.Entry<Integer, LinkedList<String>> me2 : set) {
+                if (me1.getValue().get(1).equalsIgnoreCase(me2.getValue().get(0))) {
+                    graph.addEdge(Integer.toString(me1.getKey()), Integer.toString(me2.getKey()));
                 }
             }
         }
-        
-        
-        return graph;
 
-}
+        return graph;
+    }
     
 
 

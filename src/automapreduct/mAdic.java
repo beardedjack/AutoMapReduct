@@ -2,32 +2,32 @@ package automapreduct;
 
 // m-адическое число
 
-import java.util.LinkedList;
-import java.util.TreeMap;
-
-
 public class mAdic {
     
-    
-    private Integer capacity; // разрядность
-    private Integer[]  digits;
+    private Integer capacity; // основание системы счисления
+    private Integer[]  digits; // элементы множетсва
     
     public mAdic(Integer m, int s) {
         this.capacity = m;
         this.digits = new Integer[s];
+        
+        
+        for (Integer i = 0; i < s; i++) {
+            digits[i] = 0;
+        }
+        
     } 
     
-    public void increase() {
-        Integer c;
-        boolean flag = false;
-        
-        for (Integer d : digits) {
-            
-        }
+    public void setDigits(Integer[] value) {
+        digits = value;
+    } 
+    
+    public Integer[] getDigits() {
+        return digits;
     }
     
-    public TreeMap<Integer, LinkedList<mAdic>> getRange(Integer range) {
-        return null;
+    public Integer getSize() {
+        return digits.length;
     }
     
 }

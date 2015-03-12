@@ -2,6 +2,9 @@ package automapreduct;
 
 // m-адическое число
 
+import java.util.Arrays;
+
+
 public class mAdic {
     
     private Integer capacity; // основание системы счисления
@@ -12,9 +15,7 @@ public class mAdic {
         this.digits = new Integer[s];
         
         
-        for (Integer i = 0; i < s; i++) {
-            digits[i] = 0;
-        }
+        Arrays.fill(digits, 0);
         
     } 
     

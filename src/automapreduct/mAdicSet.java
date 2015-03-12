@@ -1,5 +1,6 @@
 package automapreduct;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -10,13 +11,16 @@ import java.util.TreeMap;
 public class mAdicSet {
 
     private TreeMap<Integer, mAdic> mAdicMap = new TreeMap<Integer, mAdic>();
-
+    private Integer[] elements;
+    private ArrayList<Integer> al;
+    
+    
     // Все перестановки множества
     public mAdicSet(Integer c, Integer s) { // основание, кол-во элементов
         mAdic ma;
         Integer co = 1;
 
-        Integer[] elements = new Integer[s];
+        elements = new Integer[s];
 
         Arrays.fill(elements, 0);
 
@@ -30,19 +34,20 @@ public class mAdicSet {
             }
         //}
             
-            for (Integer i = 0; i < s; i++) {
-                permute(c, i);
-            }
+            
+                permute(c, s);
+           
 
     }
     
-    private void permute(Integer u, Integer w) {
+    private void permute(Integer u, Integer v) {
+        al = new ArrayList<Integer>();
         for (Integer a = 0; a < u; a++) {
-           // System.out.print(a + " ");
+            
             
         }
-        System.out.println("");
-        //permute(u, w);
+       
+       
         
     }
     

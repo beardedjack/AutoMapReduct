@@ -174,6 +174,13 @@ public class Automaton {
         bw.close();
     }
     
+    
+    // Выход автомата по входу
+    private mAdic getOutput(mAdic input) {
+        mAdic result = new mAdic(alphabetsDimention, 0);
+        return result;
+    }
+    
     private String getOutputWord(String inputWord) {
         String outWord ="";
         int tmp = 0; 

@@ -14,7 +14,12 @@ public class mAdic implements Cloneable {
         this.capacity = m;
         this.digits = new Integer[s];
         Arrays.fill(digits, 0);
-    } 
+    }
+    
+    public mAdic(Integer m, Integer[] s) {
+        this.capacity = m;
+        this.digits = Arrays.copyOf(s, s.length);
+    }
     
     public void setDigits(Integer[] value) {
         digits = value;

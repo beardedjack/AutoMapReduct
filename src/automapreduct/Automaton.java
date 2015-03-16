@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeMap;
 import java.io.*;
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Automaton {
@@ -15,7 +15,7 @@ public class Automaton {
         
     private List<Integer> inputAlphabet = new ArrayList<Integer>();
     private List<Integer> outputAlphabet = new ArrayList<Integer>();
-    private Integer alphabetsDimention =0;
+    private Integer alphabetsDimention = 0;
     private int initialCondition = 1;
     
     // элемент таблицы переходов-выходов автомата (отдельно взятая ячейка)
@@ -65,12 +65,10 @@ public class Automaton {
     }
 
     public void loadFromFile(String filename) throws UnsupportedEncodingException, FileNotFoundException, IOException {
-        
         Integer co = 0;
         File f = new File(filename);
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
         String line = null;
-        
         line = br.readLine();
         
          // Читаем размерность множества входного/выходного алфавита
@@ -83,43 +81,10 @@ public class Automaton {
         }
         
         // Заполняем алфавиты (входной=выходной)
-        for (Integer a=0; a<alphabetsDimention; a++) {
+        for (Integer a = 0; a < alphabetsDimention; a++) {
             inputAlphabet.add(a);
             outputAlphabet.add(a);
         }
-        
-        
-        
-        // Читаем входной алфавит
-        /*
-        line = br.readLine();
-        StringTokenizer ia1 = new StringTokenizer(line, ":");
-        while(ia1.hasMoreTokens()) {
-            ia1.nextToken();
-            line = ia1.nextToken();
-        }
-        StringTokenizer ia2 = new StringTokenizer(line, ",");
-        while(ia2.hasMoreTokens()) {
-            line = ia2.nextToken();
-            inputAlphabet.add(Integer.valueOf(line));
-            
-        }
-        
-        // Читаем выходной алфавит
-        line = br.readLine();
-        StringTokenizer oa1 = new StringTokenizer(line, ":");
-        while(oa1.hasMoreTokens()) {
-            oa1.nextToken();
-            line = oa1.nextToken();
-        }
-        StringTokenizer oa2 = new StringTokenizer(line, ",");
-        while(oa2.hasMoreTokens()) {
-            line = oa2.nextToken();
-            outputAlphabet.add(Integer.valueOf(line));
-        }
-       */ 
-                
-                
                 
         // Читаем начальное состояние
         line = br.readLine();
@@ -174,10 +139,33 @@ public class Automaton {
         bw.close();
     }
     
-    
-    // Выход автомата по входу
-    private mAdic getOutput(mAdic input) {
-        mAdic result = new mAdic(alphabetsDimention, 0);
+    // Выдать множество выходных слов по множеству входных слов
+    public mAdicSet getOutputSet(mAdicSet input) {
+        mAdicSet result = new mAdicSet();
+        mAdic m;
+        Integer num;
+        Integer currentCondition;
+        Integer[] in, out;
+        Set<Map.Entry<Integer, mAdic>> set = input.getMAdicSet();
+
+        for (Map.Entry<Integer, mAdic> me : set) {
+            num = me.getKey();
+            in = me.getValue().getDigits();
+            out = new Integer[in.length];
+            currentCondition = initialCondition;
+            
+            for (Integer i = 0; i < in.length; i++) {
+                out[i] = getOutput(in[i], currentCondition);
+                currentCondition = getCondition(in[i], currentCondition);
+            }
+            m = new mAdic(alphabetsDimention, out);
+            result.addMAdic(num, m);
+            
+            //System.out.println("Input: " + Arrays.toString(in) + " Output: " + Arrays.toString(out));
+            
+        }
+        
+        
         return result;
     }
     
@@ -242,30 +230,19 @@ public class Automaton {
     }
    
     // Выдать граф редукции
-    public DirectedGraph makeReductGraph(Integer k) {
+    public DirectedGraph makeReductGraph(Integer k) throws CloneNotSupportedException {
         DirectedGraph graph = new DirectedGraph();
         
-        // мапа <№ множества> - <x, f(x)>
-        TreeMap<Integer, LinkedList<String>> reductMap = new TreeMap<Integer, LinkedList<String>>();
+        mAdicSet input = new mAdicSet(alphabetsDimention, k);
+        mAdicSet output = getOutputSet(input);
         
-        String input, output = ""; // <входное слово>,<выходное слово>
-        LinkedList<String> corr;
+        Set<Map.Entry<Integer, mAdic>> set1 = input.getMAdicSet();
+        Set<Map.Entry<Integer, mAdic>> set2 = output.getMAdicSet();
         
-        for (Integer i = 0; i < getPow(alphabetsDimention, k); i++) {
-            corr = new LinkedList<String>();
-            input = addBits(Integer.toBinaryString(i), k);
-            output = getOutputWord(input);
-            corr.add(input);
-            corr.add(output);
-            reductMap.put(i, corr);
-        }
-
-        Set<Map.Entry<Integer, LinkedList<String>>> set = reductMap.entrySet();
-        
-        for (Map.Entry<Integer, LinkedList<String>> me1 : set) { 
-            for (Map.Entry<Integer, LinkedList<String>> me2 : set) {
-                if (me1.getValue().get(1).equalsIgnoreCase(me2.getValue().get(0))) {
-                    graph.addEdge(Integer.toString(me1.getKey()), Integer.toString(me2.getKey()));
+        for (Map.Entry<Integer, mAdic> me1 : set1) {
+            for (Map.Entry<Integer, mAdic> me2 : set2) {
+                if (Arrays.equals(me2.getValue().getDigits(), me1.getValue().getDigits())) {
+                    graph.addEdge(Integer.toString(me2.getKey()), Integer.toString(me1.getKey()));
                 }
             }
         }

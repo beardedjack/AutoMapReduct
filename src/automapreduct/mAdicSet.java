@@ -21,9 +21,18 @@ public class mAdicSet {
             tempMAdic.increaseMAdic();
             //workMAdic = new mAdic(c, s);
             workMAdic = tempMAdic.clone();
-            mAdicMap.put(i, workMAdic);
+            addMAdic(i, workMAdic);
         }
     }
+    
+    public mAdicSet() {
+        
+    }
+    
+    public void addMAdic(Integer element, mAdic value) {
+        mAdicMap.put(element, value);
+    }
+    
     
     public Set<Map.Entry<Integer, mAdic>> getMAdicSet() {
         return mAdicMap.entrySet();

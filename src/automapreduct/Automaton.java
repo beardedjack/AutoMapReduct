@@ -147,7 +147,7 @@ public class Automaton {
         Integer currentCondition;
         Integer[] in, out;
         Set<Map.Entry<Integer, mAdic>> set = input.getMAdicSet();
-
+        
         for (Map.Entry<Integer, mAdic> me : set) {
             num = me.getKey();
             in = me.getValue().getDigits();
@@ -160,12 +160,8 @@ public class Automaton {
             }
             m = new mAdic(alphabetsDimention, out);
             result.addMAdic(num, m);
-            
             //System.out.println("Input: " + Arrays.toString(in) + " Output: " + Arrays.toString(out));
-            
         }
-        
-        
         return result;
     }
     
@@ -249,7 +245,5 @@ public class Automaton {
 
         return graph;
     }
-    
-
 
 }

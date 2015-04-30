@@ -12,6 +12,7 @@ public class Main {
             DirectedGraph sdf = a.makeReductGraph(i);
             sdf.makeFile("graphreduct.dot", i);
         }  
+        
         catch (Exception e) { 
             System.out.println(e); 
         } 

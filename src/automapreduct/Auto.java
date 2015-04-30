@@ -14,8 +14,6 @@ import java.util.StringTokenizer;
 
 // Старый класс автомата
 public class Auto {
-
-    
     
     public List<String> inputAlphabet = new ArrayList<String>();
     public List<String> outputAlphabet = new ArrayList<String>();

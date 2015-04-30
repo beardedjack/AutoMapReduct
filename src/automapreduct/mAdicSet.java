@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-
+// класс множества m-адических чисел
 public class mAdicSet {
 
     private TreeMap<Integer, mAdic> mAdicMap = new TreeMap<Integer, mAdic>();

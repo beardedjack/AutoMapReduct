@@ -28,7 +28,6 @@ public class Automaton {
             this.NextCondition = Condition;
             this.Output = Output;
         }
-    
     }
      
     // проверка на наличие состояния с таким номером

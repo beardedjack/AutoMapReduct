@@ -1,6 +1,6 @@
 package automapreduct;
 
-// m-адическое число
+// класс: m-адическое число
 
 import java.util.Arrays;
 
@@ -41,6 +41,7 @@ public class mAdic implements Cloneable {
         return digits.length;
     }
     
+    // увеличение на единицу (с переносом в следующий разряд при переполнении)
     public void increaseMAdic() {
         boolean flag = false;
         for (Integer i = 0; i < digits.length; i++) {

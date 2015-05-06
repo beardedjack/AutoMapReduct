@@ -30,7 +30,9 @@ import java.util.Set;
 public class DirectedGraph {
     
     private HashMap<String, List<String>> vertexMap = new HashMap<String, List<String>>();
- 
+    
+    public Integer edgesCount; // счетчик ребер графа
+    
     public void addVertex(String vertexName) {
         if (!hasVertex(vertexName)) {
             vertexMap.put(vertexName, new ArrayList<String>());
@@ -102,6 +104,40 @@ public class DirectedGraph {
             // handle exception.
         }
       
+        
+    }
+   
+    public void makeAnalysis() {
+        
+        Integer edgesFrom [] = new Integer [edgesCount];
+        Integer edgesTo [] = new Integer [edgesCount];
+        
+        Integer e1, e2, e = 0;
+        
+        Set<Map.Entry<String, List<String>>> set = vertexMap.entrySet();
+        // Запоняем массив ребер
+        
+        for (Map.Entry<String, List<String>> me : set) {
+            e1 = Integer.valueOf(me.getKey());
+            List<String> ls = me.getValue();
+            for (String s: ls) {
+                e2 = Integer.valueOf(s);
+                // игнорируем петли
+                if (e1 != e2) {
+                    edgesFrom [e] = e1;
+                    edgesTo [e] = e2;
+                    e++;
+                }
+            }
+        }
+        
+        
+        
+        for (Integer i = 0; i < e; i++) {
+            for (Integer j = 0; j < e; j++) {
+                if 
+            }
+        }
         
     }
     

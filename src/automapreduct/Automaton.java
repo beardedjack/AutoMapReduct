@@ -238,6 +238,7 @@ public class Automaton {
             for (Map.Entry<Integer, mAdic> me2 : set2) {
                 if (Arrays.equals(me2.getValue().getDigits(), me1.getValue().getDigits())) {
                     graph.addEdge(Integer.toString(me2.getKey()), Integer.toString(me1.getKey()));
+                    graph.edgesCount ++; // счетчик ребер графа
                 }
             }
         }

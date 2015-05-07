@@ -10,7 +10,8 @@ public class Main {
             Automaton a = new Automaton();
             a.loadFromFile("InputAuto.txt");
             DirectedGraph sdf = a.makeReductGraph(i);
-            sdf.makeFile("graphreduct.dot", i);
+            //sdf.makeFile("graphreduct.dot", i);
+            sdf.makeAnalysis();
         }  
         
         catch (Exception e) { 

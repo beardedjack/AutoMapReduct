@@ -1,4 +1,4 @@
-package automapreduct;
+package core;
 
 import java.util.Map;
 import java.util.List;

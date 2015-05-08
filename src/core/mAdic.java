@@ -1,4 +1,4 @@
-package automapreduct;
+package core;
 
 // класс: m-адическое число
 

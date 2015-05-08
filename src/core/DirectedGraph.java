@@ -1,4 +1,4 @@
-package automapreduct;
+package core;
 
 /*
 Внутреннее представление графа - список смежности
@@ -180,30 +180,24 @@ public class DirectedGraph {
         //ArrayList<Vector> v = new ArrayList<Vector>();
         
         for (Integer i = 0; i < edgesCount; i++) {
-            
             if  (vertexFrom[i] != -1 | vertexTo[i] != -1) {
-            
-            allCycles.add(i);
-            System.out.println(/*++c + " " +*/ vertexFrom[i] + " ==> " + vertexTo[i]);
-            
+                //allCycles.add(i);
+                System.out.println(++c + " " + vertexFrom[i] + " ==> " + vertexTo[i]);
             }
         }
         
-        //cyclesMap.put(1, new ArrayList<Integer>());
+        
         
         // Подсчет количества циклов
-        Vector v = new Vector();
         
-        for (Integer i : allCycles) {
-            for (Integer j : allCycles) {
-                if (i != j) {
-                   if (vertexTo[i] == vertexFrom[j]) {
-                       v.add(e);
-                   } 
-                }
+        for (Integer i = 0; i < c; i++) {
+            for (Integer j = 0; i < c; i++) {
+                
             }
         }
         
+        
+         
        
         
     }

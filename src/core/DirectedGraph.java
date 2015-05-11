@@ -173,28 +173,52 @@ public class DirectedGraph {
                 
         Integer c = 0;
         
-        ArrayList<Integer> allCycles = new ArrayList<Integer>();
+        //ArrayList<Integer> allCycles = new ArrayList<Integer>();
         
         //HashMap<Integer, ArrayList<Integer>> cyclesMap = new HashMap<Integer, ArrayList<Integer>>();
         
         //ArrayList<Vector> v = new ArrayList<Vector>();
         
+        
+       // новые массивы:
+       Integer vertex1[] = new Integer[a]; // из вершины
+       Integer vertex2[] = new Integer[a]; // в вершину
+        
+        
         for (Integer i = 0; i < edgesCount; i++) {
             if  (vertexFrom[i] != -1 | vertexTo[i] != -1) {
-                //allCycles.add(i);
-                System.out.println(++c + " " + vertexFrom[i] + " ==> " + vertexTo[i]);
+                vertex1[c] = vertexFrom[i];
+                vertex2[c] = vertexTo[i];
+                c++;
+                //System.out.println(++c + " " + vertexFrom[i] + " ==> " + vertexTo[i]);
             }
         }
         
         
         
-        // Подсчет количества циклов
-        
-        for (Integer i = 0; i < c; i++) {
-            for (Integer j = 0; i < c; i++) {
+        // число a - число всех ребер, участвующих во ВСЕХ циклах
+        // поиск количества циклов...
                 
+        Integer start, end, cyclesCount = a;
+        
+        
+        for (Integer i = 0; i < a; i++) {
+            start = vertex1[i];
+            end = vertex2[i];
+            
+            for (Integer j = 0; j < a; j++) {
+                if ((vertex1[j] == end)|(vertex1[j]!=-1)) {
+                    cyclesCount--;
+                    vertex1[j] = -1;
+                    vertex2[j] = -1;
+                }
             }
+            
+            //System.out.println(vertex1[i] + " ==> " + vertex2[i]);
         }
+        
+        System.out.println(cyclesCount);
+        
         
         
          

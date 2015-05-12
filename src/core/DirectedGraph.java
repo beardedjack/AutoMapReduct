@@ -93,7 +93,7 @@ public class DirectedGraph {
         bw.write("}");
         bw.close();
         
-        if (k==0) {dummy = "C:\\graphviz\\bin\\dot -Tjpg -o GraphAutomaton.jpg graphautomaton.dot"; }
+        if (k == 0) {dummy = "C:\\graphviz\\bin\\dot -Tjpg -o GraphAutomaton.jpg graphautomaton.dot"; }
         else {dummy = "C:\\graphviz\\bin\\dot -Tjpg -o GraphReduct(k=" + Integer.toString(k) + ").jpg graphreduct.dot"; }
         
         // Делаем графический файл
@@ -127,7 +127,7 @@ public class DirectedGraph {
             List<String> ls = me.getValue();
             for (String s: ls) {
                 e2 = Integer.valueOf(s);
-                // запоняем с учетом возможных петель
+                // заполняем с учетом возможных петель
                 if (e1 != e2) {
                     vertexFrom [e] = e1;
                     vertexTo [e] = e2;
@@ -180,15 +180,16 @@ public class DirectedGraph {
         //ArrayList<Vector> v = new ArrayList<Vector>();
         
         
-       // новые массивы:
-       Integer vertex1[] = new Integer[a]; // из вершины
-       Integer vertex2[] = new Integer[a]; // в вершину
+       // новые массивы, содержащие только циклы:
+        cycleVertexFrom = new Integer[a]; // из вершины
+        cycleVertexTo = new Integer[a]; // в вершину
+        
         
         
         for (Integer i = 0; i < edgesCount; i++) {
             if  (vertexFrom[i] != -1 | vertexTo[i] != -1) {
-                vertex1[c] = vertexFrom[i];
-                vertex2[c] = vertexTo[i];
+                cycleVertexFrom[c] = vertexFrom[i];
+                cycleVertexTo[c] = vertexTo[i];
                 c++;
                 //System.out.println(++c + " " + vertexFrom[i] + " ==> " + vertexTo[i]);
             }
@@ -198,32 +199,79 @@ public class DirectedGraph {
         
         // число a - число всех ребер, участвующих во ВСЕХ циклах
         // поиск количества циклов...
-                
-        Integer start, end, cyclesCount = a;
         
         
-        for (Integer i = 0; i < a; i++) {
-            start = vertex1[i];
-            end = vertex2[i];
-            
-            for (Integer j = 0; j < a; j++) {
-                if ((vertex1[j] == end)|(vertex1[j]!=-1)) {
-                    cyclesCount--;
-                    vertex1[j] = -1;
-                    vertex2[j] = -1;
-                }
+        
+        
+        used = new boolean[c];
+        Arrays.fill(used, false);
+        
+        //System.out.println(cycleVertexFrom.length + " " + cycleVertexTo.length + " " + used.length);
+        
+        
+        Integer cyclesCount = 0;
+        
+        //for (Integer i = 0; i<c; i++) {
+         for (Integer i = 1; i<c; ++i) {
+            if (!used[i]) {
+                dfs(i);
+                cyclesCount++;
             }
-            
-            //System.out.println(vertex1[i] + " ==> " + vertex2[i]);
         }
         
-        System.out.println(cyclesCount);
+        System.out.println("Циклов:" + cyclesCount);
+    }
+    
+    /*
+    const int SIZE = 1e3 + 10;
+vector<int> adj[SIZE];
+bool usd[SIZE];
+...
+void dfs(int cur) {
+  usd[cur] = true;
+  for (int i=0;i<adj[cur].size();++i) {
+    int nxt = adj[cur][i];
+    if (!usd[nxt])
+      dfs(nxt);
+  }
+}
+int connected_components_amount_dfs() {
+  int cnt = 0;
+  for (int i=1; i<=n; ++i) {
+    if (!usd[i]) {
+      dfs(i);
+      ++cnt;
+    }
+  }
+  return cnt;
+}
+    */
+    
+    /////
+    
+    private boolean used[];
+    private Integer cycleVertexFrom[];
+    private Integer cycleVertexTo[];
+    
+    private void dfs(Integer cur) {
+        Integer next;
+        used[cur] = true;
+        for (Integer i = 0; i < used.length; i++) {
+            next = getIndex(cycleVertexTo[i]); 
+            if (!used[next]) {
+                dfs(next);
+            }
+        }
+    }
+    
+    private Integer getIndex(Integer c) {
         
+        Integer u=0;
+        for (Integer i = 0; i < used.length; i++) {
+            if (cycleVertexFrom[i]==c) {u=i;}
+        }
         
-        
-         
-       
-        
+        return u;
     }
     
 }

@@ -6,7 +6,12 @@
 package gui;
 
 
+import core.Automaton;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
@@ -233,7 +238,11 @@ public class AMRMain extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+   
+    
+    
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         JFileChooser fileopen = new JFileChooser(); 
@@ -243,6 +252,8 @@ public class AMRMain extends javax.swing.JFrame {
                     
                     //jTextField1.setText(fileopen.getSelectedFile().getName());
                     jTextField1.setText(fileopen.getSelectedFile().getPath());
+                
+            
                 }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -307,4 +318,6 @@ public class AMRMain extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextPane jTextPane1;
     // End of variables declaration//GEN-END:variables
+
+    
 }

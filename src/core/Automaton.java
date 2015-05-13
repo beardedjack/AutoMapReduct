@@ -1,5 +1,6 @@
 package core;
 
+import gui.AMRMain;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -7,6 +8,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.io.*;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 public class Automaton {
@@ -113,6 +116,7 @@ public class Automaton {
             tr.clear();
         }
         br.close();
+        
     }
     
     public void saveToFile(String filename) throws FileNotFoundException, IOException {
@@ -231,9 +235,38 @@ public class Automaton {
         mAdicSet input = new mAdicSet(alphabetsDimention, k);
         mAdicSet output = getOutputSet(input);
         
+        // !!!
+        TreeMap<Integer, Integer> inputMap = new TreeMap<Integer, Integer>();
+        TreeMap<Integer, Integer> outputMap = new TreeMap<Integer, Integer>();
+        
         Set<Map.Entry<Integer, mAdic>> set1 = input.getMAdicSet();
         Set<Map.Entry<Integer, mAdic>> set2 = output.getMAdicSet();
         
+        for (Map.Entry<Integer, mAdic> me1 : set1) {
+            inputMap.put(me1.getKey(), Arrays.deepHashCode(me1.getValue().getDigits()));
+        }
+        
+        for (Map.Entry<Integer, mAdic> me2 : set2) {
+            outputMap.put(me2.getKey(), Arrays.deepHashCode(me2.getValue().getDigits()));
+        }
+        
+        Set<Map.Entry<Integer, Integer>> inputSet = inputMap.entrySet();
+        Set<Map.Entry<Integer, Integer>> outputSet = outputMap.entrySet();
+        
+        
+        //System.out.println("Вершин:" + inputSet.size());
+        
+        for (Map.Entry<Integer, Integer> me1: inputSet) {
+            //System.out.println("Вершина: " + me1.getKey());
+            for (Map.Entry<Integer, Integer> me2: outputSet) {
+                if (Objects.equals(me2.getValue(), me1.getValue())) {
+                    graph.addEdge(Integer.toString(me2.getKey()), Integer.toString(me1.getKey()));
+                    graph.edgesCount ++; // счетчик ребер графа
+                }
+            }
+        }
+        
+        /*
         for (Map.Entry<Integer, mAdic> me1 : set1) {
             for (Map.Entry<Integer, mAdic> me2 : set2) {
                 if (Arrays.equals(me2.getValue().getDigits(), me1.getValue().getDigits())) {
@@ -243,6 +276,7 @@ public class Automaton {
             }
         }
 
+        */
         return graph;
     }
 

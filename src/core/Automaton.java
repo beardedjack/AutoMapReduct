@@ -7,12 +7,26 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeMap;
 import java.io.*;
+import static java.lang.Math.floor;
+import static java.lang.Thread.sleep;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Automaton {
+    
+    ////////////////// Для GUI /////////////////
+    private AMRMain frame;
+    
+    public Automaton(AMRMain someframe) {
+        this.frame = someframe;
+    }
+    
+    ////////////////////////////////////////////
+    
     // мапа всех состояний автомата с переходами/выходами по алфавиту 
     private TreeMap<Integer, List<TransitionOutput>> conditionMap = new TreeMap<Integer, List<TransitionOutput>>();
         
@@ -117,6 +131,11 @@ public class Automaton {
         }
         br.close();
         
+        
+        frame.setDimentionLabelData(alphabetsDimention.toString());
+        frame.setStatesCountLabelData(Integer.toString(conditionMap.size()));
+        frame.setInitialStateLabelData(Integer.toString(initialCondition));
+        
     }
     
     public void saveToFile(String filename) throws FileNotFoundException, IOException {
@@ -214,7 +233,7 @@ public class Automaton {
 
     // Выдать граф автомата
     public DirectedGraph makeAutomatonGraph() {
-        DirectedGraph graph = new DirectedGraph();
+        DirectedGraph graph = new DirectedGraph(frame);
         String curr ,next;
         Set<Map.Entry<Integer, List<TransitionOutput>>> set = conditionMap.entrySet();
         for (Map.Entry<Integer, List<TransitionOutput>> me : set) {
@@ -229,8 +248,8 @@ public class Automaton {
     }
    
     // Выдать граф редукции
-    public DirectedGraph makeReductGraph(Integer k) throws CloneNotSupportedException {
-        DirectedGraph graph = new DirectedGraph();
+    public DirectedGraph makeReductGraph(Integer k) throws CloneNotSupportedException, InterruptedException {
+        DirectedGraph graph = new DirectedGraph(frame);
         
         mAdicSet input = new mAdicSet(alphabetsDimention, k);
         mAdicSet output = getOutputSet(input);
@@ -256,8 +275,20 @@ public class Automaton {
         
         //System.out.println("Вершин:" + inputSet.size());
         
+        double x = 0;
+        y =0;
+        
+        
+        
+        
         for (Map.Entry<Integer, Integer> me1: inputSet) {
             //System.out.println("Вершина: " + me1.getKey());
+            
+            x = me1.getKey()*100/inputSet.size();
+            y = (int)x+1;
+            //frame.setProcessProgressBarValue(y);
+            
+            
             for (Map.Entry<Integer, Integer> me2: outputSet) {
                 if (Objects.equals(me2.getValue(), me1.getValue())) {
                     graph.addEdge(Integer.toString(me2.getKey()), Integer.toString(me1.getKey()));
@@ -279,5 +310,11 @@ public class Automaton {
         */
         return graph;
     }
-
+    
+    public int y;
+    
+    
+    
+   
+    
 }

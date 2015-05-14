@@ -12,6 +12,7 @@ package core;
 Несуществующие вершины будут созданы автоматически.
 */
 
+import gui.AMRMain;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,6 +32,12 @@ import java.util.Set;
 import java.util.Vector;
 
 public class DirectedGraph {
+    
+    private AMRMain frame;
+    
+    public DirectedGraph(AMRMain someframe) {
+        this.frame = someframe;
+    }
     
     private HashMap<String, List<String>> vertexMap = new HashMap<String, List<String>>();
     

@@ -7,11 +7,11 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         try { 
             int i = Integer.parseInt(args[0]);
-            Automaton a = new Automaton();
-            a.loadFromFile("InputAuto.txt");
-            DirectedGraph sdf = a.makeReductGraph(i);
+            //Automaton a = new Automaton();
+            //a.loadFromFile("InputAuto.txt");
+            //DirectedGraph sdf = a.makeReductGraph(i);
             //sdf.makeFile("graphreduct.dot", i);
-            sdf.makeAnalysis();
+            //sdf.makeAnalysis();
         }  
         
         catch (Exception e) { 

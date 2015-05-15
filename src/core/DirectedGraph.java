@@ -173,6 +173,13 @@ public class DirectedGraph {
                 
         Integer c = 0;
         
+        if (a < e) {
+            thereTails = true;
+        }
+        else {
+            thereTails = false; 
+       }
+        
        // новые массивы, содержащие только циклы:
         cycleVertexFrom = new Integer[a]; // из вершины
         cycleVertexTo = new Integer[a]; // в вершину

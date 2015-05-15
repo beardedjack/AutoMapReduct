@@ -293,10 +293,14 @@ public class Automaton {
             frame.setReductGraphEdgesLabelData(directedgraph.edgesCount.toString());
         }
         frame.setProcessProgressBarValue(100);
+        
+        frame.appendTextAreaText("Анализ...");
+        
         directedgraph.makeAnalysis();
         frame.appendTextAreaText("Посчитан граф редукции при k=" + k.toString() + 
                                 ".\nРебер графа = " + directedgraph.edgesCount.toString() + 
-                                ".\nЦиклов в графе= " + directedgraph.cyclesCount + ".");
+                                ".\nЦиклов в графе= " + directedgraph.cyclesCount + 
+                                ".\nЕсть хвосты= " + directedgraph.thereTails + ".");
         
     }
     

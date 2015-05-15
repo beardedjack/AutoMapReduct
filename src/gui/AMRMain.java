@@ -235,7 +235,11 @@ public class AMRMain extends javax.swing.JFrame {
         });
 
         jButton4.setText("Выполнить анализ");
-        jButton4.setEnabled(false);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -360,6 +364,7 @@ public class AMRMain extends javax.swing.JFrame {
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(" Вывод "));
 
         textArea1.setEditable(false);
+        textArea1.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -444,6 +449,7 @@ public class AMRMain extends javax.swing.JFrame {
         jProgressBar2.setValue(0);
         jProgressBar3.setValue(0);
         automaton.k = Integer.parseInt(jSpinner1.getValue().toString());
+        setKvalueLabelData(jSpinner1.getValue().toString());
         progress = new Progress(this, automaton);
         progress.setPriority(MAX_PRIORITY);
         progress.start();
@@ -459,6 +465,31 @@ public class AMRMain extends javax.swing.JFrame {
         // TODO add your handling code here:
         progress.stop();
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        
+        for (Integer i = 1; i <= Integer.parseInt(jSpinner1.getValue().toString()); i++) {
+            
+            if (progress.isAlive()) {
+                try {
+                    progress.join();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        
+        jProgressBar1.setValue(0);
+        jProgressBar2.setValue(0);
+        jProgressBar3.setValue(0);
+        automaton.k = i;
+        setKvalueLabelData(Integer.toString(i) + " из " + jSpinner1.getValue().toString());
+        progress = new Progress(this, automaton);
+        progress.setPriority(MAX_PRIORITY);
+        progress.start();
+        
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments

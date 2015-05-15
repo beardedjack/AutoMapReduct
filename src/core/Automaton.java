@@ -1,6 +1,7 @@
 package core;
 
 import gui.AMRMain;
+import gui.Progress;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -21,11 +22,21 @@ public class Automaton {
     ////////////////// Для GUI /////////////////
     private AMRMain frame;
     
+    
+    public DirectedGraph directedgraph;
+    public int k;
+    
+    
     public Automaton(AMRMain someframe) {
         this.frame = someframe;
+        
     }
     
     ////////////////////////////////////////////
+    
+    
+    
+    
     
     // мапа всех состояний автомата с переходами/выходами по алфавиту 
     private TreeMap<Integer, List<TransitionOutput>> conditionMap = new TreeMap<Integer, List<TransitionOutput>>();
@@ -233,7 +244,7 @@ public class Automaton {
 
     // Выдать граф автомата
     public DirectedGraph makeAutomatonGraph() {
-        DirectedGraph graph = new DirectedGraph(frame);
+        DirectedGraph graph = new DirectedGraph();
         String curr ,next;
         Set<Map.Entry<Integer, List<TransitionOutput>>> set = conditionMap.entrySet();
         for (Map.Entry<Integer, List<TransitionOutput>> me : set) {
@@ -248,8 +259,8 @@ public class Automaton {
     }
    
     // Выдать граф редукции
-    public DirectedGraph makeReductGraph(Integer k) throws CloneNotSupportedException, InterruptedException {
-        DirectedGraph graph = new DirectedGraph(frame);
+    public void makeReductGraph(Integer k) throws CloneNotSupportedException, InterruptedException {
+        directedgraph = new DirectedGraph();
         
         mAdicSet input = new mAdicSet(alphabetsDimention, k);
         mAdicSet output = getOutputSet(input);
@@ -276,7 +287,7 @@ public class Automaton {
         //System.out.println("Вершин:" + inputSet.size());
         
         double x = 0;
-        y =0;
+        int y = 0;
         
         
         
@@ -284,17 +295,23 @@ public class Automaton {
         for (Map.Entry<Integer, Integer> me1: inputSet) {
             //System.out.println("Вершина: " + me1.getKey());
             
-            x = me1.getKey()*100/inputSet.size();
-            y = (int)x+1;
-            //frame.setProcessProgressBarValue(y);
             
+            
+            //sleep(1);
             
             for (Map.Entry<Integer, Integer> me2: outputSet) {
                 if (Objects.equals(me2.getValue(), me1.getValue())) {
-                    graph.addEdge(Integer.toString(me2.getKey()), Integer.toString(me1.getKey()));
-                    graph.edgesCount ++; // счетчик ребер графа
+                    directedgraph.addEdge(Integer.toString(me2.getKey()), Integer.toString(me1.getKey()));
+                    directedgraph.edgesCount ++; // счетчик ребер графа
                 }
             }
+            
+            x = me1.getKey()*100/inputSet.size();
+            y = (int)x+1;
+            
+            frame.setProcessProgressBarValue(y);
+            frame.setReductGraphEdgesLabelData(directedgraph.edgesCount.toString());
+            
         }
         
         /*
@@ -308,10 +325,13 @@ public class Automaton {
         }
 
         */
-        return graph;
+        //return graph;
+        
+        frame.appendTextAreaText("Посчитан граф редукции при k=" + k.toString() + ".\nРебер графа = " + directedgraph.edgesCount.toString() + ".");
+        
     }
     
-    public int y;
+    
     
     
     

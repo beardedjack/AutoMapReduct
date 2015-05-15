@@ -33,11 +33,7 @@ import java.util.Vector;
 
 public class DirectedGraph {
     
-    private AMRMain frame;
     
-    public DirectedGraph(AMRMain someframe) {
-        this.frame = someframe;
-    }
     
     private HashMap<String, List<String>> vertexMap = new HashMap<String, List<String>>();
     

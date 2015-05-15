@@ -6,17 +6,23 @@
 package gui;
 
 import core.Automaton;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
  * @author kondrashov
+ * 
+ * 
+ * 
  */
 public class Progress extends Thread {
     
     private AMRMain frame;
     private Automaton automaton;
+    
+    
     
     public Progress(AMRMain someframe, Automaton someautomaton) {
         this.frame = someframe;
@@ -25,16 +31,16 @@ public class Progress extends Thread {
     
     @Override
     public void run() {
-        
-        while (automaton.y < 100) {
-            try {
-                sleep(1000);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Progress.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            frame.setProcessProgressBarValue(50);
+        try {
+            automaton.makeReductGraph(automaton.k);
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(Progress.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Progress.class.getName()).log(Level.SEVERE, null, ex);
         }
-        frame.setProcessProgressBarValue(20);
+        
+        
+        
     }
     
     

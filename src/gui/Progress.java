@@ -6,7 +6,6 @@
 package gui;
 
 import core.Automaton;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,6 +32,7 @@ public class Progress extends Thread {
     public void run() {
         try {
             automaton.makeReductGraph(automaton.k);
+            //automaton.directedgraph.makeAnalysis();
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(Progress.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InterruptedException ex) {

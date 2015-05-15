@@ -1,43 +1,26 @@
 package core;
 
 import gui.AMRMain;
-import gui.Progress;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeMap;
 import java.io.*;
-import static java.lang.Math.floor;
-import static java.lang.Thread.sleep;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Automaton {
     
-    ////////////////// Для GUI /////////////////
     private AMRMain frame;
-    
-    
     public DirectedGraph directedgraph;
     public int k;
     
-    
     public Automaton(AMRMain someframe) {
         this.frame = someframe;
-        
     }
-    
-    ////////////////////////////////////////////
-    
-    
-    
-    
-    
+
     // мапа всех состояний автомата с переходами/выходами по алфавиту 
     private TreeMap<Integer, List<TransitionOutput>> conditionMap = new TreeMap<Integer, List<TransitionOutput>>();
         
@@ -181,6 +164,11 @@ public class Automaton {
         Integer[] in, out;
         Set<Map.Entry<Integer, mAdic>> set = input.getMAdicSet();
         
+        double x = 0;
+        int y = 0;
+        
+        frame.setOutputWordsProgressValue(0);
+        
         for (Map.Entry<Integer, mAdic> me : set) {
             num = me.getKey();
             in = me.getValue().getDigits();
@@ -194,7 +182,11 @@ public class Automaton {
             m = new mAdic(alphabetsDimention, out);
             result.addMAdic(num, m);
             //System.out.println("Input: " + Arrays.toString(in) + " Output: " + Arrays.toString(out));
+            x = num*100/set.size();
+            y = (int)x+1;
+            frame.setOutputWordsProgressValue(y);
         }
+        frame.setOutputWordsProgressValue(100);
         return result;
     }
     
@@ -262,7 +254,7 @@ public class Automaton {
     public void makeReductGraph(Integer k) throws CloneNotSupportedException, InterruptedException {
         directedgraph = new DirectedGraph();
         
-        mAdicSet input = new mAdicSet(alphabetsDimention, k);
+        mAdicSet input = new mAdicSet(alphabetsDimention, k, frame);
         mAdicSet output = getOutputSet(input);
         
         // !!!
@@ -282,23 +274,11 @@ public class Automaton {
         
         Set<Map.Entry<Integer, Integer>> inputSet = inputMap.entrySet();
         Set<Map.Entry<Integer, Integer>> outputSet = outputMap.entrySet();
-        
-        
-        //System.out.println("Вершин:" + inputSet.size());
-        
+
         double x = 0;
         int y = 0;
-        
-        
-        
-        
+                
         for (Map.Entry<Integer, Integer> me1: inputSet) {
-            //System.out.println("Вершина: " + me1.getKey());
-            
-            
-            
-            //sleep(1);
-            
             for (Map.Entry<Integer, Integer> me2: outputSet) {
                 if (Objects.equals(me2.getValue(), me1.getValue())) {
                     directedgraph.addEdge(Integer.toString(me2.getKey()), Integer.toString(me1.getKey()));
@@ -311,30 +291,13 @@ public class Automaton {
             
             frame.setProcessProgressBarValue(y);
             frame.setReductGraphEdgesLabelData(directedgraph.edgesCount.toString());
-            
         }
-        
-        /*
-        for (Map.Entry<Integer, mAdic> me1 : set1) {
-            for (Map.Entry<Integer, mAdic> me2 : set2) {
-                if (Arrays.equals(me2.getValue().getDigits(), me1.getValue().getDigits())) {
-                    graph.addEdge(Integer.toString(me2.getKey()), Integer.toString(me1.getKey()));
-                    graph.edgesCount ++; // счетчик ребер графа
-                }
-            }
-        }
-
-        */
-        //return graph;
-        
-        frame.appendTextAreaText("Посчитан граф редукции при k=" + k.toString() + ".\nРебер графа = " + directedgraph.edgesCount.toString() + ".");
+        frame.setProcessProgressBarValue(100);
+        directedgraph.makeAnalysis();
+        frame.appendTextAreaText("Посчитан граф редукции при k=" + k.toString() + 
+                                ".\nРебер графа = " + directedgraph.edgesCount.toString() + 
+                                ".\nЦиклов в графе= " + directedgraph.cyclesCount + ".");
         
     }
-    
-    
-    
-    
-    
-   
     
 }

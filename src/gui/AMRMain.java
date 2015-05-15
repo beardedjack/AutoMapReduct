@@ -11,6 +11,7 @@ import core.DirectedGraph;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import static java.lang.Thread.MAX_PRIORITY;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -68,7 +69,8 @@ public class AMRMain extends javax.swing.JFrame {
     
     public void appendTextAreaText(String s) {
         Date d = new Date();
-        this.textArea1.append(df.format(d) + " :\n" + s + "\n-------------------------------------------\n");
+        this.textArea1.append(df.format(d) + " :\n" + s + 
+            "\n-----------------------------------------------------------------------\n");
     }
     
     public void setInputWordsProgressBarValue(Integer s) {
@@ -416,56 +418,35 @@ public class AMRMain extends javax.swing.JFrame {
     
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        // Открытие файла автомата
         JFileChooser fileopen = new JFileChooser(); 
-        
-                int ret = fileopen.showDialog(null, "Открыть файл автомата");                
-                if (ret == JFileChooser.APPROVE_OPTION) {
-                    
+        File f = new File(".");
+        fileopen.setCurrentDirectory(f);
+        int ret = fileopen.showDialog(null, "Открыть файл автомата");                
+        if (ret == JFileChooser.APPROVE_OPTION) {
             try {
                 jTextField1.setText(fileopen.getSelectedFile().getName());
                 jTextField1.setToolTipText(fileopen.getSelectedFile().getCanonicalPath());
-                
-               
-                
                 automaton = new Automaton(this);
                 automaton.loadFromFile(fileopen.getSelectedFile().getPath());
-                
                 appendTextAreaText("Открыт файл: " + fileopen.getSelectedFile().getPath());
-                //textArea1.append("Открыт файл: " + fileopen.getSelectedFile().getPath() + "\n");
-                 
-        
-                
-                
-                
-                
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
             }
-                
-            
-                }
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
-        
-        
-        
+        // Запуск расчета редукции по указанному модулю
+        jProgressBar1.setValue(0);
+        jProgressBar2.setValue(0);
+        jProgressBar3.setValue(0);
         automaton.k = Integer.parseInt(jSpinner1.getValue().toString());
-        
         progress = new Progress(this, automaton);
+        progress.setPriority(MAX_PRIORITY);
         progress.start();
-        
-        
-        
-        
-        
-        
-        
-        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     

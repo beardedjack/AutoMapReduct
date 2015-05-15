@@ -12,7 +12,6 @@ package core;
 Несуществующие вершины будут созданы автоматически.
 */
 
-import gui.AMRMain;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,7 +28,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
-import java.util.Vector;
 
 public class DirectedGraph {
     
@@ -38,6 +36,9 @@ public class DirectedGraph {
     private HashMap<String, List<String>> vertexMap = new HashMap<String, List<String>>();
     
     public Integer edgesCount = 0; // счетчик ребер графа
+    public Integer cyclesCount = 0; // число циклов
+    public boolean thereTails = false; // есть хвосты на циклах
+    
     
     public void addVertex(String vertexName) {
         if (!hasVertex(vertexName)) {
@@ -113,6 +114,7 @@ public class DirectedGraph {
         
     }
    
+    // Выполнение анализа: сколько циклов, есть ли хвосты...
     public void makeAnalysis() {
         // массив выходных вершин
         Integer vertexFrom [] = new Integer [edgesCount];
@@ -187,7 +189,7 @@ public class DirectedGraph {
         
         used = new boolean[c];
         Arrays.fill(used, false);
-        Integer cyclesCount = 0;
+        cyclesCount = 0;
         
         for (Integer i = 0; i<c; i++) {
         // for (Integer i = 1; i<c; ++i) {
@@ -197,7 +199,7 @@ public class DirectedGraph {
             }
         }
         
-        System.out.println("Циклов:" + cyclesCount);
+        //System.out.println("Циклов:" + cyclesCount);
     }
 
     private boolean used[];

@@ -124,12 +124,10 @@ public class Automaton {
             tr.clear();
         }
         br.close();
-        
-        
+
         frame.setDimentionLabelData(alphabetsDimention.toString());
         frame.setStatesCountLabelData(Integer.toString(conditionMap.size()));
         frame.setInitialStateLabelData(Integer.toString(initialCondition));
-        
     }
     
     public void saveToFile(String filename) throws FileNotFoundException, IOException {
@@ -181,7 +179,6 @@ public class Automaton {
             }
             m = new mAdic(alphabetsDimention, out);
             result.addMAdic(num, m);
-            //System.out.println("Input: " + Arrays.toString(in) + " Output: " + Arrays.toString(out));
             x = num*100/set.size();
             y = (int)x+1;
             frame.setOutputWordsProgressValue(y);
@@ -195,10 +192,8 @@ public class Automaton {
         int tmp = 0; 
         int currentCondition = 1;
         Integer i = inputWord.length()-1;
-        
         do {tmp = Character.getNumericValue(inputWord.charAt(i));
             outWord =  Integer.toString(this.getOutput(tmp, currentCondition)) + outWord  ;
-            // outWord += Integer.toString(this.getOutput(tmp, currentCondition));
             currentCondition = getCondition(tmp, currentCondition);
             i = i-1;
         } while (i>=0);
@@ -257,7 +252,6 @@ public class Automaton {
         mAdicSet input = new mAdicSet(alphabetsDimention, k, frame);
         mAdicSet output = getOutputSet(input);
         
-        // !!!
         TreeMap<Integer, Integer> inputMap = new TreeMap<Integer, Integer>();
         TreeMap<Integer, Integer> outputMap = new TreeMap<Integer, Integer>();
         
@@ -282,26 +276,23 @@ public class Automaton {
             for (Map.Entry<Integer, Integer> me2: outputSet) {
                 if (Objects.equals(me2.getValue(), me1.getValue())) {
                     directedgraph.addEdge(Integer.toString(me2.getKey()), Integer.toString(me1.getKey()));
-                    directedgraph.edgesCount ++; // счетчик ребер графа
+                    directedgraph.edgesCount++; // счетчик ребер графа
                 }
             }
             
-            x = me1.getKey()*100/inputSet.size();
-            y = (int)x+1;
+            x = me1.getKey() * 100 / inputSet.size();
+            y = (int)x + 1;
             
             frame.setProcessProgressBarValue(y);
             frame.setReductGraphEdgesLabelData(directedgraph.edgesCount.toString());
         }
+
         frame.setProcessProgressBarValue(100);
-        
         frame.appendTextAreaText("Анализ...");
-        
         directedgraph.makeAnalysis();
         frame.appendTextAreaText("Посчитан граф редукции при k=" + k.toString() + 
                                 ".\nРебер графа = " + directedgraph.edgesCount.toString() + 
-                                ".\nЦиклов в графе= " + directedgraph.cyclesCount + 
-                                ".\nЕсть хвосты= " + directedgraph.thereTails + ".");
-        
+                                ".\nЦиклов в графе = " + directedgraph.cyclesCount + 
+                                ".\nЕсть хвосты = " + directedgraph.thereTails + ".");
     }
-    
 }

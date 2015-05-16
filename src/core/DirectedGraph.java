@@ -30,15 +30,12 @@ import java.util.Objects;
 import java.util.Set;
 
 public class DirectedGraph {
-    
-    
-    
+
     private HashMap<String, List<String>> vertexMap = new HashMap<String, List<String>>();
     
     public Integer edgesCount = 0; // счетчик ребер графа
     public Integer cyclesCount = 0; // число циклов
     public boolean thereTails = false; // есть хвосты на циклах
-    
     
     public void addVertex(String vertexName) {
         if (!hasVertex(vertexName)) {
@@ -84,7 +81,6 @@ public class DirectedGraph {
         for (Map.Entry<String, List<String>> me : set) {
             line = me.getKey();
             List<String> to = me.getValue();
-            
             if (to.size()==0) {
             bw.write(line);
                 bw.newLine();
@@ -110,8 +106,6 @@ public class DirectedGraph {
             } catch (IOException e) {
             // handle exception.
         }
-      
-        
     }
    
     // Выполнение анализа: сколько циклов, есть ли хвосты...
@@ -142,7 +136,6 @@ public class DirectedGraph {
         }
         
         // Находим все циклы в графе
-        
         Integer vertexFromSorted [];
         Integer vertexToSorted [];
         Integer a = 0, b = 0;
@@ -193,20 +186,17 @@ public class DirectedGraph {
         }
 
         // поиск количества циклов...
-        
         used = new boolean[c];
         Arrays.fill(used, false);
         cyclesCount = 0;
         
-        for (Integer i = 0; i<c; i++) {
+        for (Integer i = 1; i<c; i++) {
         // for (Integer i = 1; i<c; ++i) {
             if (!used[i]) {
                 dfs(i);
-                ++cyclesCount;
+                cyclesCount++;
             }
         }
-        
-        //System.out.println("Циклов:" + cyclesCount);
     }
 
     private boolean used[];
@@ -216,10 +206,10 @@ public class DirectedGraph {
     private void dfs(Integer cur) {
         Integer next;
         used[cur] = true;
-            next = getIndex(cycleVertexTo[cur]); 
-            if (!used[next]) {
-                dfs(next);
-            }
+        next = getIndex(cycleVertexTo[cur]); 
+        if (!used[next]) {
+            dfs(next);
+        }
     }
     
     private Integer getIndex(Integer c) {
@@ -229,5 +219,4 @@ public class DirectedGraph {
         }
         return u;
     }
-    
 }

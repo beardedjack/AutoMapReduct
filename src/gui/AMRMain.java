@@ -243,7 +243,11 @@ public class AMRMain extends javax.swing.JFrame {
         });
 
         jButton6.setText("Показать граф редукции");
-        jButton6.setEnabled(false);
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jButton5.setText("Прервать");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -496,6 +500,15 @@ public class AMRMain extends javax.swing.JFrame {
         
         }
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        try {
+            // TODO add your handling code here:
+            automaton.directedgraph.makeFile("graphreduct.dot", automaton.k);
+        } catch (IOException ex) {
+            Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments

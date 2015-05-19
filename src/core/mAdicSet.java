@@ -51,7 +51,6 @@ public class mAdicSet {
         mAdicMap.put(element, value);
     }
     
-    
     public Set<Map.Entry<Integer, mAdic>> getMAdicSet() {
         return mAdicMap.entrySet();
     }

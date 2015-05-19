@@ -1,6 +1,7 @@
 package core;
 
 import gui.AMRMain;
+import gui.BuilderFrame;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -14,11 +15,16 @@ import java.util.StringTokenizer;
 public class Automaton {
     
     private AMRMain frame;
+    
     public DirectedGraph directedgraph;
     public int k;
     
     public Automaton(AMRMain someframe) {
         this.frame = someframe;
+    }
+    
+    public Automaton() {
+        
     }
 
     // мапа всех состояний автомата с переходами/выходами по алфавиту 
@@ -41,6 +47,10 @@ public class Automaton {
         }
     }
      
+    public void setInitialCondition(Integer i) {
+        initialCondition = i;
+    }
+    
     // проверка на наличие состояния с таким номером
     private boolean hasCondition(Integer conditionNumber) {
         return conditionMap.containsKey(conditionNumber);
@@ -247,6 +257,9 @@ public class Automaton {
    
     // Выдать граф редукции
     public void makeReductGraph(Integer k) throws CloneNotSupportedException, InterruptedException {
+        
+        frame.appendTextAreaText("Построение графа редукции при k = " + k.toString() + " ...");
+        
         directedgraph = new DirectedGraph();
         
         mAdicSet input = new mAdicSet(alphabetsDimention, k, frame);
@@ -288,11 +301,25 @@ public class Automaton {
         }
 
         frame.setProcessProgressBarValue(100);
-        frame.appendTextAreaText("Анализ...");
+        frame.appendTextAreaText("Определение параметров графа ...");
         directedgraph.makeAnalysis();
-        frame.appendTextAreaText("Посчитан граф редукции при k=" + k.toString() + 
+        
+        String cyclesData ="";
+        if (directedgraph.cyclesCount > 0) {
+            for (Integer asd : directedgraph.cyclesLength) {
+                cyclesData = cyclesData + asd.toString() + ", ";
+            }
+            cyclesData = cyclesData.substring(0, cyclesData.length() - 2);
+        }
+        else {
+            cyclesData = "0";
+        }
+        
+        frame.appendTextAreaText("Посчитан граф редукции при k = " + k.toString() + 
                                 ".\nРебер графа = " + directedgraph.edgesCount.toString() + 
                                 ".\nЦиклов в графе = " + directedgraph.cyclesCount + 
+                                ".\nОбщая длина всех циклов в графе = " + directedgraph.c +
+                                ".\nДлины циклов в графе : " + cyclesData +
                                 ".\nЕсть хвосты = " + directedgraph.thereTails + ".");
     }
 }

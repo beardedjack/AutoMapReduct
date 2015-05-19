@@ -36,6 +36,8 @@ public class DirectedGraph {
     public Integer edgesCount = 0; // счетчик ребер графа
     public Integer cyclesCount = 0; // число циклов
     public boolean thereTails = false; // есть хвосты на циклах
+    public Integer c = 0; // длина циклов в графе
+    public ArrayList<Integer> cyclesLength;
     
     public void addVertex(String vertexName) {
         if (!hasVertex(vertexName)) {
@@ -164,7 +166,7 @@ public class DirectedGraph {
             
         } while (!Objects.equals(a, b));
                 
-        Integer c = 0;
+        c = 0;
         
         if (a < e) {
             thereTails = true;
@@ -185,15 +187,19 @@ public class DirectedGraph {
             }
         }
 
-        // поиск количества циклов...
+        // поиск количества циклов и определение длин самих циклов...
         used = new boolean[c];
         Arrays.fill(used, false);
+        
         cyclesCount = 0;
+        cyclesLength = new ArrayList<Integer>();
+        Integer aaa = 0;
         
         for (Integer i = 1; i<c; i++) {
         // for (Integer i = 1; i<c; ++i) {
             if (!used[i]) {
-                dfs(i);
+                aaa = dfs(i);
+                cyclesLength.add(aaa);
                 cyclesCount++;
             }
         }
@@ -203,13 +209,16 @@ public class DirectedGraph {
     private Integer cycleVertexFrom[];
     private Integer cycleVertexTo[];
     
-    private void dfs(Integer cur) {
-        Integer next;
+    private Integer dfs(Integer cur) {
+        Integer next, a = 0;
         used[cur] = true;
         next = getIndex(cycleVertexTo[cur]); 
         if (!used[next]) {
-            dfs(next);
+            a = dfs(next);
+            //a++;
         }
+        a++;
+        return a;
     }
     
     private Integer getIndex(Integer c) {

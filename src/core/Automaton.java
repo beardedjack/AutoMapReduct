@@ -292,6 +292,7 @@ public class Automaton {
                     directedgraph.addEdge(Integer.toString(me2.getKey()), Integer.toString(me1.getKey()));
                     directedgraph.edgesCount++; // счетчик ребер графа
                 }
+                //frame.setSimpleProgressValue(me1.getKey()*100/inputSet.size()+1);
             }
             
             x = me1.getKey() * 100 / inputSet.size();
@@ -302,6 +303,7 @@ public class Automaton {
         }
 
         frame.setProcessProgressBarValue(100);
+        //frame.setSimpleProgressValue(100);
         
         if (!frame.isCycleCalc) {
             frame.appendTextAreaText("Определение параметров графа ...");

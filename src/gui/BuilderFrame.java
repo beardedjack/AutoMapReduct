@@ -161,8 +161,14 @@ public class BuilderFrame extends javax.swing.JFrame {
         });
 
         jButton2.setText("Открыть");
+        jButton2.setEnabled(false);
 
         jButton3.setText("Очистить");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Файл автомата");
 
@@ -287,7 +293,7 @@ public class BuilderFrame extends javax.swing.JFrame {
         bw.close();
     }
     
-    public void setTableParams() {
+    public void setTableParams(Boolean clean) {
         Object[][] data = new Object[statesCount][alpabetsLength + 1];
         String[] columnNames = new String[alpabetsLength + 1];
         
@@ -296,7 +302,12 @@ public class BuilderFrame extends javax.swing.JFrame {
                     if ((i >= statesCount) || (j >= alpabetsLength + 1)) {
                         continue;
                     }
-                    data[i][j] = jTable1.getValueAt(i, j);
+                    if (clean) {
+                        data[i][j] = null;
+                    }
+                    else {
+                        data[i][j] = jTable1.getValueAt(i, j);
+                    }
             }
         }
 
@@ -341,13 +352,13 @@ public class BuilderFrame extends javax.swing.JFrame {
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
         // TODO add your handling code here:
         alpabetsLength = (Integer) jSpinner1.getValue();
-        setTableParams();
+        setTableParams(false);
     }//GEN-LAST:event_jSpinner1StateChanged
 
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
         // TODO add your handling code here:
         statesCount = (Integer) jSpinner2.getValue();
-        setTableParams();
+        setTableParams(false);
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void jSpinner3StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner3StateChanged
@@ -357,7 +368,7 @@ public class BuilderFrame extends javax.swing.JFrame {
             jSpinner3.setValue(initialState);
         }
         initialState = (Integer) jSpinner3.getValue();
-        setTableParams();
+        setTableParams(false);
     }//GEN-LAST:event_jSpinner3StateChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -376,6 +387,11 @@ public class BuilderFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        setTableParams(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

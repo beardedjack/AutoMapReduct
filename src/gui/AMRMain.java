@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import static java.lang.Thread.MAX_PRIORITY;
+import static java.lang.Thread.sleep;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -508,6 +509,8 @@ public class AMRMain extends javax.swing.JFrame {
         for (Integer i = 1; i <= Integer.parseInt(jSpinner1.getValue().toString()); i++) {
             
         if (progress != null) {   
+            
+            
             if (progress.isAlive()) {
                 try {
                     progress.join();
@@ -515,7 +518,21 @@ public class AMRMain extends javax.swing.JFrame {
                     Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            
+            
+            /*
+            while (!progress.isAlive()) {
+                try {
+                    sleep(100);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            */
+            
         }
+        
+        
         jProgressBar1.setValue(0);
         jProgressBar2.setValue(0);
         jProgressBar3.setValue(0);

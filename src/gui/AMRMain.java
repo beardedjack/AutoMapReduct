@@ -236,7 +236,11 @@ public class AMRMain extends javax.swing.JFrame {
         jSpinner1.setValue(1);
 
         jButton2.setText("Показать граф автомата");
-        jButton2.setEnabled(false);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Построить граф редукции");
         jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -534,6 +538,16 @@ public class AMRMain extends javax.swing.JFrame {
         
         bf.show();
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            // TODO add your handling code here:
+            DirectedGraph dg = automaton.makeAutomatonGraph();
+            dg.makeFile("graphautomaton.dot", 0);
+        } catch (IOException ex) {
+            Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

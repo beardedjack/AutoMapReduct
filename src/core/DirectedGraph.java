@@ -38,6 +38,7 @@ public class DirectedGraph {
     public boolean thereTails = false; // есть хвосты на циклах
     public Integer c = 0; // длина циклов в графе
     public ArrayList<Integer> cyclesLength;
+    public Integer loopsCount = 0;
     
     public void addVertex(String vertexName) {
         if (!hasVertex(vertexName)) {
@@ -116,6 +117,7 @@ public class DirectedGraph {
         Integer vertexFrom [] = new Integer [edgesCount];
         // массив входных вершин
         Integer vertexTo [] = new Integer [edgesCount];
+        loopsCount = 0;
         Integer e1, e2, e = 0;
         Set<Map.Entry<String, List<String>>> set = vertexMap.entrySet();
         // Запоняем массивы входных и выходных вершин
@@ -125,14 +127,16 @@ public class DirectedGraph {
             for (String s: ls) {
                 e2 = Integer.valueOf(s);
                 // заполняем с учетом возможных петель
-                if (e1 != e2) {
+                if (Objects.equals(e1, e2)) {
+                    loopsCount++;
+                }
                     vertexFrom [e] = e1;
                     vertexTo [e] = e2;
-                }
-                else {
-                    vertexFrom [e] = -1;
-                    vertexTo [e] = -1; 
-                }
+                //}
+                //else {
+                //    vertexFrom [e] = -1;
+                //    vertexTo [e] = -1; 
+                //}
                 e++;
             }
         }
@@ -199,10 +203,14 @@ public class DirectedGraph {
         // for (Integer i = 1; i<c; ++i) {
             if (!used[i]) {
                 aaa = dfs(i);
-                cyclesLength.add(aaa);
-                cyclesCount++;
+                if (aaa != 1) {
+                    cyclesLength.add(aaa);
+                    cyclesCount++;
+                }
             }
         }
+        // длина всех циклов за вычетом длин петель (по 1 на петлю)
+        c = c - loopsCount; 
     }
 
     private boolean used[];

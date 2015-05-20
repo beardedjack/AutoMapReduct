@@ -260,6 +260,7 @@ public class Automaton {
         if (!frame.isCycleCalc) {
             frame.appendTextAreaText("Построение графа редукции при k = " + k.toString() + " ...");
         }
+        
         directedgraph = new DirectedGraph();
         
         mAdicSet input = new mAdicSet(alphabetsDimention, k, frame);
@@ -305,6 +306,7 @@ public class Automaton {
         if (!frame.isCycleCalc) {
             frame.appendTextAreaText("Определение параметров графа ...");
         }
+        
         directedgraph.makeAnalysis();
         
         String cyclesData ="";
@@ -318,13 +320,22 @@ public class Automaton {
             cyclesData = "0";
         }
         
+        String tails = "";
+        if (directedgraph.thereTails) {
+            tails = "ДА";
+        }
+        else {
+            tails = "НЕТ";
+        }
+                
         if (frame.isCycleCalc) {
             frame.appendTextAreaSimpleText("k = [" + k.toString() + 
-                                    "]. Ребер = [" + directedgraph.edgesCount.toString() + 
+                                    "] : Ребер = [" + directedgraph.edgesCount.toString() + 
                                     "]. Циклов = [" + directedgraph.cyclesCount + 
                                     "]. Длина циклов = [" + directedgraph.c +
+                                    "]. Число петель = [" + directedgraph.loopsCount +
                                     "]. Длины циклов : [" + cyclesData +
-                                    "]. Есть хвосты = [" + directedgraph.thereTails + "].");
+                                    "]. Есть хвосты = [" + tails + "].");
             
         }
         else {
@@ -332,8 +343,9 @@ public class Automaton {
                                     ".\nРебер графа = " + directedgraph.edgesCount.toString() + 
                                     ".\nЦиклов в графе = " + directedgraph.cyclesCount + 
                                     ".\nОбщая длина всех циклов в графе = " + directedgraph.c +
+                                    ".\nЧисло петель в графе = " + directedgraph.loopsCount +
                                     ".\nДлины циклов в графе : " + cyclesData +
-                                    ".\nЕсть хвосты = " + directedgraph.thereTails + ".");
+                                    ".\nЕсть хвосты = " + tails + ".");
         }
     }
 }

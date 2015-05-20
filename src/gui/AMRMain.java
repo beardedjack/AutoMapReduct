@@ -35,8 +35,9 @@ public class AMRMain extends javax.swing.JFrame {
     private Automaton automaton;
     private DirectedGraph directedgraph;
     private Progress progress;
-    DateFormat df;
-    BuilderFrame bf;
+    private DateFormat df;
+    private BuilderFrame bf;
+    public boolean isCycleCalc = false;
     
     public AMRMain() {
         initComponents();
@@ -72,6 +73,10 @@ public class AMRMain extends javax.swing.JFrame {
         Date d = new Date();
         this.textArea1.append(df.format(d) + " :\n" + s + 
             "\n-----------------------------------------------------------------------\n");
+    }
+    
+    public void appendTextAreaSimpleText(String s) {
+        this.textArea1.append(s + " \n");
     }
     
     public void setInputWordsProgressBarValue(Integer s) {
@@ -445,6 +450,7 @@ public class AMRMain extends javax.swing.JFrame {
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // Открытие файла автомата
+        isCycleCalc = false;
         JFileChooser fileopen = new JFileChooser(); 
         File f = new File(".");
         fileopen.setCurrentDirectory(f);
@@ -466,6 +472,7 @@ public class AMRMain extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // Запуск расчета редукции по указанному модулю
+        isCycleCalc = false;
         jProgressBar1.setValue(0);
         jProgressBar2.setValue(0);
         jProgressBar3.setValue(0);
@@ -489,9 +496,11 @@ public class AMRMain extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        
+        isCycleCalc = true;
+        appendTextAreaText("Запуск построения графов редукции при k = 1.." + jSpinner1.getValue().toString() + " ...");
         for (Integer i = 1; i <= Integer.parseInt(jSpinner1.getValue().toString()); i++) {
             
+        if (progress != null) {   
             if (progress.isAlive()) {
                 try {
                     progress.join();
@@ -499,7 +508,7 @@ public class AMRMain extends javax.swing.JFrame {
                     Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        
+        }
         jProgressBar1.setValue(0);
         jProgressBar2.setValue(0);
         jProgressBar3.setValue(0);

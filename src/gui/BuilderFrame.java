@@ -16,7 +16,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -171,10 +174,8 @@ public class BuilderFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jLabel5)
+                        .addGap(0, 433, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -197,7 +198,8 @@ public class BuilderFrame extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addComponent(jTextField2))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -267,7 +269,7 @@ public class BuilderFrame extends javax.swing.JFrame {
         File f = new File(filename);
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f)));
         String line = "";
-        bw.write("@Automaton");
+        bw.write("@Automaton: " + jTextField1.getText());
         bw.newLine();
         bw.write("AlphabetsDimention:" + Integer.toString(alpabetsLength));
         bw.newLine();
@@ -277,8 +279,8 @@ public class BuilderFrame extends javax.swing.JFrame {
         for (Integer i = 0; i < jTable1.getRowCount(); i++) {
             bw.newLine();
             line = Integer.toString(i+1) + ":";
-            for (Integer j = 0; j < jTable1.getColumnCount(); j++) {
-                line += jTable1.getValueAt(i, j);
+            for (Integer j = 1; j < jTable1.getColumnCount(); j++) {
+                line += jTable1.getValueAt(i, j) + ",";
             }
             bw.write(line.substring(0, line.length() - 1));
         }
@@ -360,7 +362,19 @@ public class BuilderFrame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        JFileChooser a;
+        //FileNameExtensionFilter filter = new FileNameExtensionFilter("*.txt","*.*");
+        JFileChooser fc = new JFileChooser();
+        //fc.setFileFilter(filter);
+        File f = new File(".");
+        fc.setCurrentDirectory(f);
+        if ( fc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION ) {
+            try {
+                saveToFile(fc.getSelectedFile().getPath());
+                jTextField2.setText(fc.getSelectedFile().getPath());
+            } catch (IOException ex) {
+                Logger.getLogger(BuilderFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

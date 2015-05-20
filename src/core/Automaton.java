@@ -257,9 +257,9 @@ public class Automaton {
    
     // Выдать граф редукции
     public void makeReductGraph(Integer k) throws CloneNotSupportedException, InterruptedException {
-        
-        frame.appendTextAreaText("Построение графа редукции при k = " + k.toString() + " ...");
-        
+        if (!frame.isCycleCalc) {
+            frame.appendTextAreaText("Построение графа редукции при k = " + k.toString() + " ...");
+        }
         directedgraph = new DirectedGraph();
         
         mAdicSet input = new mAdicSet(alphabetsDimention, k, frame);
@@ -301,7 +301,10 @@ public class Automaton {
         }
 
         frame.setProcessProgressBarValue(100);
-        frame.appendTextAreaText("Определение параметров графа ...");
+        
+        if (!frame.isCycleCalc) {
+            frame.appendTextAreaText("Определение параметров графа ...");
+        }
         directedgraph.makeAnalysis();
         
         String cyclesData ="";
@@ -315,11 +318,22 @@ public class Automaton {
             cyclesData = "0";
         }
         
-        frame.appendTextAreaText("Посчитан граф редукции при k = " + k.toString() + 
-                                ".\nРебер графа = " + directedgraph.edgesCount.toString() + 
-                                ".\nЦиклов в графе = " + directedgraph.cyclesCount + 
-                                ".\nОбщая длина всех циклов в графе = " + directedgraph.c +
-                                ".\nДлины циклов в графе : " + cyclesData +
-                                ".\nЕсть хвосты = " + directedgraph.thereTails + ".");
+        if (frame.isCycleCalc) {
+            frame.appendTextAreaSimpleText("k = [" + k.toString() + 
+                                    "]. Ребер = [" + directedgraph.edgesCount.toString() + 
+                                    "]. Циклов = [" + directedgraph.cyclesCount + 
+                                    "]. Длина циклов = [" + directedgraph.c +
+                                    "]. Длины циклов : [" + cyclesData +
+                                    "]. Есть хвосты = [" + directedgraph.thereTails + "].");
+            
+        }
+        else {
+            frame.appendTextAreaText("Посчитан граф редукции при k = " + k.toString() + 
+                                    ".\nРебер графа = " + directedgraph.edgesCount.toString() + 
+                                    ".\nЦиклов в графе = " + directedgraph.cyclesCount + 
+                                    ".\nОбщая длина всех циклов в графе = " + directedgraph.c +
+                                    ".\nДлины циклов в графе : " + cyclesData +
+                                    ".\nЕсть хвосты = " + directedgraph.thereTails + ".");
+        }
     }
 }

@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.io.*;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.StringTokenizer;
 
@@ -263,14 +265,58 @@ public class Automaton {
         
         directedgraph = new DirectedGraph();
         
+        // Множество входных слов
         mAdicSet input = new mAdicSet(alphabetsDimention, k, frame);
+        // Множество выходных слов
         mAdicSet output = getOutputSet(input);
+        
         
         TreeMap<Integer, Integer> inputMap = new TreeMap<Integer, Integer>();
         TreeMap<Integer, Integer> outputMap = new TreeMap<Integer, Integer>();
         
+        
         Set<Map.Entry<Integer, mAdic>> set1 = input.getMAdicSet();
         Set<Map.Entry<Integer, mAdic>> set2 = output.getMAdicSet();
+
+        /*
+        // Решил сделать так... с deepHashCode 
+        for (Map.Entry<Integer, mAdic> me1 : set1) {
+            inputMap.put(Arrays.deepHashCode(me1.getValue().getDigits()), me1.getKey());
+        }
+        
+        for (Map.Entry<Integer, mAdic> me2 : set2) {
+            outputMap.put(Arrays.deepHashCode(me2.getValue().getDigits()), me2.getKey());
+        }
+        
+        
+        Set<Map.Entry<Integer, Integer>> outputSet = outputMap.entrySet();
+        
+        double x = 0;
+        int y = 0;
+        Integer z = 0;
+        
+        TreeMap<Integer, Integer> tmpMap;
+        
+        for (Map.Entry<Integer, Integer> me: outputSet) {
+            if (inputMap.containsKey(me.getKey())) {
+                
+                directedgraph.addEdge(Integer.toString(me.getValue()), Integer.toString(inputMap.get(me.getKey())));
+                directedgraph.edgesCount++; // счетчик ребер графа
+            }
+            z++;
+             
+            
+            x = z * 100 / outputSet.size();
+            y = (int)x + 1;
+            frame.setProcessProgressBarValue(y);
+            //frame.setReductGraphEdgesLabelData(directedgraph.edgesCount.toString());
+            frame.setReductGraphEdgesLabelData(Integer.toString(outputSet.size()));
+        }
+        
+        
+        */
+        
+        
         
         for (Map.Entry<Integer, mAdic> me1 : set1) {
             inputMap.put(me1.getKey(), Arrays.deepHashCode(me1.getValue().getDigits()));
@@ -280,16 +326,20 @@ public class Automaton {
             outputMap.put(me2.getKey(), Arrays.deepHashCode(me2.getValue().getDigits()));
         }
         
+        
+        
         Set<Map.Entry<Integer, Integer>> inputSet = inputMap.entrySet();
         Set<Map.Entry<Integer, Integer>> outputSet = outputMap.entrySet();
-
+        
         double x = 0;
         int y = 0;
                 
-        for (Map.Entry<Integer, Integer> me1: inputSet) {
-            for (Map.Entry<Integer, Integer> me2: outputSet) {
+        for (Map.Entry<Integer, Integer> me1: outputSet) {
+            
+                
+            for (Map.Entry<Integer, Integer> me2: inputSet) {
                 if (Objects.equals(me2.getValue(), me1.getValue())) {
-                    directedgraph.addEdge(Integer.toString(me2.getKey()), Integer.toString(me1.getKey()));
+                    directedgraph.addEdge(Integer.toString(me1.getKey()), Integer.toString(me2.getKey()));
                     directedgraph.edgesCount++; // счетчик ребер графа
                 }
                 //frame.setSimpleProgressValue(me1.getKey()*100/inputSet.size()+1);
@@ -301,7 +351,9 @@ public class Automaton {
             frame.setProcessProgressBarValue(y);
             frame.setReductGraphEdgesLabelData(directedgraph.edgesCount.toString());
         }
-
+        
+        
+        
         frame.setProcessProgressBarValue(100);
         //frame.setSimpleProgressValue(100);
         

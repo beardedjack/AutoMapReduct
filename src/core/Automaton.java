@@ -3,7 +3,6 @@ package core;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import gui.AMRMain;
-import gui.BuilderFrame;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -11,9 +10,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.io.*;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Objects;
 import java.util.StringTokenizer;
 
 public class Automaton {

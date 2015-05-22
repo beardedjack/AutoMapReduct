@@ -12,16 +12,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import static java.lang.Thread.MAX_PRIORITY;
-import static java.lang.Thread.sleep;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
 
 
 /**

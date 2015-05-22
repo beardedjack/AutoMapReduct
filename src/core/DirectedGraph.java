@@ -37,9 +37,9 @@ public class DirectedGraph {
     public Integer cyclesCount = 0; // число циклов
     public boolean thereTails = false; // есть хвосты на циклах
     public Integer c = 0; // длина циклов в графе
-    public ArrayList<Integer> cyclesLength;
-    public Integer loopsCount = 0;
-    public Integer graphType = 0;
+    public ArrayList<Integer> cyclesLength; // длины циклов
+    public Integer loopsCount = 0; // число петель
+    public Integer graphType = 0; // тип графа
     
     public void addVertex(String vertexName) {
         if (!hasVertex(vertexName)) {
@@ -118,7 +118,7 @@ public class DirectedGraph {
         Integer vertexFrom [] = new Integer [edgesCount];
         // массив входных вершин
         Integer vertexTo [] = new Integer [edgesCount];
-        loopsCount = 0;
+        loopsCount = 0; // количество циклов
         Integer e1, e2, e = 0;
         Set<Map.Entry<String, List<String>>> set = vertexMap.entrySet();
         // Запоняем массивы входных и выходных вершин
@@ -131,13 +131,8 @@ public class DirectedGraph {
                 if (Objects.equals(e1, e2)) {
                     loopsCount++;
                 }
-                    vertexFrom [e] = e1;
-                    vertexTo [e] = e2;
-                //}
-                //else {
-                //    vertexFrom [e] = -1;
-                //    vertexTo [e] = -1; 
-                //}
+                vertexFrom [e] = e1;
+                vertexTo [e] = e2;
                 e++;
             }
         }
@@ -238,7 +233,6 @@ public class DirectedGraph {
                 graphType = 3; // эргодическое + сохраняет меру
             }
         }
-        
     }
 
     private boolean used[];
@@ -251,7 +245,6 @@ public class DirectedGraph {
         next = getIndex(cycleVertexTo[cur]); 
         if (!used[next]) {
             a = dfs(next);
-            //a++;
         }
         a++;
         return a;

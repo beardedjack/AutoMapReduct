@@ -39,6 +39,7 @@ public class DirectedGraph {
     public Integer c = 0; // длина циклов в графе
     public ArrayList<Integer> cyclesLength;
     public Integer loopsCount = 0;
+    public Integer graphType = 0;
     
     public void addVertex(String vertexName) {
         if (!hasVertex(vertexName)) {
@@ -126,7 +127,7 @@ public class DirectedGraph {
             List<String> ls = me.getValue();
             for (String s: ls) {
                 e2 = Integer.valueOf(s);
-                // заполняем с учетом возможных петель
+                // Заполняем с учетом возможных петель
                 if (Objects.equals(e1, e2)) {
                     loopsCount++;
                 }
@@ -209,8 +210,35 @@ public class DirectedGraph {
                 }
             }
         }
-        // длина всех циклов за вычетом длин петель (по 1 на петлю)
-        c = c - loopsCount; 
+        // Сортировка длин циклов для вывода
+        Collections.sort(cyclesLength);
+        // В обратном порядке
+        Collections.reverse(cyclesLength);
+        // Длина всех циклов за вычетом длин петель (по 1 на петлю)
+        c = c - loopsCount;
+        
+        // Определение параметров графа:
+        
+        graphType = 0; 
+        
+        if (cyclesCount == 1) {
+            if (thereTails) {
+                graphType = 1; // эргодическое
+            }
+        }
+        
+        if (cyclesCount > 1) {
+            if (!thereTails) {
+                graphType = 2; // сохраняет меру
+            }
+        }
+        
+        if (cyclesCount == 1) {
+            if (!thereTails) {
+                graphType = 3; // эргодическое + сохраняет меру
+            }
+        }
+        
     }
 
     private boolean used[];

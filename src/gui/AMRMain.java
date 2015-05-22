@@ -15,6 +15,7 @@ import static java.lang.Thread.MAX_PRIORITY;
 import static java.lang.Thread.sleep;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
@@ -91,6 +92,11 @@ public class AMRMain extends javax.swing.JFrame {
     public void setSimpleProgressValue(Integer s) {
         this.jProgressBar4.setValue(s);
     }
+    
+    public int getK() {
+        return (int)jSpinner1.getValue();
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -480,6 +486,7 @@ public class AMRMain extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // Запуск расчета редукции по указанному модулю
+        automaton.graphTypes = new ArrayList<>();
         isCycleCalc = false;
         jProgressBar1.setValue(0);
         jProgressBar2.setValue(0);
@@ -506,6 +513,9 @@ public class AMRMain extends javax.swing.JFrame {
         // TODO add your handling code here:
         isCycleCalc = true;
         appendTextAreaText("Запуск построения графов редукции при k = 1.." + jSpinner1.getValue().toString() + " ...");
+        
+        automaton.graphTypes = new ArrayList<>();
+        
         for (Integer i = 1; i <= Integer.parseInt(jSpinner1.getValue().toString()); i++) {
             
         if (progress != null) {   
@@ -543,6 +553,9 @@ public class AMRMain extends javax.swing.JFrame {
         progress.start();
         
         }
+        
+        
+        
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed

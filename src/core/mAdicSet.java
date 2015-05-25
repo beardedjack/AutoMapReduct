@@ -27,6 +27,7 @@ public class mAdicSet {
         mAdic tempMAdic = new mAdic(c, s);
         workMAdic = tempMAdic.clone();
         mAdicMap.put(0, workMAdic);
+        
         for (Integer i = 1; i < a; i++) {
             tempMAdic.increaseMAdic();
             //workMAdic = new mAdic(c, s);
@@ -37,6 +38,7 @@ public class mAdicSet {
             y = (int)x+1;
             
             yield();
+            
             frame.setInputWordsProgressBarValue(y);
             
         }

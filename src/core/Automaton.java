@@ -15,7 +15,6 @@ import java.util.StringTokenizer;
 public class Automaton {
     
     private AMRMain frame;
-    
     public DirectedGraph directedgraph;
     public int k;
     
@@ -24,12 +23,10 @@ public class Automaton {
     }
     
     public Automaton() {
-        
     }
 
     // мапа всех состояний автомата с переходами/выходами по алфавиту 
     private TreeMap<Integer, List<TransitionOutput>> conditionMap = new TreeMap<Integer, List<TransitionOutput>>();
-        
     private List<Integer> inputAlphabet = new ArrayList<Integer>();
     private List<Integer> outputAlphabet = new ArrayList<Integer>();
     private Integer alphabetsDimention = 0;
@@ -38,10 +35,8 @@ public class Automaton {
     
     // элемент таблицы переходов-выходов автомата (отдельно взятая ячейка)
     private class TransitionOutput {
-                       
         Integer NextCondition; // следующее состояние
         Integer Output; // выход
-        
         public TransitionOutput(int Condition, int Output) {
             this.NextCondition = Condition;
             this.Output = Output;
@@ -66,10 +61,8 @@ public class Automaton {
     }
     
     private void printAutomaton() {
-        
         System.out.print("Автомат:\nНачальное состояние: " +
                 Integer.toString(initialCondition) + "\n#:\t");
-        
         for (int a : inputAlphabet) {
             System.out.print(a + "\t");
         }
@@ -91,7 +84,6 @@ public class Automaton {
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
         String line = null;
         line = br.readLine();
-        
          // Читаем размерность множества входного/выходного алфавита
         line = br.readLine();
         StringTokenizer dm = new StringTokenizer(line, ":");
@@ -100,13 +92,11 @@ public class Automaton {
             line = dm.nextToken();
             alphabetsDimention = Integer.valueOf(line);
         }
-        
         // Заполняем алфавиты (входной=выходной)
         for (Integer a = 0; a < alphabetsDimention; a++) {
             inputAlphabet.add(a);
             outputAlphabet.add(a);
         }
-                
         // Читаем начальное состояние
         line = br.readLine();
         StringTokenizer ic = new StringTokenizer(line, ":");
@@ -115,16 +105,13 @@ public class Automaton {
             line = ic.nextToken();
             initialCondition = Integer.valueOf(line);
         }
-        
         // Читаем данные: Состояние:<переход/выход>,...,<переход/выход>
         TransitionOutput to; 
         ArrayList<TransitionOutput> tr = new ArrayList<TransitionOutput>();
         StringTokenizer st;
-        
         while ((line = br.readLine()) != null) {
             st = new StringTokenizer(line, ":,/");
             co = Integer.valueOf(st.nextToken());
-           
             while(st.hasMoreElements()) {
                 to = new TransitionOutput(Integer.valueOf(st.nextToken()), Integer.valueOf(st.nextToken()));
                 //to.NextCondition = Integer.valueOf(st.nextToken());
@@ -135,7 +122,6 @@ public class Automaton {
             tr.clear();
         }
         br.close();
-
         frame.setDimentionLabelData(alphabetsDimention.toString());
         frame.setStatesCountLabelData(Integer.toString(conditionMap.size()));
         frame.setInitialStateLabelData(Integer.toString(initialCondition));
@@ -202,12 +188,12 @@ public class Automaton {
         String outWord ="";
         int tmp = 0; 
         int currentCondition = 1;
-        Integer i = inputWord.length()-1;
+        Integer i = inputWord.length() - 1;
         do {tmp = Character.getNumericValue(inputWord.charAt(i));
             outWord =  Integer.toString(this.getOutput(tmp, currentCondition)) + outWord  ;
             currentCondition = getCondition(tmp, currentCondition);
-            i = i-1;
-        } while (i>=0);
+            i = i - 1;
+        } while (i >= 0);
         return outWord;
     }
         

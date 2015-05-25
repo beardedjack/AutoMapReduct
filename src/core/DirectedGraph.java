@@ -31,7 +31,7 @@ import java.util.Set;
 
 public class DirectedGraph {
 
-    private HashMap<String, List<String>> vertexMap = new HashMap<String, List<String>>();
+    private HashMap<String, List<String>> vertexMap = new HashMap<>();
     
     public Integer edgesCount = 0; // счетчик ребер графа
     public Integer cyclesCount = 0; // число циклов
@@ -85,7 +85,7 @@ public class DirectedGraph {
         for (Map.Entry<String, List<String>> me : set) {
             line = me.getKey();
             List<String> to = me.getValue();
-            if (to.size()==0) {
+            if (to.isEmpty()) {
             bw.write(line);
                 bw.newLine();
             }
@@ -106,8 +106,7 @@ public class DirectedGraph {
             exec(dummy);
             InputStream inputStream = process.getInputStream();
             InputStream errorStream = process.getErrorStream();
- 
-            } catch (IOException e) {
+        } catch (IOException e) {
             // handle exception.
         }
     }
@@ -167,13 +166,7 @@ public class DirectedGraph {
         } while (!Objects.equals(a, b));
                 
         c = 0;
-        
-        if (a < e) {
-            thereTails = true;
-        }
-        else {
-            thereTails = false; 
-       }
+        thereTails = a < e;
         
        // новые массивы, содержащие только циклы:
         cycleVertexFrom = new Integer[a]; // из вершины
@@ -192,7 +185,7 @@ public class DirectedGraph {
         Arrays.fill(used, false);
         
         cyclesCount = 0;
-        cyclesLength = new ArrayList<Integer>();
+        cyclesLength = new ArrayList<>();
         Integer aaa = 0;
         
         for (Integer i = 1; i<c; i++) {
@@ -251,9 +244,9 @@ public class DirectedGraph {
     }
     
     private Integer getIndex(Integer c) {
-        Integer u=0;
+        Integer u = 0;
         for (Integer i = 0; i < used.length; i++) {
-            if (Objects.equals(cycleVertexFrom[i], c)) {u=i;}
+            if (Objects.equals(cycleVertexFrom[i], c)) {u = i;}
         }
         return u;
     }

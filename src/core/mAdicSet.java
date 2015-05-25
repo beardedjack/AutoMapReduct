@@ -11,7 +11,7 @@ public class mAdicSet {
 
     private AMRMain frame;
     
-    private TreeMap<Integer, mAdic> mAdicMap = new TreeMap<Integer, mAdic>();
+    private TreeMap<Integer, mAdic> mAdicMap = new TreeMap<>();
  
     // Все перестановки множества
     // c: основание системы счисления, s: кол-во элементов множества

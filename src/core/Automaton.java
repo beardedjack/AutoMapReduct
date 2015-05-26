@@ -152,16 +152,14 @@ public class Automaton {
     
     // Выдать множество выходных слов по множеству входных слов
     public mAdicSet getOutputSet(mAdicSet input) {
-        mAdicSet result = new mAdicSet();
+        mAdicSet result = new mAdicSet(input.getMAdicSet().size());
         mAdic m;
         Integer num;
         Integer currentCondition;
         Integer[] in, out;
         Set<Map.Entry<Integer, mAdic>> set = input.getMAdicSet();
-        
         double x = 0;
         int y = 0;
-        
         frame.setOutputWordsProgressValue(0);
         
         for (Map.Entry<Integer, mAdic> me : set) {

@@ -2,6 +2,7 @@ package core;
 
 import gui.AMRMain;
 import static java.lang.Thread.yield;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +21,7 @@ public class mAdicSet {
         double x = 0;
         int y = 0;
         Integer a = BasicOperations.getPow(c, s);
-        mAdicMap = new LinkedHashMap<>(a);
+        mAdicMap = new LinkedHashMap<>(a*2, 1);
         mAdic workMAdic;
         mAdic tempMAdic = new mAdic(c, s);
         workMAdic = tempMAdic.clone();
@@ -40,7 +41,7 @@ public class mAdicSet {
     }
     
     public mAdicSet(Integer a) {
-        mAdicMap = new LinkedHashMap<>(a);
+        mAdicMap = new LinkedHashMap<>(a*2, 1);
     }
     
     public void addMAdic(Integer element, mAdic value) {

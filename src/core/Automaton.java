@@ -3,6 +3,7 @@ package core;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import gui.AMRMain;
+import gui.AutoCurve;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -278,6 +279,8 @@ public class Automaton {
         mAdicSet input = new mAdicSet(alphabetsDimention, k, frame);
         // Множество выходных слов
         mAdicSet output = getOutputSet(input);
+        
+        //AutoCurve ac = new AutoCurve(input, output);
         
         /* Старая версия построения графа редукции (медленно)
         

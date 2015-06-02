@@ -282,6 +282,7 @@ public class Automaton {
         
         //AutoCurve ac = new AutoCurve(input, output);
         
+        // <editor-fold defaultstate="collapsed" desc="Old Code">
         /* Старая версия построения графа редукции (медленно)
         
         TreeMap<Integer, Integer> inputMap = new TreeMap<Integer, Integer>();
@@ -325,6 +326,7 @@ public class Automaton {
         
         ///////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////
+        // </editor-fold>  
         
         TreeMap<Integer, Integer> inputMap = new TreeMap<>();
         Multimap<Integer, Integer> outputMap = ArrayListMultimap.create();

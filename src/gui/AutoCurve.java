@@ -15,15 +15,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
  
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 public class AutoCurve extends JPanel{
-    private static final float STROKE_WIDTH = 5.5f;
+    private static final float STROKE_WIDTH = 1.0f;
     private static final Dimension APP_SIZE = new Dimension(800, 600);
     private List<Point2D> points = new ArrayList<Point2D>();
+    private TreeMap<Integer, Integer> Points = new TreeMap<>();
   
     public AutoCurve(mAdicSet input, mAdicSet output) {
         double x = 0, y = 0;
@@ -51,11 +53,12 @@ public class AutoCurve extends JPanel{
             yyy[me2.getKey()] = y;
         }
         for (Integer i = 0; i < set1.size(); i++) {
-            points.add(new Point2D.Double(xxx[i], yyy[i]));
+            Points.put((int)xxx[i], (int)yyy[i]);
+            //points.add(new Point2D.Double(xxx[i], yyy[i]));
         }
         this.setPreferredSize(APP_SIZE);
         JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.getContentPane().add(this);
         frame.pack();
         frame.setLocationRelativeTo(null);
@@ -80,15 +83,46 @@ protected void paintComponent(Graphics g) {
     g2.setRenderingHint(
         RenderingHints.KEY_ANTIALIASING, 
         RenderingHints.VALUE_ANTIALIAS_ON);
-    if (points.size() > 1) {
-        double xMultiplier = width;
-        double yMultiplier = height;
-        for (Point2D point : points) {
-            int x = BasicOperations.getPow((int) (point.getX()), 4);
-            int y = BasicOperations.getPow((int) (point.getY()), 4);
-            g2.drawLine(x, y, x, y);
+    
+    Set<Map.Entry<Integer, Integer>> set = Points.entrySet();
+        
+        Integer prevx = null, prevy = null;
+        int x1 = 0 , y1, x2 = 0, y2 = 0;
+    
+        Integer minx=0, miny=0,maxx=0, maxy=0;
+        for (Map.Entry<Integer, Integer> me : set) {
+            if (me.getKey()>maxx) maxx = me.getKey();
+            if (me.getValue()>maxy) maxy = me.getValue();
+            if (me.getKey()<minx) minx = me.getKey();
+            if (me.getValue()<miny) miny = me.getValue();
         }
-    }
+        int xMultiplier = (width-100)/maxx;
+        int yMultiplier = (height-100)/maxy;
+        
+        
+        g2.drawLine(0, height-yMultiplier, width, height-yMultiplier);
+        
+        for (Map.Entry<Integer, Integer> me : set) {
+            
+            if (prevx != null) {
+            x1 = prevx;
+            y1 = prevy;       
+            x2 = me.getKey();
+            y2 = me.getValue();
+            
+            g2.drawLine(x1*xMultiplier,0-y1*yMultiplier+maxy*yMultiplier+10,x2*xMultiplier,0-y2*yMultiplier+maxy*yMultiplier+10);
+            
+            
+            
+            
+            }
+            g2.drawLine(x2*xMultiplier, 0, x2*xMultiplier, height-yMultiplier+10);
+            g2.drawString(me.getKey().toString(), x2*xMultiplier, height-yMultiplier+15);
+            prevx = x2;
+            prevy= y2;
+        }
+    
+    
 }
   
 }

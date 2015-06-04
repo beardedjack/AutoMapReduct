@@ -18,6 +18,7 @@ public class Automaton {
     private AMRMain frame;
     public DirectedGraph directedgraph;
     public int k;
+    public mAdicSet input, output;
     
     public Automaton(AMRMain someframe) {
         this.frame = someframe;
@@ -61,21 +62,21 @@ public class Automaton {
         }
     }
     
-    private void printAutomaton() {
-        System.out.print("Автомат:\nНачальное состояние: " +
+    public void printAutomaton() {
+        frame.appendTextAreaSimpleTextA("Автомат:\nНачальное состояние: " +
                 Integer.toString(initialCondition) + "\n#:\t");
         for (int a : inputAlphabet) {
-            System.out.print(a + "\t");
+            frame.appendTextAreaSimpleTextA(a + "\t");
         }
-        System.out.print("\n");
+        frame.appendTextAreaSimpleTextA("\n");
         Set<Map.Entry<Integer, List<TransitionOutput>>> set = conditionMap.entrySet();
         for (Map.Entry<Integer, List<TransitionOutput>> me : set) {
-            System.out.print(me.getKey() + ":\t");
+            frame.appendTextAreaSimpleTextA(me.getKey() + ":\t");
             List<TransitionOutput> to = me.getValue();
             for (TransitionOutput o : to) {
-                System.out.print(o.NextCondition + "/" + o.Output + "\t");
+                frame.appendTextAreaSimpleTextA(o.NextCondition + "/" + o.Output + "\t");
             }
-            System.out.print("\n");
+            frame.appendTextAreaSimpleTextA("\n");
         }
     }
 
@@ -276,9 +277,9 @@ public class Automaton {
         directedgraph = new DirectedGraph();
         
         // Множество входных слов
-        mAdicSet input = new mAdicSet(alphabetsDimention, k, frame);
+        input = new mAdicSet(alphabetsDimention, k, frame);
         // Множество выходных слов
-        mAdicSet output = getOutputSet(input);
+        output = getOutputSet(input);
         
         //AutoCurve ac = new AutoCurve(input, output);
         

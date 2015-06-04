@@ -560,7 +560,7 @@ public class AMRMain extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
-        AutoCurve ac = new AutoCurve(automaton.input, automaton.output);
+        AutoCurve ac = new AutoCurve(automaton);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed

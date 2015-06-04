@@ -1,5 +1,6 @@
 package gui;
 
+import core.Automaton;
 import core.BasicOperations;
 import core.mAdic;
 import core.mAdicSet;
@@ -9,10 +10,11 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import javax.swing.JFrame;
@@ -21,19 +23,17 @@ import javax.swing.JPanel;
 public class AutoCurve extends JPanel{
     private float STROKE_WIDTH = 2.0f;
     private static final Dimension APP_SIZE = new Dimension(800, 600);
-    private List<Point2D> points = new ArrayList<>();
-    private TreeMap<Integer, Integer> Points = new TreeMap<>();
-  
-    public AutoCurve(mAdicSet input, mAdicSet output) {
+    private LinkedHashMap<Integer, Integer> Points;
+    //private List<Points> al = new ArrayList<Points>();
+    
+    public AutoCurve(Automaton automaton) {
         double x = 0, y = 0;
         Integer[] xx;
         Integer[] yy;
         Integer langLength = 0;
         Integer size = 0;
-        Set<Map.Entry<Integer, mAdic>> set1 = input.getMAdicSet();
-        Set<Map.Entry<Integer, mAdic>> set2 = output.getMAdicSet();
+        Set<Map.Entry<Integer, mAdic>> set1 = automaton.input.getMAdicSet();
         double[] xxx = new double[set1.size()]; 
-        double[] yyy = new double[set2.size()]; 
         for (Map.Entry<Integer, mAdic> me1 : set1) {
             xx = me1.getValue().getDigits();
             langLength = me1.getValue().getCapacity() + 1;
@@ -43,6 +43,10 @@ public class AutoCurve extends JPanel{
             }
             xxx[me1.getKey()] = x;
         }
+        //for (Integer j=1; j<=automaton.getConditionsCount(); j++) {
+        Set<Map.Entry<Integer, mAdic>> set2 = automaton.output.getMAdicSet();
+        double[] yyy = new double[set2.size()];
+        
         for (Map.Entry<Integer, mAdic> me2 : set2) {
             yy = me2.getValue().getDigits();
             langLength = me2.getValue().getCapacity() + 1;
@@ -52,11 +56,13 @@ public class AutoCurve extends JPanel{
             }
             yyy[me2.getKey()] = y;
         }
+        Points = new LinkedHashMap<>();
         Points.put(0, 0);
         for (Integer i = 0; i < set1.size(); i++) {
             Points.put((int)xxx[i], (int)yyy[i]);
             //points.add(new Point2D.Double(xxx[i], yyy[i]));
         }
+        //}
         this.setPreferredSize(APP_SIZE);
         JFrame frame = new JFrame("Геометрическое пространство");
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);

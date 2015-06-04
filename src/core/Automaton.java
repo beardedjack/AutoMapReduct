@@ -3,7 +3,6 @@ package core;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import gui.AMRMain;
-import gui.AutoCurve;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -28,9 +27,9 @@ public class Automaton {
     }
 
     // мапа всех состояний автомата с переходами/выходами по алфавиту 
-    private TreeMap<Integer, List<TransitionOutput>> conditionMap = new TreeMap<Integer, List<TransitionOutput>>();
-    private List<Integer> inputAlphabet = new ArrayList<Integer>();
-    private List<Integer> outputAlphabet = new ArrayList<Integer>();
+    private TreeMap<Integer, List<TransitionOutput>> conditionMap = new TreeMap<>();
+    private List<Integer> inputAlphabet = new ArrayList<>();
+    private List<Integer> outputAlphabet = new ArrayList<>();
     private Integer alphabetsDimention = 0;
     private int initialCondition = 1;
     public ArrayList<Integer> graphTypes;
@@ -47,6 +46,10 @@ public class Automaton {
      
     public void setInitialCondition(Integer i) {
         initialCondition = i;
+    }
+    
+    public int getConditionsCount() {
+        return conditionMap.size();
     }
     
     // проверка на наличие состояния с таким номером
@@ -280,8 +283,6 @@ public class Automaton {
         input = new mAdicSet(alphabetsDimention, k, frame);
         // Множество выходных слов
         output = getOutputSet(input);
-        
-        //AutoCurve ac = new AutoCurve(input, output);
         
         // <editor-fold defaultstate="collapsed" desc="Old Code">
         /* Старая версия построения графа редукции (медленно)

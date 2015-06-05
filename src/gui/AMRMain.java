@@ -22,6 +22,7 @@ public class AMRMain extends javax.swing.JFrame {
     private DateFormat df;
     private BuilderFrame bf;
     public boolean isCycleCalc = false;
+    public String autoFileName ="";
     
     public AMRMain() {
         initComponents();
@@ -476,6 +477,7 @@ public class AMRMain extends javax.swing.JFrame {
                 automaton = new Automaton(this);
                 automaton.loadFromFile(fileopen.getSelectedFile().getPath());
                 appendTextAreaText("Открыт файл: " + fileopen.getSelectedFile().getPath());
+                autoFileName = fileopen.getSelectedFile().getPath();
             } catch (FileNotFoundException ex) {
                     Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
@@ -559,8 +561,16 @@ public class AMRMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
-        AutoCurve ac = new AutoCurve(automaton);
+        
+        try {
+            // TODO add your handling code here:
+            AutoCurve ac = new AutoCurve(automaton, this);
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed

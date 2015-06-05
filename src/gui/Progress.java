@@ -19,9 +19,7 @@ public class Progress extends Thread {
         try {
             automaton.makeReductGraph(automaton.k);
             //automaton.directedgraph.makeAnalysis();
-        } catch (CloneNotSupportedException ex) {
-            Logger.getLogger(Progress.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InterruptedException ex) {
+        } catch (CloneNotSupportedException | InterruptedException ex) {
             Logger.getLogger(Progress.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

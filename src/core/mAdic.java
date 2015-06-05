@@ -4,7 +4,6 @@ package core;
 
 import java.util.Arrays;
 
-
 public class mAdic implements Cloneable {
     
     private Integer capacity; // основание системы счисления

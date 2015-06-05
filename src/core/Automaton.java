@@ -14,23 +14,23 @@ import java.util.StringTokenizer;
 
 public class Automaton {
     
-    private AMRMain frame;
+    public AMRMain frame;
     public DirectedGraph directedgraph;
     public int k;
-    public mAdicSet input, output;
-    
+        
     public Automaton(AMRMain someframe) {
         this.frame = someframe;
     }
     
     public Automaton() {
+    
     }
 
     // мапа всех состояний автомата с переходами/выходами по алфавиту 
     private TreeMap<Integer, List<TransitionOutput>> conditionMap = new TreeMap<>();
     private List<Integer> inputAlphabet = new ArrayList<>();
     private List<Integer> outputAlphabet = new ArrayList<>();
-    private Integer alphabetsDimention = 0;
+    public Integer alphabetsDimention = 0;
     private int initialCondition = 1;
     public ArrayList<Integer> graphTypes;
     
@@ -61,7 +61,7 @@ public class Automaton {
     private void addCondition(Integer transitionNumber, ArrayList<TransitionOutput> e) {
         if (!hasCondition(transitionNumber)) {
             // добавление всех переходов/выходов по каждому символу входного алфавита для данного состояния
-            conditionMap.put(transitionNumber, new ArrayList<TransitionOutput>(e));
+            conditionMap.put(transitionNumber, new ArrayList<>(e));
         }
     }
     
@@ -89,7 +89,7 @@ public class Automaton {
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
         String line = null;
         line = br.readLine();
-         // Читаем размерность множества входного/выходного алфавита
+        // Читаем размерность множества входного/выходного алфавита
         line = br.readLine();
         StringTokenizer dm = new StringTokenizer(line, ":");
         while(dm.hasMoreTokens()) {
@@ -112,15 +112,13 @@ public class Automaton {
         }
         // Читаем данные: Состояние:<переход/выход>,...,<переход/выход>
         TransitionOutput to; 
-        ArrayList<TransitionOutput> tr = new ArrayList<TransitionOutput>();
+        ArrayList<TransitionOutput> tr = new ArrayList<>();
         StringTokenizer st;
         while ((line = br.readLine()) != null) {
             st = new StringTokenizer(line, ":,/");
             co = Integer.valueOf(st.nextToken());
             while(st.hasMoreElements()) {
                 to = new TransitionOutput(Integer.valueOf(st.nextToken()), Integer.valueOf(st.nextToken()));
-                //to.NextCondition = Integer.valueOf(st.nextToken());
-                //to.Output = st.nextToken();
                 tr.add(to);
             }
             addCondition(co, tr);
@@ -179,36 +177,14 @@ public class Automaton {
             }
             m = new mAdic(alphabetsDimention, out);
             result.addMAdic(num, m);
-            x = num*100/set.size();
-            y = (int)x+1;
+            x = num * 100 / set.size();
+            y = (int)x + 1;
             frame.setOutputWordsProgressValue(y);
         }
         frame.setOutputWordsProgressValue(100);
         return result;
     }
     
-    private String getOutputWord(String inputWord) {
-        String outWord ="";
-        int tmp = 0; 
-        int currentCondition = 1;
-        Integer i = inputWord.length() - 1;
-        do {tmp = Character.getNumericValue(inputWord.charAt(i));
-            outWord =  Integer.toString(this.getOutput(tmp, currentCondition)) + outWord  ;
-            currentCondition = getCondition(tmp, currentCondition);
-            i = i - 1;
-        } while (i >= 0);
-        return outWord;
-    }
-        
-    // Выдать степень числа
-    private Integer getPow(Integer a, Integer b) {
-        Integer res = 1;
-        for (int i = 1; i <= b; i++) { 
-            res *= a;
-        }
-        return res;
-    }
-            
     // Выдать элемент выходного алфавита по номеру элемента входного алфавита и номеру состояния
     private Integer getOutput(Integer inputElement, Integer condition) {
         List<TransitionOutput> to = conditionMap.get(condition);
@@ -221,14 +197,6 @@ public class Automaton {
         return to.get(inputElement).NextCondition;
     }
        
-    private String addBits(String s, Integer k) {
-        StringBuffer sb = new StringBuffer(s).reverse();
-        while(sb.length() < k)
-            sb.append("0");
-            sb.reverse();
-        return sb.toString();
-    }
-
     // Выдать граф автомата
     public DirectedGraph makeAutomatonGraph() {
         DirectedGraph graph = new DirectedGraph();
@@ -280,9 +248,9 @@ public class Automaton {
         directedgraph = new DirectedGraph();
         
         // Множество входных слов
-        input = new mAdicSet(alphabetsDimention, k, frame);
+        mAdicSet input = new mAdicSet(alphabetsDimention, k, frame);
         // Множество выходных слов
-        output = getOutputSet(input);
+        mAdicSet output = getOutputSet(input);
         
         // <editor-fold defaultstate="collapsed" desc="Old Code">
         /* Старая версия построения графа редукции (медленно)
@@ -370,17 +338,13 @@ public class Automaton {
         
         frame.setProcessProgressBarValue(100);
         //frame.setSimpleProgressValue(100);
-        
         if (!frame.isCycleCalc) {
             frame.appendTextAreaText("Определение параметров графа ...");
         }
-        
         directedgraph.makeAnalysis();
-        
         if (k > 1) {
             graphTypes.add(directedgraph.graphType);
         }
-        
         String cyclesData ="";
         if (directedgraph.cyclesCount > 0) {
             for (Integer asd : directedgraph.cyclesLength) {
@@ -391,7 +355,6 @@ public class Automaton {
         else {
             cyclesData = "0";
         }
-        
         String tails = "";
         if (directedgraph.thereTails) {
             tails = "ДА";
@@ -399,7 +362,6 @@ public class Automaton {
         else {
             tails = "НЕТ";
         }
-                
         if (frame.isCycleCalc) {
             frame.appendTextAreaSimpleText("k = [" + k.toString() + 
                                     "] : Ребер = [" + directedgraph.edgesCount.toString() + 
@@ -411,7 +373,6 @@ public class Automaton {
             if (k==frame.getK()) {
                 getMapParams();
             }
-            
         }
         else {
             frame.appendTextAreaText("Посчитан граф редукции при k = " + k.toString() + 

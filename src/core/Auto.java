@@ -2,14 +2,10 @@ package core;
 
 import java.util.Map;
 import java.util.List;
-import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Set;
 import java.util.TreeMap;
 import java.io.*;
-import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
 // Старый класс автомата

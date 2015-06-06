@@ -19,6 +19,7 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+// Класс построения геометрического пространства
 public class AutoCurve extends JPanel{
     private float STROKE_WIDTH = 2.0f;
     private static final Dimension APP_SIZE = new Dimension(800, 800);
@@ -32,17 +33,15 @@ public class AutoCurve extends JPanel{
         this.frame = someframe;
         Automaton geomAutomaton = new Automaton(frame);
         geomAutomaton.loadFromFile(automaton.frame.autoFileName);
-        
         double x = 0, y = 0;
         Integer[] xx;
         Integer[] yy;
         Integer langLength = 0;
         Integer size = 0;
-        
         mAdicSet input = new mAdicSet(geomAutomaton.alphabetsDimention, 1, frame);
         Set<Map.Entry<Integer, mAdic>> set1 = input.getMAdicSet();
-        
         double[] xxx = new double[set1.size()]; 
+
         for (Map.Entry<Integer, mAdic> me1 : set1) {
             xx = me1.getValue().getDigits();
             langLength = me1.getValue().getCapacity() + 1;
@@ -52,7 +51,6 @@ public class AutoCurve extends JPanel{
             }
             xxx[me1.getKey()] = x;
         }
-        
         Points points;
         Set<Map.Entry<Integer, mAdic>> set2;
                 
@@ -61,7 +59,6 @@ public class AutoCurve extends JPanel{
             mAdicSet output = geomAutomaton.getOutputSet(input);
             set2 = output.getMAdicSet();
             double[] yyy = new double[set2.size()];
-        
             for (Map.Entry<Integer, mAdic> me2 : set2) {
                 yy = me2.getValue().getDigits();
                 langLength = me2.getValue().getCapacity() + 1;
@@ -69,7 +66,7 @@ public class AutoCurve extends JPanel{
                 for (Integer i = 0; i < yy.length; i++) {
                     y = y + (double)(yy[i] + 1) / (double)BasicOperations.getPow(langLength, i);  
                 }
-            yyy[me2.getKey()] = y;
+                yyy[me2.getKey()] = y;
             }
             
             points = new Points();
@@ -109,12 +106,12 @@ protected void paintComponent(Graphics g) {
     g.setColor(Color.black);
     Graphics2D g2 = (Graphics2D)g;
     g2.setStroke(new BasicStroke(
-            STROKE_WIDTH,
-            BasicStroke.CAP_ROUND,
-            BasicStroke.JOIN_ROUND));
+        STROKE_WIDTH,
+        BasicStroke.CAP_ROUND,
+        BasicStroke.JOIN_ROUND));
     g2.setRenderingHint(
-            RenderingHints.KEY_ANTIALIASING, 
-            RenderingHints.VALUE_ANTIALIAS_ON);
+        RenderingHints.KEY_ANTIALIASING, 
+        RenderingHints.VALUE_ANTIALIAS_ON);
     
     Integer minx = 1, miny = 1, maxx = 1, maxy = 1;
     for (Points all : al) {
@@ -145,7 +142,6 @@ protected void paintComponent(Graphics g) {
         prevx = null;
         prevy = null;
         int x1 = 0 , y1 = 0, x2 = 0, y2 = 0;
-        g2.setColor(Color.DARK_GRAY);
         g2.setColor(Color.BLUE);
         
         for (Map.Entry<Integer, Integer> me : set) {
@@ -159,21 +155,20 @@ protected void paintComponent(Graphics g) {
                 g2.setColor(Color.RED);
                 STROKE_WIDTH = 7.0f;
                 g2.setStroke(new BasicStroke(
-                        STROKE_WIDTH, 
-                        BasicStroke.CAP_ROUND, 
-                        BasicStroke.JOIN_ROUND));
-                    g2.drawLine(x2 * xMultiplier + 20,
-                                0 - y2 * yMultiplier + maxy * yMultiplier + 10 + 150,
-                                x2 * xMultiplier + 20,
-                                0 - y2 * yMultiplier + maxy * yMultiplier + 10 + 150);
-                    
+                    STROKE_WIDTH, 
+                    BasicStroke.CAP_ROUND, 
+                    BasicStroke.JOIN_ROUND));
+                g2.drawLine(x2 * xMultiplier + 20,
+                        0 - y2 * yMultiplier + maxy * yMultiplier + 10 + 150,
+                            x2 * xMultiplier + 20,
+                        0 - y2 * yMultiplier + maxy * yMultiplier + 10 + 150);
             }
             g2.setColor(Color.DARK_GRAY);
             STROKE_WIDTH = 0.5f;
             g2.setStroke(new BasicStroke(
-                    STROKE_WIDTH, 
-                    BasicStroke.CAP_ROUND, 
-                    BasicStroke.JOIN_ROUND));
+                STROKE_WIDTH, 
+                BasicStroke.CAP_ROUND, 
+                BasicStroke.JOIN_ROUND));
             g2.drawLine(15, 0 - y2 * yMultiplier + maxy * yMultiplier + 10 + 150,
                         width, 0 - y2 * yMultiplier + maxy * yMultiplier + 10 + 150);
             g2.drawLine(x2 * xMultiplier + 20, 0 + 150,
@@ -193,25 +188,25 @@ protected void paintComponent(Graphics g) {
             curvedY[me.getKey()] = (double) me.getValue();
         }
         
-        g2.setColor(colors[ui-1]);
-        g2.drawString("Состояние " + ui.toString(), 10, ui*15);
+        g2.setColor(colors[ui - 1]);
+        g2.drawString("Состояние " + ui.toString(), 10, ui * 15);
         STROKE_WIDTH = 1.0f;
         g2.setStroke(new BasicStroke(
-                STROKE_WIDTH, 
-                BasicStroke.CAP_ROUND, 
-                BasicStroke.JOIN_ROUND));
+            STROKE_WIDTH, 
+            BasicStroke.CAP_ROUND, 
+            BasicStroke.JOIN_ROUND));
         prevdx = -1;
         prevdy = -1;
-        while (co<=maxx)  {
+        while (co <= maxx)  {
             xx1 = prevdx;
             yy1 = prevdy;
             xx2= co;
             yy2= f(co, curvedX, curvedY);
             if (prevdx != -1) {
                 g2.drawLine((int)(xx1 * xMultiplier) + 20,
-                                0 - (int)(yy1 * yMultiplier) + maxy * yMultiplier + 10 + 150,
-                                (int)(xx2 * xMultiplier) + 20,
-                                0 - (int)(yy2 * yMultiplier) + maxy * yMultiplier + 10 + 150);
+                        0 - (int)(yy1 * yMultiplier) + maxy * yMultiplier + 10 + 150,
+                            (int)(xx2 * xMultiplier) + 20,
+                        0 - (int)(yy2 * yMultiplier) + maxy * yMultiplier + 10 + 150);
             }
             co += 0.01;
             prevdx = xx2;

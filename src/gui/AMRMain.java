@@ -27,7 +27,7 @@ public class AMRMain extends javax.swing.JFrame {
     public AMRMain() {
         initComponents();
         df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-        bf = new BuilderFrame();
+        bf = new BuilderFrame(this);
     }
 
     public void setDimentionLabelData(String s) {
@@ -82,6 +82,16 @@ public class AMRMain extends javax.swing.JFrame {
     
     public int getK() {
         return (int)jSpinner1.getValue();
+    }
+    
+    public void openAutomatonFile(String filename) throws FileNotFoundException, IOException {
+        isCycleCalc = false;
+        jTextField1.setText(filename);
+        jTextField1.setToolTipText(filename);
+        automaton = new Automaton(this);
+        automaton.loadFromFile(filename);
+        appendTextAreaText("Открыт файл: " + filename);
+        autoFileName = filename;
     }
     
     @SuppressWarnings("unchecked")
@@ -369,12 +379,11 @@ public class AMRMain extends javax.swing.JFrame {
                     .addComponent(jProgressBar3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jProgressBar4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel11))
                             .addComponent(jLabel10)
                             .addComponent(jLabel12)
                             .addGroup(jPanel4Layout.createSequentialGroup()
@@ -506,14 +515,13 @@ public class AMRMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3MouseReleased
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
         progress.stop();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
         isCycleCalc = true;
         appendTextAreaText("Запуск построения графов редукции при k = 1.." + jSpinner1.getValue().toString() + " ...");
+        appendTextAreaSimpleText("k\tРёбер\tЦиклов\tХвосты\tДлина циклов\tДлины циклов\tПетель");
         automaton.graphTypes = new ArrayList<>();
         for (Integer i = 1; i <= Integer.parseInt(jSpinner1.getValue().toString()); i++) {
         if (progress != null) {   
@@ -538,7 +546,6 @@ public class AMRMain extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         try {
-            // TODO add your handling code here:
             automaton.directedgraph.makeFile("graphreduct.dot", automaton.k);
         } catch (IOException ex) {
             Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
@@ -546,13 +553,11 @@ public class AMRMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
         bf.show();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-            // TODO add your handling code here:
             DirectedGraph dg = automaton.makeAutomatonGraph();
             dg.makeFile("graphautomaton.dot", 0);
         } catch (IOException ex) {
@@ -561,20 +566,16 @@ public class AMRMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        
         try {
-            // TODO add your handling code here:
             AutoCurve ac = new AutoCurve(automaton, this);
         } catch (CloneNotSupportedException ex) {
             Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
         automaton.printAutomaton();
     }//GEN-LAST:event_jButton9ActionPerformed
 

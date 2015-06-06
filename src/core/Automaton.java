@@ -10,6 +10,9 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.io.*;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
 public class Automaton {
@@ -345,16 +348,30 @@ public class Automaton {
         if (k > 1) {
             graphTypes.add(directedgraph.graphType);
         }
+        
         String cyclesData ="";
+        
         if (directedgraph.cyclesCount > 0) {
+            LinkedHashMap<Integer, Integer> cyclesInfo = new LinkedHashMap<>();
             for (Integer asd : directedgraph.cyclesLength) {
-                cyclesData = cyclesData + asd.toString() + ", ";
+                if (cyclesInfo.containsKey(asd)) {
+                    cyclesInfo.replace(asd, cyclesInfo.get(asd) + 1);
+                }
+                else {
+                    cyclesInfo.put(asd, 1);
+                }
+            }
+        
+            Set<Map.Entry<Integer, Integer>> set = cyclesInfo.entrySet();
+            for (Map.Entry<Integer, Integer> me : set) {
+                cyclesData += me.getKey().toString() + "(" + me.getValue().toString() + "), ";
             }
             cyclesData = cyclesData.substring(0, cyclesData.length() - 2);
         }
         else {
             cyclesData = "0";
         }
+        
         String tails = "";
         if (directedgraph.thereTails) {
             tails = "ДА";
@@ -363,14 +380,22 @@ public class Automaton {
             tails = "НЕТ";
         }
         if (frame.isCycleCalc) {
+            
+            /*
             frame.appendTextAreaSimpleText("k = [" + k.toString() + 
                                     "] : Ребер = [" + directedgraph.edgesCount.toString() + 
                                     "]. Циклов = [" + directedgraph.cyclesCount + 
+                                    "]. Есть хвосты = [" + tails + 
                                     "]. Длина циклов = [" + directedgraph.c +
-                                    "]. Число петель = [" + directedgraph.loopsCount +
-                                    "]. Длины циклов : [" + cyclesData +
-                                    "]. Есть хвосты = [" + tails + "].");
-            if (k==frame.getK()) {
+                                    "]. Длины циклов : [" + cyclesData + 
+                                    "]. Число петель = [" + directedgraph.loopsCount + "].");
+            
+            */
+            frame.appendTextAreaSimpleText(k.toString()+ "\t" + directedgraph.edgesCount.toString() + "\t" + directedgraph.cyclesCount + "\t" + tails + "\t" + directedgraph.c.toString() + "\t" + cyclesData + "\t" + directedgraph.loopsCount);
+            
+            
+            
+            if (k == frame.getK()) {
                 getMapParams();
             }
         }

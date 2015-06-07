@@ -527,25 +527,9 @@ public class AMRMain extends javax.swing.JFrame {
         appendTextAreaText("Запуск построения графов редукции при k = 1.." + jSpinner1.getValue().toString() + " ...");
         appendTextAreaSimpleText("k\tРёбер\tЦиклов\tХвосты\tДлина циклов\tДлины циклов\tПетель");
         automaton.graphTypes = new ArrayList<>();
-        for (Integer i = 1; i <= Integer.parseInt(jSpinner1.getValue().toString()); i++) {
-        if (progress != null) {   
-            if (progress.isAlive()) {
-                try {
-                    progress.join();
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        jProgressBar1.setValue(0);
-        jProgressBar2.setValue(0);
-        jProgressBar3.setValue(0);
-        automaton.k = i;
-        setKvalueLabelData(Integer.toString(i) + " из " + jSpinner1.getValue().toString());
         progress = new Progress(this, automaton);
         progress.setPriority(MAX_PRIORITY);
         progress.start();
-        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -572,9 +556,7 @@ public class AMRMain extends javax.swing.JFrame {
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         try {
             AutoCurve ac = new AutoCurve(automaton, this);
-        } catch (CloneNotSupportedException ex) {
-            Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (CloneNotSupportedException | IOException ex) {
             Logger.getLogger(AMRMain.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton8ActionPerformed

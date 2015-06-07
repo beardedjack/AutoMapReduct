@@ -16,11 +16,30 @@ public class Progress extends Thread {
     
     @Override
     public void run() {
-        try {
-            automaton.makeReductGraph(automaton.k);
-            //automaton.directedgraph.makeAnalysis();
-        } catch (CloneNotSupportedException | InterruptedException ex) {
-            Logger.getLogger(Progress.class.getName()).log(Level.SEVERE, null, ex);
+        if (frame.isCycleCalc) {
+            for (Integer i = 1; i <= frame.getK(); i++) {
+                try {
+                    frame.setProcessProgressBarValue(0);
+                    frame.setInputWordsProgressBarValue(0);
+                    frame.setOutputWordsProgressValue(0);
+                    automaton.k = i;
+                    frame.setKvalueLabelData(i.toString() + " из " + frame.getK());
+                    automaton.makeReductGraph(automaton.k);
+                } catch (CloneNotSupportedException | InterruptedException ex) {
+                    Logger.getLogger(Progress.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
+        else {
+            try {
+                frame.setProcessProgressBarValue(0);
+                frame.setInputWordsProgressBarValue(0);
+                frame.setOutputWordsProgressValue(0);
+                automaton.makeReductGraph(automaton.k);
+            } catch (CloneNotSupportedException | InterruptedException ex) {
+                Logger.getLogger(Progress.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
     }
 }

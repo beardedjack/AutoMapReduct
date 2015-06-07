@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -296,7 +297,7 @@ public class BuilderFrame extends javax.swing.JFrame {
         }
 
         for (Integer i = 1; i <= statesCount; i++) {
-            if (i == initialState) {
+            if (Objects.equals(i, initialState)) {
                 data[i - 1][0] = i.toString() + "*";
             }
             else {

@@ -6,8 +6,8 @@ import java.util.logging.Logger;
 
 public class Progress extends Thread {
     
-    private AMRMain frame;
-    private Automaton automaton;
+    private final AMRMain frame;
+    private final Automaton automaton;
     
     public Progress(AMRMain someframe, Automaton someautomaton) {
         this.frame = someframe;

@@ -84,6 +84,10 @@ public class AMRMain extends javax.swing.JFrame {
         return (int)jSpinner1.getValue();
     }
     
+    public void setIndeterminate(boolean set) {
+        jProgressBar4.setIndeterminate(set);
+    }
+    
     public void openAutomatonFile(String filename) throws FileNotFoundException, IOException {
         isCycleCalc = false;
         jTextField1.setText(filename);
@@ -365,7 +369,7 @@ public class AMRMain extends javax.swing.JFrame {
 
         jLabel12.setText("Подготовка выходных слов");
 
-        jProgressBar4.setForeground(java.awt.Color.green);
+        jProgressBar4.setForeground(java.awt.Color.blue);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);

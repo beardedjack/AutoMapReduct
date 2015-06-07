@@ -10,8 +10,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.io.*;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
@@ -340,7 +338,7 @@ public class Automaton {
         //////////////////////////////////////////////////////////////////////
         
         frame.setProcessProgressBarValue(100);
-        //frame.setSimpleProgressValue(100);
+        frame.setIndeterminate(true);
         if (!frame.isCycleCalc) {
             frame.appendTextAreaText("Определение параметров графа ...");
         }
@@ -408,5 +406,6 @@ public class Automaton {
                                     ".\nДлины циклов в графе : " + cyclesData +
                                     ".\nЕсть хвосты = " + tails + ".");
         }
+        frame.setIndeterminate(false);
     }
 }

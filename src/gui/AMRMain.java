@@ -80,6 +80,10 @@ public class AMRMain extends javax.swing.JFrame {
         this.jProgressBar4.setValue(s);
     }
     
+    public boolean getTabOutput() {
+        return jCheckBox1.isSelected();
+    }
+    
     public int getK() {
         return (int)jSpinner1.getValue();
     }
@@ -134,6 +138,7 @@ public class AMRMain extends javax.swing.JFrame {
         jProgressBar3 = new javax.swing.JProgressBar();
         jLabel12 = new javax.swing.JLabel();
         jProgressBar4 = new javax.swing.JProgressBar();
+        jCheckBox1 = new javax.swing.JCheckBox();
         jPanel5 = new javax.swing.JPanel();
         textArea1 = new java.awt.TextArea();
 
@@ -371,6 +376,8 @@ public class AMRMain extends javax.swing.JFrame {
 
         jProgressBar4.setForeground(java.awt.Color.blue);
 
+        jCheckBox1.setText("Вывод с табуляцией");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -389,12 +396,14 @@ public class AMRMain extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel11))
                             .addComponent(jLabel10)
-                            .addComponent(jLabel12)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel8)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(jLabel12))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jCheckBox1)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -411,7 +420,8 @@ public class AMRMain extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel8))
+                    .addComponent(jLabel8)
+                    .addComponent(jCheckBox1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -525,7 +535,9 @@ public class AMRMain extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         isCycleCalc = true;
         appendTextAreaText("Запуск построения графов редукции при k = 1.." + jSpinner1.getValue().toString() + " ...");
-        appendTextAreaSimpleText("k\tРёбер\tЦиклов\tХвосты\tДлина циклов\tДлины циклов\tПетель");
+        if (getTabOutput()) {
+            appendTextAreaSimpleText("k\tРёбер\tЦиклов\tХвосты\tДлина циклов\tДлины циклов\tПетель");
+        }
         automaton.graphTypes = new ArrayList<>();
         progress = new Progress(this, automaton);
         progress.setPriority(MAX_PRIORITY);
@@ -607,6 +619,7 @@ public class AMRMain extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

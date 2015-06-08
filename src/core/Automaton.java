@@ -378,20 +378,23 @@ public class Automaton {
             tails = "НЕТ";
         }
         if (frame.isCycleCalc) {
-            
-            /*
-            frame.appendTextAreaSimpleText("k = [" + k.toString() + 
+            if (frame.getTabOutput()) {
+                frame.appendTextAreaSimpleText(k + 
+                        "\t" + directedgraph.edgesCount.toString() + 
+                        "\t" + directedgraph.cyclesCount + "\t" + tails + 
+                        "\t" + directedgraph.c.toString() + 
+                        "\t" + cyclesData + 
+                        "\t" + directedgraph.loopsCount);    
+            }
+            else {
+                frame.appendTextAreaSimpleText("k = [" + k + 
                                     "] : Ребер = [" + directedgraph.edgesCount.toString() + 
                                     "]. Циклов = [" + directedgraph.cyclesCount + 
                                     "]. Есть хвосты = [" + tails + 
                                     "]. Длина циклов = [" + directedgraph.c +
                                     "]. Длины циклов : [" + cyclesData + 
-                                    "]. Число петель = [" + directedgraph.loopsCount + "].");
-            
-            */
-            frame.appendTextAreaSimpleText(k + "\t" + directedgraph.edgesCount.toString() + "\t" + directedgraph.cyclesCount + "\t" + tails + "\t" + directedgraph.c.toString() + "\t" + cyclesData + "\t" + directedgraph.loopsCount);
-            
-            
+                                    "]. Число петель = [" + directedgraph.loopsCount + "].");    
+            }
             
             if (k == frame.getK()) {
                 getMapParams();

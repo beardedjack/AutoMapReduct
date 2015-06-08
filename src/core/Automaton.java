@@ -241,9 +241,9 @@ public class Automaton {
     }
     
     // Выдать граф редукции
-    public void makeReductGraph(Integer k) throws CloneNotSupportedException, InterruptedException {
+    public void makeReductGraph(Integer u) throws CloneNotSupportedException, InterruptedException {
         if (!frame.isCycleCalc) {
-            frame.appendTextAreaText("Построение графа редукции при k = " + k.toString() + " ...");
+            frame.appendTextAreaText("Построение графа редукции при k = " + k + " ...");
         }
         
         directedgraph = new DirectedGraph();
@@ -389,7 +389,7 @@ public class Automaton {
                                     "]. Число петель = [" + directedgraph.loopsCount + "].");
             
             */
-            frame.appendTextAreaSimpleText(k.toString()+ "\t" + directedgraph.edgesCount.toString() + "\t" + directedgraph.cyclesCount + "\t" + tails + "\t" + directedgraph.c.toString() + "\t" + cyclesData + "\t" + directedgraph.loopsCount);
+            frame.appendTextAreaSimpleText(k + "\t" + directedgraph.edgesCount.toString() + "\t" + directedgraph.cyclesCount + "\t" + tails + "\t" + directedgraph.c.toString() + "\t" + cyclesData + "\t" + directedgraph.loopsCount);
             
             
             
@@ -398,7 +398,7 @@ public class Automaton {
             }
         }
         else {
-            frame.appendTextAreaText("Посчитан граф редукции при k = " + k.toString() + 
+            frame.appendTextAreaText("Посчитан граф редукции при k = " + k + 
                                     ".\nРебер графа = " + directedgraph.edgesCount.toString() + 
                                     ".\nЦиклов в графе = " + directedgraph.cyclesCount + 
                                     ".\nОбщая длина всех циклов в графе = " + directedgraph.c +

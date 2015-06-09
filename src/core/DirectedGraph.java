@@ -12,6 +12,7 @@ package core;
 Несуществующие вершины будут созданы автоматически.
 */
 
+import gui.AMRMain;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -41,12 +42,22 @@ public class DirectedGraph {
     public Integer loopsCount = 0; // число петель
     public Integer graphType = 0; // тип графа
     
+    public AMRMain frame;
+    
     public void addVertex(String vertexName) {
         if (!hasVertex(vertexName)) {
             vertexMap.put(vertexName, new ArrayList<String>());
         }
     }
  
+    public DirectedGraph(AMRMain someframe) {
+        this.frame = someframe;
+    }
+    
+    public DirectedGraph() {
+        
+    }
+    
     public boolean hasVertex(String vertexName) {
         return vertexMap.containsKey(vertexName);
     }
@@ -188,7 +199,13 @@ public class DirectedGraph {
         cyclesLength = new ArrayList<>();
         Integer aaa = 0;
         
-        for (Integer i = 1; i<c; i++) {
+        double x = 0;
+        int y = 0;
+        
+        frame.setIndeterminate(false);
+        frame.setSimpleProgressValue(0);
+        
+        for (Integer i = 1; i < c; i++) {
         // for (Integer i = 1; i<c; ++i) {
             if (!used[i]) {
                 aaa = dfs(i);
@@ -197,7 +214,13 @@ public class DirectedGraph {
                     cyclesCount++;
                 }
             }
+            x = i * 100 / c;
+            y = (int)x + 1;
+            frame.setSimpleProgressValue(y);
         }
+        frame.setSimpleProgressValue(100);
+        frame.setIndeterminate(true);
+        
         // Сортировка длин циклов для вывода
         Collections.sort(cyclesLength);
         // В обратном порядке

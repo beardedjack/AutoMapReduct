@@ -246,7 +246,7 @@ public class Automaton {
             frame.appendTextAreaText("Построение графа редукции при k = " + k + " ...");
         }
         
-        directedgraph = new DirectedGraph();
+        directedgraph = new DirectedGraph(frame);
         
         // Множество входных слов
         mAdicSet input = new mAdicSet(alphabetsDimention, k, frame);

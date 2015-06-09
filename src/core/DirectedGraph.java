@@ -217,7 +217,7 @@ public class DirectedGraph {
         }
         frame.setSimpleProgressValue(100);
         frame.setIndeterminate(true);
-        
+        frame.setDFScurrentElement(0);
         // Сортировка длин циклов для вывода
         Collections.sort(cyclesLength);
         // В обратном порядке
@@ -250,6 +250,7 @@ public class DirectedGraph {
     private Integer cycleVertexTo[];
     
     private Integer dfs(Integer cur) {
+        frame.setDFScurrentElement(cur);
         Integer next, a = 0;
         used[cur] = true;
         next = getIndex(cycleVertexTo[cur]); 

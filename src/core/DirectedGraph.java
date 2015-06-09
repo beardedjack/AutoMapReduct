@@ -41,7 +41,6 @@ public class DirectedGraph {
     public ArrayList<Integer> cyclesLength; // длины циклов
     public Integer loopsCount = 0; // число петель
     public Integer graphType = 0; // тип графа
-    
     public AMRMain frame;
     
     public void addVertex(String vertexName) {
@@ -198,7 +197,6 @@ public class DirectedGraph {
         cyclesCount = 0;
         cyclesLength = new ArrayList<>();
         Integer aaa = 0;
-        
         double x = 0;
         int y = 0;
         
@@ -206,7 +204,6 @@ public class DirectedGraph {
         frame.setSimpleProgressValue(0);
         
         for (Integer i = 1; i < c; i++) {
-        // for (Integer i = 1; i<c; ++i) {
             if (!used[i]) {
                 aaa = dfs(i);
                 if (aaa != 1) {
@@ -231,19 +228,16 @@ public class DirectedGraph {
         // Определение параметров графа:
         
         graphType = 0; 
-        
         if (cyclesCount == 1) {
             if (thereTails) {
                 graphType = 1; // эргодическое
             }
         }
-        
         if (cyclesCount > 1) {
             if (!thereTails) {
                 graphType = 2; // сохраняет меру
             }
         }
-        
         if (cyclesCount == 1) {
             if (!thereTails) {
                 graphType = 3; // эргодическое + сохраняет меру

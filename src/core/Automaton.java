@@ -242,6 +242,12 @@ public class Automaton {
     
     // Выдать граф редукции
     public void makeReductGraph(Integer u) throws CloneNotSupportedException, InterruptedException {
+        frame.setReductGraphEdgesLabelData(Integer.toString(0));
+        frame.setProcessProgressBarValue(0);
+        frame.setInputWordsProgressBarValue(0);
+        frame.setOutputWordsProgressValue(0);
+        frame.setSimpleProgressValue(0);
+        
         if (!frame.isCycleCalc) {
             frame.appendTextAreaText("Построение графа редукции при k = " + k + " ...");
         }

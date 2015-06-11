@@ -33,7 +33,11 @@ public class Automaton {
     private List<Integer> outputAlphabet = new ArrayList<>();
     public Integer alphabetsDimention = 0;
     private int initialCondition = 1;
-    public ArrayList<Integer> graphTypes;
+    
+    //public ArrayList<Integer> graphTypes;
+    
+    public ArrayList<Integer> graphCycles;
+    public ArrayList<Boolean> graphTails;
     
     // элемент таблицы переходов-выходов автомата (отдельно взятая ячейка)
     private class TransitionOutput {
@@ -215,21 +219,34 @@ public class Automaton {
     }
    
     private void getMapParams() {
-        Integer typeCurrent = graphTypes.get(0);
-        Integer typeNext = 0;
-        for (Integer a : graphTypes) {
-            typeNext = a;
-            if (typeCurrent == typeNext) {
-                typeCurrent = typeNext;
+        Integer cycles = 0;
+        Integer type = 0;
+        boolean tail = false;
+        for (Integer a : graphCycles) {
+           cycles += a; 
+        }
+        for (boolean a : graphTails) {
+            tail = tail | a;
+        }
+        if (!tail) {
+            if (cycles/k == 1) {
+                type = 3;
             }
             else {
-                typeCurrent = 0;
-                break;
+                type = 2;
+            }
+        } 
+        else {
+            if ((double)cycles / k == 1.0) {
+                type = 1;
+            }
+            else {
+                type = 0;
             }
         }
         
         String mapType = "Класс отображения: ";
-        switch (typeCurrent) {
+        switch (type) {
             case 0 : {mapType += "Не определено."; break;}
             case 1 : {mapType += "Эргодическое."; break;}
             case 2 : {mapType += "Сохраняет меру."; break;}
@@ -261,29 +278,21 @@ public class Automaton {
         
         // <editor-fold defaultstate="collapsed" desc="Old Code">
         /* Старая версия построения графа редукции (медленно)
-        
         TreeMap<Integer, Integer> inputMap = new TreeMap<Integer, Integer>();
         TreeMap<Integer, Integer> outputMap = new TreeMap<Integer, Integer>();
         Set<Map.Entry<Integer, mAdic>> set1 = input.getMAdicSet();
         Set<Map.Entry<Integer, mAdic>> set2 = output.getMAdicSet();
-       
         for (Map.Entry<Integer, mAdic> me1 : set1) {
             inputMap.put(me1.getKey(), Arrays.deepHashCode(me1.getValue().getDigits()));
         }
-        
         for (Map.Entry<Integer, mAdic> me2 : set2) {
             outputMap.put(me2.getKey(), Arrays.deepHashCode(me2.getValue().getDigits()));
         }
-        
         Set<Map.Entry<Integer, Integer>> inputSet = inputMap.entrySet();
         Set<Map.Entry<Integer, Integer>> outputSet = outputMap.entrySet();
-        
         double x = 0;
         int y = 0;
-                
         for (Map.Entry<Integer, Integer> me1: outputSet) {
-            
-                
             for (Map.Entry<Integer, Integer> me2: inputSet) {
                 if (Objects.equals(me2.getValue(), me1.getValue())) {
                     directedgraph.addEdge(Integer.toString(me1.getKey()), Integer.toString(me2.getKey()));
@@ -291,30 +300,24 @@ public class Automaton {
                 }
                 //frame.setSimpleProgressValue(me1.getKey()*100/inputSet.size()+1);
             }
-            
             x = me1.getKey() * 100 / outputSet.size();
             y = (int)x + 1;
-            
             frame.setProcessProgressBarValue(y);
             frame.setReductGraphEdgesLabelData(directedgraph.edgesCount.toString());
         }
-        
         */
-        
-        ///////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////
         // </editor-fold>  
         
         TreeMap<Integer, Integer> inputMap = new TreeMap<>();
         Multimap<Integer, Integer> outputMap = ArrayListMultimap.create();
-        
+
         Set<Map.Entry<Integer, mAdic>> set1 = input.getMAdicSet();
         Set<Map.Entry<Integer, mAdic>> set2 = output.getMAdicSet();
-        
+
         for (Map.Entry<Integer, mAdic> me1 : set1) {
             inputMap.put(Arrays.deepHashCode(me1.getValue().getDigits()), me1.getKey());
         }
-        
+
         for (Map.Entry<Integer, mAdic> me2 : set2) {
             outputMap.put(Arrays.deepHashCode(me2.getValue().getDigits()), me2.getKey());
         }
@@ -340,18 +343,14 @@ public class Automaton {
             frame.setReductGraphEdgesLabelData(directedgraph.edgesCount.toString());
         }
 
-        ///////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////
-        
         frame.setProcessProgressBarValue(100);
         frame.setIndeterminate(true);
         if (!frame.isCycleCalc) {
             frame.appendTextAreaText("Определение параметров графа ...");
         }
         directedgraph.makeAnalysis();
-        if (k > 1) {
-            graphTypes.add(directedgraph.graphType);
-        }
+        graphCycles.add(directedgraph.cyclesCount);
+        graphTails.add(directedgraph.thereTails);
         
         String cyclesData ="";
         

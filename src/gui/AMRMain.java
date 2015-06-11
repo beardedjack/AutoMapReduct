@@ -539,7 +539,8 @@ public class AMRMain extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // Запуск расчета редукции по указанному модулю
-        automaton.graphTypes = new ArrayList<>();
+        automaton.graphCycles = new ArrayList<>();
+        automaton.graphTails = new ArrayList<>();
         isCycleCalc = false;
         jProgressBar1.setValue(0);
         jProgressBar2.setValue(0);
@@ -567,7 +568,8 @@ public class AMRMain extends javax.swing.JFrame {
         if (getTabOutput()) {
             appendTextAreaSimpleText("k\tРёбер\tЦиклов\tХвосты\tДлина циклов\tДлины циклов\tПетель");
         }
-        automaton.graphTypes = new ArrayList<>();
+        automaton.graphCycles = new ArrayList<>();
+        automaton.graphTails = new ArrayList<>();
         progress = new Progress(this, automaton);
         progress.setPriority(MAX_PRIORITY);
         progress.start();

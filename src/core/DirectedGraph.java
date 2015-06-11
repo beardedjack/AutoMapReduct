@@ -40,7 +40,7 @@ public class DirectedGraph {
     public Integer c = 0; // длина циклов в графе
     public ArrayList<Integer> cyclesLength; // длины циклов
     public Integer loopsCount = 0; // число петель
-    public Integer graphType = 0; // тип графа
+    
     public AMRMain frame;
     
     public void addVertex(String vertexName) {
@@ -224,25 +224,6 @@ public class DirectedGraph {
         Collections.reverse(cyclesLength);
         // Длина всех циклов за вычетом длин петель (по 1 на петлю)
         c = c - loopsCount;
-        
-        // Определение параметров графа:
-        
-        graphType = 0; 
-        if (cyclesCount == 1) {
-            if (thereTails) {
-                graphType = 1; // эргодическое
-            }
-        }
-        if (cyclesCount > 1) {
-            if (!thereTails) {
-                graphType = 2; // сохраняет меру
-            }
-        }
-        if (cyclesCount == 1) {
-            if (!thereTails) {
-                graphType = 3; // эргодическое + сохраняет меру
-            }
-        }
     }
 
     private boolean used[];

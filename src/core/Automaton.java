@@ -223,7 +223,7 @@ public class Automaton {
         Integer type = 0;
         boolean tail = false;
         for (Integer a : graphCycles) {
-           cycles += a; 
+            cycles += a; 
         }
         for (boolean a : graphTails) {
             tail = tail | a;

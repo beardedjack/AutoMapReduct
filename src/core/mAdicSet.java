@@ -11,7 +11,7 @@ public class mAdicSet {
 
     private AMRMain frame;
     private LinkedHashMap<Integer, mAdic> mAdicMap;
- 
+    
     // Все перестановки множества
     // c: основание системы счисления, s: кол-во элементов множества
     public mAdicSet(Integer c, Integer s, AMRMain someframe) throws CloneNotSupportedException { 
@@ -26,10 +26,8 @@ public class mAdicSet {
         mAdicMap.put(0, workMAdic);
         for (Integer i = 1; i < a; i++) {
             tempMAdic.increaseMAdic();
-            //workMAdic = new mAdic(c, s);
             workMAdic = tempMAdic.clone();
             mAdicMap.put(i, workMAdic);
-            //addMAdic(i, workMAdic);
             x = i * 100 / a;
             y = (int)x + 1;
             yield();

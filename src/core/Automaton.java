@@ -158,13 +158,23 @@ public class Automaton {
         bw.close();
     }
     
+    public mAdic getOutput(mAdic input) {
+        Integer currentCondition;
+        Integer[] in = input.getDigits();
+        Integer[] out = new Integer[in.length];
+        currentCondition = initialCondition;
+        for (Integer i = 0; i < in.length; i++) {
+                out[i] = getOutput(in[i], currentCondition);
+                currentCondition = getCondition(in[i], currentCondition);
+        }
+        return new mAdic(alphabetsDimention, out);
+    }
+    
+    
     // Выдать множество выходных слов по множеству входных слов
     public mAdicSet getOutputSet(mAdicSet input) {
         mAdicSet result = new mAdicSet(input.getMAdicSet().size());
-        mAdic m;
         Integer num;
-        Integer currentCondition;
-        Integer[] in, out;
         Set<Map.Entry<Integer, mAdic>> set = input.getMAdicSet();
         double x = 0;
         int y = 0;
@@ -172,16 +182,8 @@ public class Automaton {
         
         for (Map.Entry<Integer, mAdic> me : set) {
             num = me.getKey();
-            in = me.getValue().getDigits();
-            out = new Integer[in.length];
-            currentCondition = initialCondition;
             
-            for (Integer i = 0; i < in.length; i++) {
-                out[i] = getOutput(in[i], currentCondition);
-                currentCondition = getCondition(in[i], currentCondition);
-            }
-            m = new mAdic(alphabetsDimention, out);
-            result.addMAdic(num, m);
+            result.addMAdic(num, getOutput(me.getValue()));
             x = num * 100 / set.size();
             y = (int)x + 1;
             frame.setOutputWordsProgressValue(y);
@@ -229,11 +231,17 @@ public class Automaton {
             tail = tail | a;
         }
         if (!tail) {
-            if (cycles/k == 1) {
+            if ((double)cycles/k == 1.0) {
                 type = 3;
             }
             else {
-                type = 2;
+                
+                if (graphCycles.get(0)==0) {
+                    type = 0;
+                }
+                else {
+                    type = 2;
+                }
             }
         } 
         else {
@@ -271,10 +279,12 @@ public class Automaton {
         
         directedgraph = new DirectedGraph(frame);
         
+        
         // Множество входных слов
-        mAdicSet input = new mAdicSet(alphabetsDimention, k, frame);
+        //mAdicSet input = new mAdicSet(alphabetsDimention, k, frame);
         // Множество выходных слов
-        mAdicSet output = getOutputSet(input);
+        //mAdicSet output = getOutputSet(input);
+        
         
         // <editor-fold defaultstate="collapsed" desc="Old Code">
         /* Старая версия построения графа редукции (медленно)
@@ -308,6 +318,8 @@ public class Automaton {
         */
         // </editor-fold>  
         
+        /*
+        
         TreeMap<Integer, Integer> inputMap = new TreeMap<>();
         Multimap<Integer, Integer> outputMap = ArrayListMultimap.create();
 
@@ -321,6 +333,13 @@ public class Automaton {
         for (Map.Entry<Integer, mAdic> me2 : set2) {
             outputMap.put(Arrays.deepHashCode(me2.getValue().getDigits()), me2.getKey());
         }
+        
+        */
+        
+        ResultSet rs = new ResultSet(alphabetsDimention, k, frame, this);
+        
+        TreeMap<Integer, Integer> inputMap = rs.getInputMap();
+        Multimap<Integer, Integer> outputMap = rs.getOutputMap();
         
         double x = 0;
         int y = 0;

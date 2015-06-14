@@ -207,13 +207,13 @@ public class Automaton {
     // Выдать граф автомата
     public DirectedGraph makeAutomatonGraph() {
         DirectedGraph graph = new DirectedGraph();
-        String curr ,next;
+        Integer curr ,next;
         Set<Map.Entry<Integer, List<TransitionOutput>>> set = conditionMap.entrySet();
         for (Map.Entry<Integer, List<TransitionOutput>> me : set) {
-            curr = Integer.toString(me.getKey());
+            curr = me.getKey();
             List<TransitionOutput> to = me.getValue();
             for (TransitionOutput o : to) {
-                next = Integer.toString(o.NextCondition);
+                next = o.NextCondition;
                 graph.addEdge(curr, next);
             }
         }
@@ -236,7 +236,7 @@ public class Automaton {
             }
             else {
                 
-                if (graphCycles.get(0)==0) {
+                if (graphCycles.get(0) == 0) {
                     type = 0;
                 }
                 else {
@@ -279,13 +279,6 @@ public class Automaton {
         
         directedgraph = new DirectedGraph(frame);
         
-        
-        // Множество входных слов
-        //mAdicSet input = new mAdicSet(alphabetsDimention, k, frame);
-        // Множество выходных слов
-        //mAdicSet output = getOutputSet(input);
-        
-        
         // <editor-fold defaultstate="collapsed" desc="Old Code">
         /* Старая версия построения графа редукции (медленно)
         TreeMap<Integer, Integer> inputMap = new TreeMap<Integer, Integer>();
@@ -317,27 +310,26 @@ public class Automaton {
         }
         */
         // </editor-fold>  
-        
+        // <editor-fold defaultstate="collapsed" desc="Old Code">
         /*
-        
+        // Множество входных слов
+        //mAdicSet input = new mAdicSet(alphabetsDimention, k, frame);
+        // Множество выходных слов
+        //mAdicSet output = getOutputSet(input);
         TreeMap<Integer, Integer> inputMap = new TreeMap<>();
         Multimap<Integer, Integer> outputMap = ArrayListMultimap.create();
-
         Set<Map.Entry<Integer, mAdic>> set1 = input.getMAdicSet();
         Set<Map.Entry<Integer, mAdic>> set2 = output.getMAdicSet();
-
         for (Map.Entry<Integer, mAdic> me1 : set1) {
             inputMap.put(Arrays.deepHashCode(me1.getValue().getDigits()), me1.getKey());
         }
-
         for (Map.Entry<Integer, mAdic> me2 : set2) {
             outputMap.put(Arrays.deepHashCode(me2.getValue().getDigits()), me2.getKey());
         }
-        
         */
+        // </editor-fold>  
         
         ResultSet rs = new ResultSet(alphabetsDimention, k, frame, this);
-        
         TreeMap<Integer, Integer> inputMap = rs.getInputMap();
         Multimap<Integer, Integer> outputMap = rs.getOutputMap();
         
@@ -351,7 +343,7 @@ public class Automaton {
             if (inputMap.containsKey(key)) {
                 al = new ArrayList<>(outputMap.get(key));
                 for (Integer i : al) {
-                    directedgraph.addEdge(Integer.toString(i), Integer.toString(inputMap.get(key)));
+                    directedgraph.addEdge(i, inputMap.get(key));
                     directedgraph.edgesCount++; // счетчик ребер графа
                 }
             }

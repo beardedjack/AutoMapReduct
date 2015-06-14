@@ -32,7 +32,7 @@ import java.util.Set;
 
 public class DirectedGraph {
 
-    private HashMap<String, List<String>> vertexMap = new HashMap<>();
+    private HashMap<Integer, List<Integer>> vertexMap = new HashMap<>();
     
     public Integer edgesCount = 0; // счетчик ребер графа
     public Integer cyclesCount = 0; // число циклов
@@ -43,9 +43,9 @@ public class DirectedGraph {
     
     public AMRMain frame;
     
-    public void addVertex(String vertexName) {
+    public void addVertex(Integer vertexName) {
         if (!hasVertex(vertexName)) {
-            vertexMap.put(vertexName, new ArrayList<String>());
+            vertexMap.put(vertexName, new ArrayList<Integer>());
         }
     }
  
@@ -57,25 +57,25 @@ public class DirectedGraph {
         
     }
     
-    public boolean hasVertex(String vertexName) {
+    public boolean hasVertex(Integer vertexName) {
         return vertexMap.containsKey(vertexName);
     }
  
-    public boolean hasEdge(String vertexName1, String vertexName2) {
+    public boolean hasEdge(Integer vertexName1, Integer vertexName2) {
         if (!hasVertex(vertexName1)) return false;
-        List<String> edges = vertexMap.get(vertexName1);
+        List<Integer> edges = vertexMap.get(vertexName1);
         return Collections.binarySearch(edges, vertexName2) != -1;
     }
  
-    public void addEdge(String vertexName1, String vertexName2) {
+    public void addEdge(Integer vertexName1, Integer vertexName2) {
         if (!hasVertex(vertexName1)) addVertex(vertexName1);
         if (!hasVertex(vertexName2)) addVertex(vertexName2);
-        List<String> edges1 = vertexMap.get(vertexName1);
+        List<Integer> edges1 = vertexMap.get(vertexName1);
         edges1.add(vertexName2);
         Collections.sort(edges1);
     }
  
-    public Map<String, List<String>> getVertexMap() {
+    public Map<Integer, List<Integer>> getVertexMap() {
         return vertexMap;
     }
     
@@ -91,16 +91,16 @@ public class DirectedGraph {
         bw.newLine();
         bw.write("node[shape=\"circle\"]");
         bw.newLine();
-        Set<Map.Entry<String, List<String>>> set = vertexMap.entrySet();
-        for (Map.Entry<String, List<String>> me : set) {
-            line = me.getKey();
-            List<String> to = me.getValue();
+        Set<Map.Entry<Integer, List<Integer>>> set = vertexMap.entrySet();
+        for (Map.Entry<Integer, List<Integer>> me : set) {
+            line = me.getKey().toString();
+            List<Integer> to = me.getValue();
             if (to.isEmpty()) {
             bw.write(line);
                 bw.newLine();
             }
-            for (String s : to) {
-                bw.write(line + "->" + s);
+            for (Integer s : to) {
+                bw.write(line + "->" + s.toString());
                 bw.newLine();
             }
         }
@@ -129,13 +129,13 @@ public class DirectedGraph {
         Integer vertexTo [] = new Integer [edgesCount];
         loopsCount = 0; // количество циклов
         Integer e1, e2, e = 0;
-        Set<Map.Entry<String, List<String>>> set = vertexMap.entrySet();
+        Set<Map.Entry<Integer, List<Integer>>> set = vertexMap.entrySet();
         // Запоняем массивы входных и выходных вершин
-        for (Map.Entry<String, List<String>> me : set) {
-            e1 = Integer.valueOf(me.getKey());
-            List<String> ls = me.getValue();
-            for (String s: ls) {
-                e2 = Integer.valueOf(s);
+        for (Map.Entry<Integer, List<Integer>> me : set) {
+            e1 = me.getKey();
+            List<Integer> ls = me.getValue();
+            for (Integer s: ls) {
+                e2 = s;
                 // Заполняем с учетом возможных петель
                 if (Objects.equals(e1, e2)) {
                     loopsCount++;

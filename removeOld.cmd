@@ -1,1 +1,2 @@
 del graphreduct*.*
+del GraphAutomaton.*

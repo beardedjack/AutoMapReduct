@@ -164,8 +164,10 @@ public class DirectedGraph {
             Arrays.sort(vertexToSorted);
         
             for (Integer i = 0; i < edgesCount; i++) {
-                if (((Arrays.binarySearch(vertexToSorted, vertexFrom[i]) < 0) | (vertexFrom[i] < 0)) || 
-                        ((Arrays.binarySearch(vertexFromSorted, vertexTo[i]) < 0) | (vertexTo[i] < 0))) {
+                if (((Arrays.binarySearch(vertexToSorted, vertexFrom[i]) < 0) |
+                        (vertexFrom[i] < 0)) || 
+                        ((Arrays.binarySearch(vertexFromSorted, vertexTo[i]) < 0) |
+                        (vertexTo[i] < 0))) {
                     vertexFrom[i] = -1;
                     vertexTo[i] = -1;
                 }

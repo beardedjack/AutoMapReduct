@@ -107,8 +107,12 @@ public class DirectedGraph {
         bw.write("}");
         bw.close();
         
-        if (k == 0) {dummy = "C:\\graphviz\\bin\\dot -Tjpg -o GraphAutomaton.jpg graphautomaton.dot"; }
-        else {dummy = "C:\\graphviz\\bin\\dot -Tjpg -o GraphReduct(k=" + Integer.toString(k) + ").jpg graphreduct.dot"; }
+        if (k == 0) {
+            dummy = "\\graphviz\\bin\\dot -Tjpg -o GraphAutomaton.jpg graphautomaton.dot"; 
+        }
+        else {dummy = "\\graphviz\\bin\\dot -Tjpg -o GraphReduct(k=" +
+                Integer.toString(k) + ").jpg graphreduct.dot";
+        }
         
         // Делаем графический файл
         try {

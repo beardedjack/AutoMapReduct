@@ -153,6 +153,7 @@ public class Automaton {
         bw.close();
     }
     
+    // Выдать выходное слово по входному
     public mAdic getOutput(mAdic input) {
         Integer currentCondition;
         Integer[] in = input.getDigits();
@@ -164,7 +165,6 @@ public class Automaton {
         }
         return new mAdic(alphabetsDimention, out);
     }
-    
     
     // Выдать множество выходных слов по множеству входных слов
     public mAdicSet getOutputSet(mAdicSet input) {
@@ -226,7 +226,7 @@ public class Automaton {
             tail = tail | a;
         }
         if (!tail) {
-            if ((double)cycles/k == 1.0) {
+            if ((double)cycles / k == 1.0) {
                 type = 3;
             }
             else {
@@ -331,7 +331,6 @@ public class Automaton {
         double x = 0;
         int y = 0;
         Integer z = 0;
-        String k1, k2;
         ArrayList<Integer> al;
         
         for (Integer key : outputMap.keySet()) {

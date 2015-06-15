@@ -1,6 +1,5 @@
 package core;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import gui.AMRMain;
 import java.util.Map;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeMap;
 import java.io.*;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
 
@@ -33,9 +31,6 @@ public class Automaton {
     private List<Integer> outputAlphabet = new ArrayList<>();
     public Integer alphabetsDimention = 0;
     private int initialCondition = 1;
-    
-    //public ArrayList<Integer> graphTypes;
-    
     public ArrayList<Integer> graphCycles;
     public ArrayList<Boolean> graphTails;
     
@@ -386,7 +381,7 @@ public class Automaton {
             cyclesData = "0";
         }
         
-        String tails = "";
+        String tails;
         if (directedgraph.thereTails) {
             tails = "ДА";
         }

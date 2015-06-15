@@ -38,7 +38,7 @@ public class AutoCurve extends JPanel{
         Integer[] yy;
         Integer langLength = 0;
         Integer size = 0;
-        mAdicSet input = new mAdicSet(geomAutomaton.alphabetsDimention, 1, frame);
+        mAdicSet input = new mAdicSet(geomAutomaton.alphabetsDimention, frame.getK(), frame);
         Set<Map.Entry<Integer, mAdic>> set1 = input.getMAdicSet();
         double[] xxx = new double[set1.size()]; 
 
@@ -130,7 +130,8 @@ protected void paintComponent(Graphics g) {
     double[] curvedY;
     double co;
     Integer ui = 1;
-    Integer prevx = null, prevy = null;
+    Integer prevx = null;
+    Integer prevy = null;
     double xx1;
     double yy1;
     double xx2;

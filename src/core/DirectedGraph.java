@@ -45,7 +45,7 @@ public class DirectedGraph {
     
     public void addVertex(Integer vertexName) {
         if (!hasVertex(vertexName)) {
-            vertexMap.put(vertexName, new ArrayList<Integer>());
+            vertexMap.put(vertexName, new ArrayList<>());
         }
     }
  
@@ -149,7 +149,8 @@ public class DirectedGraph {
         // Находим все циклы в графе
         Integer vertexFromSorted [];
         Integer vertexToSorted [];
-        Integer a = 0, b = 0;
+        Integer a = 0;
+        Integer b = 0;
                 
         do {    
             b = a;

@@ -1,9 +1,8 @@
 package core;
 
-// класс: m-адическое число
-
 import java.util.Arrays;
 
+// класс: m-адическое число
 public class mAdic implements Cloneable {
     
     private Integer capacity; // основание системы счисления
@@ -76,6 +75,5 @@ public class mAdic implements Cloneable {
         obj.setDigits(i);
         return obj;
     }
-    
     
 }

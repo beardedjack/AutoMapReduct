@@ -1,0 +1,1 @@
+java -jar dist\AutoMapReduct.jar -Xms2048m  -Xmx2048m -Xss2048m -Xmn2048m -XX:PermSize=2048m -XX:MaxPermSize=2048m -XX:+ UseConcMarkSweepGC -XX:-UseParNewGC -XX:NewRatio=100
